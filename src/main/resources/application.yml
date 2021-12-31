@@ -1,0 +1,78 @@
+quarkus:
+  container-image:
+    group: ubitech
+
+  datasource:
+    db-kind: postgresql
+    jdbc:
+      driver: org.postgresql.Driver
+
+  hibernate-orm:
+    jdbc:
+      timezone: "UTC"
+    database:
+      generation: none
+    dialect: org.hibernate.dialect.PostgreSQL95Dialect
+    sql-load-script: no-file
+
+  hibernate-search-orm:
+    elasticsearch:
+      version: 7
+      protocol: HTTP
+      analysis:
+        configurer: eu.ubitech.palantir.portal.config.AnalysisConfigurer
+      schema-management:
+        required-status: YELLOW
+    schema-management:
+      strategy: DROP_AND_CREATE
+    automatic-indexing:
+      synchronization:
+        strategy: sync
+
+  ssl:
+    native: false
+
+  jaeger:
+    sampler-type: const
+    sampler-param: 1
+    endpoint:
+    metrics:
+      enabled: true
+
+  log:
+    console:
+      enable: true
+      color: true
+      format: "%d{HH:mm:ss} %-5p traceId=%X{traceId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n"
+    handler:
+      gelf:
+        enabled: true
+
+  liquibase:
+    migrate-at-start: true
+
+  jackson:
+    timezone: "UTC"
+
+"%dev":
+  quarkus:
+    datasource:
+      metrics:
+        enabled: true
+    hibernate-orm:
+      log:
+        sql: true
+
+"%test":
+  quarkus:
+    hibernate-orm:
+      log:
+        sql: true
+
+"%prod":
+  quarkus:
+    package:
+      type: uber-jar
+    hibernate-orm:
+      log:
+        sql: false

@@ -1,93 +1,105 @@
-# dashboard-portal
+# [**PALANTIR**](../) **Portal and Dashboard**
 
-Dashboard / Portal
+**Note: This is WIP.*
 
-## Getting started
+## Running the application in dev mode
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### Prerequisites
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Before moving on, make sure you have the following software installed:
 
-## Add your files
+1. Git
+2. Docker
+3. Docker Compose (1.28.0 profiles support)
+4. Java SE JDK 11
 
-- [ ] [Create](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### Services
+
+During development time you can use Docker and Docker Compose to deploy locally all required services like postgres, pgAdmin, etc.
+
+> **Notice:** Before moving on, make sure you have set the required [environment variables](https://docs.docker.com/compose/environment-variables/) which are needed for running Docker. You can do this by creating a `.env` file and export the environment variables. There is an [**example** environment file named `.env.example` under the parent project's root dir](../.env.example) for the **backend**, and [one more under `src/main/dashboard-webapp` for the **frontend**](./src/main/dashboard-webapp/.env.example). The **.env** for this project is to be put in the **current** directory.
+
+
+```$shell
+docker-compose up
+```
+For production
+```$shell
+docker-compose --profile monitoring up
+```
+
+### Keycloak
+
+Once the docker compose services are up, go to http://localhost:8090/auth/ and login in the Administration Console using the credentials defined in the `.env` file (i.e. admin/admin).
+
+From the realm selector, add a new realm by selecting the `realm-export.json` file in `realm/` folder.
+
+Then go to _Clients_ and open the `backend-service` client ID. On the _Credentials_ tab generate a new secret and update the value of `KEYCLOAK_CLIENT_SECRET` in `.env` with it.
+
+Last but not least, go to _Users_ and add a user with a non-temporary password. Once you save the user, go to _Credentials_ to set a password. You can also go to _Attributes_ and add the following key-values:
+
+| Key          | Value   |
+| ------------ | ------- |
+| userid       | 1       |
+| userfullname | trainer |
+
+The go to Roles and add role trainer to the user.
+### Backend
+
+You can compile and run the **backend** service in dev mode with a profile using:
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/palantir-project/dashboard-portal.git
-git branch -M master
-git push -uf origin master
+./mvnw clean compile quarkus:dev
 ```
 
-## Integrate with your tools
+### Frontend
 
-- [ ] [Set up project integrations](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://gitlab.com/palantir-project/dashboard-portal/-/settings/integrations)
+Before moving on, make sure you've installed the required dependencies needed to watch the frontend app:
 
-## Collaborate with your team
+```sh
+cd src/main/dashboard-webapp
+npm install
+```
 
-- [ ] [Invite team members and collaborators](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Additionally, you can use the following commands for the frontend app:
 
-## Test and Deploy
+#### Compiles and hot-reloads for development
 
-Use the built-in continuous integration in GitLab.
+```sh
+npm run serve
+```
 
-- [ ] [Get started with GitLab CI/CD](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+#### Lints and fixes files
 
-***
+```sh
+npm run lint-fix
+```
 
-# Editing this README
+#### Test
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://gitlab.com/-/experiment/new_project_readme_content:97ccaf4f9149482b67a366b06eff8e17?https://www.makeareadme.com/) for this template.
+(dev mode : dev , prod mode: prod)
+```sh
+npm run cypress:dev
+```
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Packaging and running the application
+By default, Quarkus has three profiles, although it is possible to use as many as you like. The default profiles are:
 
-## Name
-Choose a self-explaining name for your project.
+- dev - Activated when in development mode (i.e. quarkus:dev)
+- test - Activated when running tests
+- prod - The default profile when not running in development or test mode
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+> **Notice:** The above commands are for a bundled back-end and front-end application
+### Creating a jar executable
+Check pom.xml for ${release}
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+```$shell
+./mvnw clean package -Pvue
+java -jar target/portal-${release}-runner.jar
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
-
+#### Create docker container
+```$shell
+./mvnw clean package -Dquarkus.container-image.build=true -Pvue
+docker run --env-file .env --network=host palantir/dashboard-portal:${release}
+```

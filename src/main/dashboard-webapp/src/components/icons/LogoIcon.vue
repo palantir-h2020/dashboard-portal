@@ -1,0 +1,18 @@
+<template>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6.6217 0H0V6.6217H6.6217V0Z" fill="white" />
+    <path d="M6.6217 8.68985H0V15.3115H6.6217V8.68985Z" fill="white" />
+    <path d="M6.6217 17.3783H0V23.9986H6.6217V17.3783Z" fill="white" />
+    <path d="M23.9958 17.3797H17.3419V24H23.9958V17.3797Z" fill="white" />
+    <path d="M15.3088 17.3797H8.65491V24H15.3088V17.3797Z" fill="white" />
+    <path d="M24 0H17.3447V6.6217H24V0Z" fill="white" />
+    <path d="M24 8.68985H17.3447V15.3115H24V8.68985Z" fill="white" />
+    <path d="M15.3088 8.68985H8.65491V15.3115H15.3088V8.68985Z" fill="white" />
+  </svg>
+</template>
+
+<script>
+export default {
+  name: 'LogoIcon',
+};
+</script>

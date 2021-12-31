@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="00000000000000" author="niki" dbms="postgresql,oracle">
+        <createSequence sequenceName="hibernate_sequence" startValue="20000" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="00000000000001" author="niki">
+        <createTable tableName="userp">
+            <column name="id" type="bigint" autoIncrement="true" >
+                <constraints primaryKey="true" nullable="false" primaryKeyName="userp_pkey"/>
+            </column>
+            <column name="username" type="varchar(50)">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_username"/>
+            </column>
+            <column name="email" type="varchar(191)">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
+            </column>
+            <column name="avatar" type="varchar(50)"/>
+            <column name="role" type="varchar(50)"/>
+            <column name="createdtimestamp" type="timestamp"/>
+        </createTable>
+        <loadData
+                  file="db/data/users.csv"
+                  separator=";"
+                  tableName="userp">
+        </loadData>
+        <rollback>
+            <dropTable tableName="userp"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

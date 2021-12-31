@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+  "-//Puppy Crawl//DTD Suppressions 1.0//EN"
+  "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
+
+<suppressions>
+  <suppress checks="LineLength" files=".*.java"/>
+  <suppress checks="AvoidStarImport" files=".*.java"/>
+  <suppress checks="JavadocMethod" files=".*.java"/>
+  <suppress checks="InterfaceTypeParameterName" files=".*.java"/>
+  <suppress checks="CustomImportOrder" files=".*.java"/>
+  <!--  Consider removing the following -->
+  <suppress checks="SummaryJavadocCheck" files=".*.java"/>
+  <suppress checks="AbbreviationAsWordInName" files=".*.java"/>
+  <suppress checks="OverloadMethodsDeclarationOrder" files=".*.java"/>
+  <suppress checks="MemberName" files=".*.java"/>
+</suppressions>

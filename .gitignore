@@ -1,0 +1,49 @@
+# Eclipse
+.project
+.classpath
+.settings/
+**/bin/
+.factorypath
+nohup.out
+**/src/main/vue-webapp/nohup.out
+nohup.out
+
+# IntelliJ
+.idea
+*.ipr
+*.iml
+*.iws
+
+# NetBeans
+nb-configuration.xml
+nbactions.xml
+# Visual Studio Code
+.vscode
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# VSCode
+lsp
+
+# patch
+*.orig
+*.rej
+
+# Maven
+**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+**/src/main/resources/META-INF/resources/
+
+# Enviroment file
+.env
+
+#.directory
+.directory
