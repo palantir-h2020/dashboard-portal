@@ -75,82 +75,6 @@ services:
       - postgreskeycloak
     restart: unless-stopped
 
-  jaeger:
-    container_name: "${PROJECT_NAME}_jaeger"
-    profiles: ["monitoring"]
-    ports:
-      - '5775:5775'
-      - '6831:6831'
-      - '6832:6832'
-      - '5778:5778'
-      - '16686:16686'
-      - ${JAEGER_PORT}:14268
-    image: 'jaegertracing/all-in-one:1.22'
-    restart: unless-stopped
-
-#sudo sysctl -w vm.max_map_count=262144 && set ulimit -n 65536
-  es01:
-    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.8.0'
-    container_name: "${PROJECT_NAME}_es01"
-    restart: unless-stopped
-    environment:
-      - node.name=${PROJECT_NAME}_es01
-      - cluster.name=${PROJECT_NAME}_es-cluster
-      # - discovery.seed_hosts=es02
-      - cluster.initial_master_nodes=${PROJECT_NAME}_es01
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    cap_add:
-      - IPC_LOCK
-#    volumes:
-#      - data01:/usr/share/elasticsearch/data
-    ports:
-      - ${ELASTIC_PORT}:9200
-    networks:
-      elastic:
-        aliases:
-          - ${PROJECT_NAME}_es01
-          - elasticsearch
-
-  kib01:
-    image: 'docker.elastic.co/kibana/kibana:7.8.0'
-    container_name: "${PROJECT_NAME}_kib01"
-    ports:
-      - ${KIBANA_PORT}:5601
-    environment:
-      ELASTICSEARCH_URL: http://${PROJECT_NAME}_es01:${ELASTIC_PORT}
-      ELASTICSEARCH_HOSTS: http://${PROJECT_NAME}_es01:${ELASTIC_PORT}
-    networks:
-      - elastic
-    depends_on:
-      - es01
-    restart: unless-stopped
-
-  logstash:
-    image: 'docker.elastic.co/logstash/logstash:7.8.0'
-    container_name: "${PROJECT_NAME}_logstash"
-    restart: unless-stopped
-    profiles: ["monitoring"]
-    volumes:
-      - source: ./pipelines
-        target: /usr/share/logstash/pipeline
-        type: bind
-    ports:
-      - ${LOGSTASH_PORT}:12201/udp
-      - "5000:5000"
-      - "9600:9600"
-    networks:
-      - elastic
-    depends_on:
-      - es01
-
   minio:
     image: minio/minio:latest
     container_name: "${PROJECT_NAME}_minio"
@@ -175,6 +99,3 @@ services:
 volumes:
   miniodata1:
 
-networks:
-  elastic:
-    driver: bridge

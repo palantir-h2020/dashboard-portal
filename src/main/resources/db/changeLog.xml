@@ -11,9 +11,5 @@
   <property name="uuidType" value="uuid" dbms="h2, postgresql" />
 
   <include file="db/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false" />
-  <include file="db/changelog/added_entity_person.xml" relativeToChangelogFile="false" />
-  <include file="db/changelog/table_user_remove_column_avatar.xml" relativeToChangelogFile="false" />
-  <include file="db/changelog/added_entity_organization.xml" relativeToChangelogFile="false" />
-  <include file="db/changelog/update_defaultvalue_column_createdtimestamp_and_updatedtimestamp.xml" relativeToChangelogFile="false" />
 
 </databaseChangeLog>

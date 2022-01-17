@@ -1,17 +1,13 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  
-  <groupId>eu.ubitech.palantir</groupId>
-  <artifactId>portal</artifactId>
-  <version>0.0.1</version>
-  <packaging>pom</packaging>
-  
 
-  
+  <groupId>eu.palantir_project</groupId>
+  <artifactId>portal-dashboard</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
   <properties>
     <!-- <release>0.0.1</release> -->
-	<!-- BUMP UP VERSIONS!!! -->
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.checkstyle.plugin>3.1.0</maven.checkstyle.plugin>
     <maven.compiler.parameters>true</maven.compiler.parameters>
@@ -19,11 +15,13 @@
     <maven.compiler.target>11</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkus-plugin.version>1.13.4.Final</quarkus-plugin.version>
-    <quarkus.platform.version>1.13.4.Final</quarkus.platform.version>
-    <surefire-plugin.version>2.22.1</surefire-plugin.version>
+    <quarkus-plugin.version>2.4.2.Final</quarkus-plugin.version>
+    <quarkus.platform.version>2.4.2.Final</quarkus.platform.version>
+    <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
+    <testcontainers.version>1.15.3</testcontainers.version>
+    <testcontainers.keycloak.vesion>1.8.0</testcontainers.keycloak.vesion>
   </properties>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -35,7 +33,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -60,8 +58,16 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-search-orm-elasticsearch</artifactId>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <version>${testcontainers.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.dasniko</groupId>
+      <artifactId>testcontainers-keycloak</artifactId>
+      <version>${testcontainers.keycloak.vesion}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -100,11 +106,11 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-qute</artifactId>
+      <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-opentracing</artifactId>
+      <artifactId>quarkus-resteasy-qute</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -112,15 +118,11 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-logging-gelf</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-oidc</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.elasticsearch.client</groupId>
-      <artifactId>elasticsearch-rest-high-level-client</artifactId>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-keycloak-admin-client</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -130,10 +132,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-rest-client</artifactId>
     </dependency>
-	<dependency>
-      <groupId>io.opentracing.contrib</groupId>
-      <artifactId>opentracing-jdbc</artifactId>
-    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-liquibase</artifactId>
@@ -141,7 +139,7 @@
 	    <dependency>
       <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
       <artifactId>owasp-java-html-sanitizer</artifactId>
-      <version>20200615.1</version>
+      <version>20211018.2</version>
     </dependency>
     <dependency>
       <groupId>io.minio</groupId>
@@ -156,9 +154,12 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-websockets</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-mailer</artifactId>
+    </dependency>
   </dependencies>
-  
-  
+
 
   <build>
     <resources>
@@ -203,6 +204,7 @@
         <version>${maven.checkstyle.plugin}</version>
         <executions>
           <execution>
+            <?m2e ignore?>
             <id>validate</id>
             <phase>validate</phase>
             <goals>
@@ -240,7 +242,7 @@
       </plugin>
     </plugins>
   </build>
-  
+
     <profiles>
     <profile>
       <id>vue</id>
@@ -249,7 +251,7 @@
           <plugin>
             <groupId>com.github.eirslett</groupId>
             <artifactId>frontend-maven-plugin</artifactId>
-            <version>1.10.2</version>
+            <version>1.12.1</version>
             <executions>
               <execution>
                 <id>install node and npm</id>
@@ -257,8 +259,8 @@
                   <goal>install-node-and-npm</goal>
                 </goals>
                 <configuration>
-                  <nodeVersion>v12.16.3</nodeVersion>
-                  <npmVersion>6.14.4</npmVersion>
+                  <nodeVersion>v16.13.2</nodeVersion>
+                  <npmVersion>8.3.1</npmVersion>
                 </configuration>
               </execution>
               <execution>
@@ -289,5 +291,4 @@
       </build>
     </profile>
   </profiles>
-  
 </project>

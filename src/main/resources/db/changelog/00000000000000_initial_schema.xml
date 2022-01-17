@@ -6,11 +6,13 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="00000000000000" author="niki" dbms="postgresql,oracle">
+<!-- TODO: CHANGE DB BASED ON WHAT IS FOUND -->
+
+    <changeSet id="00000000000000" author="stsarsitalidis" dbms="postgresql,oracle">
         <createSequence sequenceName="hibernate_sequence" startValue="20000" incrementBy="1"/>
     </changeSet>
 
-    <changeSet id="00000000000001" author="niki">
+    <changeSet id="00000000000001" author="stsarsitalidis">
         <createTable tableName="userp">
             <column name="id" type="bigint" autoIncrement="true" >
                 <constraints primaryKey="true" nullable="false" primaryKeyName="userp_pkey"/>
@@ -30,9 +32,35 @@
                   separator=";"
                   tableName="userp">
         </loadData>
-        <rollback>
+        <!-- Override the default rollback statement -->
+		<rollback>
             <dropTable tableName="userp"/>
         </rollback>
     </changeSet>
+	
+	<changeSet id="00000000000002" author="stsarsitalidis">
+		<createTable tableName="organization">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" primaryKeyName="organization_pkey"/>
+			</column>
+			<column name="name" type="varchar(255)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="createdtimestamp" type="timestamp"/>
+			<column name="updatedtimestamp" type="timestamp"/>
+		</createTable>
+		<rollback>
+			<dropTable tableName="organization"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="10000000000003" author="stsarsitalidis" context="fake-data">
+		<loadData
+			file="db/fake-data/organizations.csv"
+			separator=";"
+			tableName="organization">
+		</loadData>
+	</changeSet>
+
 
 </databaseChangeLog>
