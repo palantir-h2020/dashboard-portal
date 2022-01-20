@@ -1,0 +1,276 @@
+
+package eu.palantir.portal.dto.message.ti;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.Generated;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "Time_Start",
+        "Time_End",
+        "Time_Duration",
+        "Source_Address",
+        "Destination_Address",
+        "Source_Port",
+        "Destination_Port",
+        "Protocol",
+        "Flag",
+        "Soure_tos",
+        "Input_packets",
+        "Input_bytes"
+})
+@Generated("jsonschema2pojo")
+public class ThreatFinding implements Serializable {
+
+    @JsonProperty("Time_Start")
+    private String timeStart;
+    @JsonProperty("Time_End")
+    private String timeEnd;
+    @JsonProperty("Time_Duration")
+    private Double timeDuration;
+    @JsonProperty("Source_Address")
+    private String sourceAddress;
+    @JsonProperty("Destination_Address")
+    private String destinationAddress;
+    @JsonProperty("Source_Port")
+    private Integer sourcePort;
+    @JsonProperty("Destination_Port")
+    private Integer destinationPort;
+    @JsonProperty("Protocol")
+    private String protocol;
+    @JsonProperty("Flag")
+    private String flag;
+    @JsonProperty("Soure_tos")
+    private Integer soureTos;
+    @JsonProperty("Input_packets")
+    private Integer inputPackets;
+    @JsonProperty("Input_bytes")
+    private Integer inputBytes;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private final static long serialVersionUID = -5779869128532782590L;
+
+    /**
+     * 
+     * @param timeEnd
+     * @param destinationPort
+     * @param inputPackets
+     * @param inputBytes
+     * @param sourcePort
+     * @param protocol
+     * @param timeStart
+     * @param sourceAddress
+     * @param destinationAddress
+     * @param flag
+     * @param soureTos
+     * @param timeDuration
+     */
+    public ThreatFinding(String timeStart, String timeEnd, Double timeDuration, String sourceAddress,
+            String destinationAddress, Integer sourcePort, Integer destinationPort, String protocol, String flag,
+            Integer soureTos, Integer inputPackets, Integer inputBytes) {
+        super();
+        this.timeStart = timeStart;
+        this.timeEnd = timeEnd;
+        this.timeDuration = timeDuration;
+        this.sourceAddress = sourceAddress;
+        this.destinationAddress = destinationAddress;
+        this.sourcePort = sourcePort;
+        this.destinationPort = destinationPort;
+        this.protocol = protocol;
+        this.flag = flag;
+        this.soureTos = soureTos;
+        this.inputPackets = inputPackets;
+        this.inputBytes = inputBytes;
+    }
+
+    @JsonProperty("Time_Start")
+    public String getTimeStart() {
+        return timeStart;
+    }
+
+    @JsonProperty("Time_End")
+    public String getTimeEnd() {
+        return timeEnd;
+    }
+
+    @JsonProperty("Time_Duration")
+    public Double getTimeDuration() {
+        return timeDuration;
+    }
+
+    @JsonProperty("Source_Address")
+    public String getSourceAddress() {
+        return sourceAddress;
+    }
+
+    @JsonProperty("Destination_Address")
+    public String getDestinationAddress() {
+        return destinationAddress;
+    }
+
+    @JsonProperty("Source_Port")
+    public Integer getSourcePort() {
+        return sourcePort;
+    }
+
+    @JsonProperty("Destination_Port")
+    public Integer getDestinationPort() {
+        return destinationPort;
+    }
+
+    @JsonProperty("Protocol")
+    public String getProtocol() {
+        return protocol;
+    }
+
+    @JsonProperty("Flag")
+    public String getFlag() {
+        return flag;
+    }
+
+    @JsonProperty("Soure_tos")
+    public Integer getSoureTos() {
+        return soureTos;
+    }
+
+    @JsonProperty("Input_packets")
+    public Integer getInputPackets() {
+        return inputPackets;
+    }
+
+    @JsonProperty("Input_bytes")
+    public Integer getInputBytes() {
+        return inputBytes;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(ThreatFinding.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this)))
+                .append('[');
+        sb.append("timeStart");
+        sb.append('=');
+        sb.append(((this.timeStart == null) ? "<null>" : this.timeStart));
+        sb.append(',');
+        sb.append("timeEnd");
+        sb.append('=');
+        sb.append(((this.timeEnd == null) ? "<null>" : this.timeEnd));
+        sb.append(',');
+        sb.append("timeDuration");
+        sb.append('=');
+        sb.append(((this.timeDuration == null) ? "<null>" : this.timeDuration));
+        sb.append(',');
+        sb.append("sourceAddress");
+        sb.append('=');
+        sb.append(((this.sourceAddress == null) ? "<null>" : this.sourceAddress));
+        sb.append(',');
+        sb.append("destinationAddress");
+        sb.append('=');
+        sb.append(((this.destinationAddress == null) ? "<null>" : this.destinationAddress));
+        sb.append(',');
+        sb.append("sourcePort");
+        sb.append('=');
+        sb.append(((this.sourcePort == null) ? "<null>" : this.sourcePort));
+        sb.append(',');
+        sb.append("destinationPort");
+        sb.append('=');
+        sb.append(((this.destinationPort == null) ? "<null>" : this.destinationPort));
+        sb.append(',');
+        sb.append("protocol");
+        sb.append('=');
+        sb.append(((this.protocol == null) ? "<null>" : this.protocol));
+        sb.append(',');
+        sb.append("flag");
+        sb.append('=');
+        sb.append(((this.flag == null) ? "<null>" : this.flag));
+        sb.append(',');
+        sb.append("soureTos");
+        sb.append('=');
+        sb.append(((this.soureTos == null) ? "<null>" : this.soureTos));
+        sb.append(',');
+        sb.append("inputPackets");
+        sb.append('=');
+        sb.append(((this.inputPackets == null) ? "<null>" : this.inputPackets));
+        sb.append(',');
+        sb.append("inputBytes");
+        sb.append('=');
+        sb.append(((this.inputBytes == null) ? "<null>" : this.inputBytes));
+        sb.append(',');
+        sb.append("additionalProperties");
+        sb.append('=');
+        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
+        sb.append(',');
+        if (sb.charAt((sb.length() - 1)) == ',') {
+            sb.setCharAt((sb.length() - 1), ']');
+        } else {
+            sb.append(']');
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result = ((result * 31) + ((this.timeEnd == null) ? 0 : this.timeEnd.hashCode()));
+        result = ((result * 31) + ((this.destinationPort == null) ? 0 : this.destinationPort.hashCode()));
+        result = ((result * 31) + ((this.sourcePort == null) ? 0 : this.sourcePort.hashCode()));
+        result = ((result * 31) + ((this.sourceAddress == null) ? 0 : this.sourceAddress.hashCode()));
+        result = ((result * 31) + ((this.destinationAddress == null) ? 0 : this.destinationAddress.hashCode()));
+        result = ((result * 31) + ((this.flag == null) ? 0 : this.flag.hashCode()));
+        result = ((result * 31) + ((this.timeDuration == null) ? 0 : this.timeDuration.hashCode()));
+        result = ((result * 31) + ((this.inputPackets == null) ? 0 : this.inputPackets.hashCode()));
+        result = ((result * 31) + ((this.inputBytes == null) ? 0 : this.inputBytes.hashCode()));
+        result = ((result * 31) + ((this.protocol == null) ? 0 : this.protocol.hashCode()));
+        result = ((result * 31) + ((this.timeStart == null) ? 0 : this.timeStart.hashCode()));
+        result = ((result * 31) + ((this.soureTos == null) ? 0 : this.soureTos.hashCode()));
+        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if ((other instanceof ThreatFinding) == false) {
+            return false;
+        }
+        ThreatFinding rhs = ((ThreatFinding) other);
+        return ((((((((((((((this.timeEnd == rhs.timeEnd)
+                || ((this.timeEnd != null) && this.timeEnd.equals(rhs.timeEnd)))
+                && ((this.destinationPort == rhs.destinationPort)
+                        || ((this.destinationPort != null) && this.destinationPort.equals(rhs.destinationPort))))
+                && ((this.sourcePort == rhs.sourcePort)
+                        || ((this.sourcePort != null) && this.sourcePort.equals(rhs.sourcePort))))
+                && ((this.sourceAddress == rhs.sourceAddress)
+                        || ((this.sourceAddress != null) && this.sourceAddress.equals(rhs.sourceAddress))))
+                && ((this.destinationAddress == rhs.destinationAddress) || ((this.destinationAddress != null)
+                        && this.destinationAddress.equals(rhs.destinationAddress))))
+                && ((this.flag == rhs.flag) || ((this.flag != null) && this.flag.equals(rhs.flag))))
+                && ((this.timeDuration == rhs.timeDuration)
+                        || ((this.timeDuration != null) && this.timeDuration.equals(rhs.timeDuration))))
+                && ((this.inputPackets == rhs.inputPackets)
+                        || ((this.inputPackets != null) && this.inputPackets.equals(rhs.inputPackets))))
+                && ((this.inputBytes == rhs.inputBytes)
+                        || ((this.inputBytes != null) && this.inputBytes.equals(rhs.inputBytes))))
+                && ((this.protocol == rhs.protocol) || ((this.protocol != null) && this.protocol.equals(rhs.protocol))))
+                && ((this.timeStart == rhs.timeStart)
+                        || ((this.timeStart != null) && this.timeStart.equals(rhs.timeStart))))
+                && ((this.soureTos == rhs.soureTos) || ((this.soureTos != null) && this.soureTos.equals(rhs.soureTos))))
+                && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null)
+                        && this.additionalProperties.equals(rhs.additionalProperties))));
+    }
+
+}

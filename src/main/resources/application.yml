@@ -52,6 +52,44 @@ quarkus:
     access-key:
     secret-key:
 
+mp:
+  messaging:
+    outgoing:
+      cmr-requests:
+        connector: smallrye-kafka
+        topic: cmr.requests
+        value:
+          serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
+    incoming:
+      cmr-responses:
+        connector: smallrye-kafka
+        failure-strategy: ignore
+        health-readiness-enabled: false
+        topic: cmr.responses
+        value:
+          deserializer: eu.palantir.portal.kafka.SMResponsesDeserializer
+      ti-threat-findings-netflow:
+        connector: smallrye-kafka
+        failure-strategy: ignore
+        health-readiness-enabled: false
+        topic: ti.threat_findings_netflow
+        value:
+          deserializer: eu.palantir.portal.kafka.ThreatFindingsNetFlowDeserializer
+      ti-threat-findings-syslog:
+        connector: smallrye-kafka
+        failure-strategy: ignore
+        health-readiness-enabled: false
+        topic: ti.threat_findings_syslog
+        value:
+          deserializer: eu.palantir.portal.kafka.ThreatFindingsSysLogDeserializer
+      ti-anomaly-detection:
+        connector: smallrye-kafka
+        failure-strategy: ignore
+        health-readiness-enabled: false
+        topic: ti.anomaly_detection
+        value:
+          deserializer: eu.palantir.portal.kafka.TIAnomalyDetectionDeserializer
+
 # keycloak:
 #   baseurl:
 #   realm:
@@ -106,4 +144,7 @@ quarkus:
       mock: false
     liquibase:
       contexts: "!fake-data"
+    kafka:
+      bootstrap:
+        servers: kafka:9092
   # domain:
