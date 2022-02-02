@@ -16,7 +16,7 @@ services:
       - POSTGRES_DB=${DATABASE_NAME}
     ports:
       - ${DATABASE_PORT}:5432
-    image: 'postgres:11.3'
+    image: 'postgres:latest'
     restart: unless-stopped
 
   pgadmin:
@@ -29,7 +29,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=${DATABASE_USERNAME}
       - PGADMIN_DEFAULT_PASSWORD=${DATABASE_PASSWORD}
       - PGADMIN_LISTEN_PORT=${PGADMIN_PORT}
-    image: 'dpage/pgadmin4:4.22'
+    image: 'dpage/pgadmin4:latest'
     depends_on:
       - postgres
     links:
@@ -52,12 +52,12 @@ services:
       - POSTGRES_DB=${KEYCLOAK_DATABASE_NAME}
     ports:
       - ${KEYCLOAK_DATABASE_PORT}:5432
-    image: 'postgres:11.3'
+    image: 'postgres:latest'
     restart: unless-stopped
 
   keycloak:
     container_name: "${PROJECT_NAME}_keycloak"
-    image: quay.io/keycloak/keycloak:10.0.1
+    image: quay.io/keycloak/keycloak:latest
     environment:
       DB_VENDOR: POSTGRES
       DB_ADDR: postgreskeycloak

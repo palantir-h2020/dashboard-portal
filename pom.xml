@@ -1,13 +1,11 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>eu.palantir_project</groupId>
   <artifactId>portal-dashboard</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-
   <properties>
-    <!-- <release>0.0.1</release> -->
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.checkstyle.plugin>3.1.0</maven.checkstyle.plugin>
     <maven.compiler.parameters>true</maven.compiler.parameters>
@@ -18,10 +16,9 @@
     <quarkus-plugin.version>2.4.2.Final</quarkus-plugin.version>
     <quarkus.platform.version>2.4.2.Final</quarkus.platform.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
-    <testcontainers.version>1.15.3</testcontainers.version>
     <testcontainers.keycloak.vesion>1.8.0</testcontainers.keycloak.vesion>
+    <testcontainers.version>1.15.3</testcontainers.version>
   </properties>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -33,7 +30,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -46,6 +42,14 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-multipart</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-reactive-messaging-http</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -136,7 +140,7 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-liquibase</artifactId>
     </dependency>
-	    <dependency>
+    <dependency>
       <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
       <artifactId>owasp-java-html-sanitizer</artifactId>
       <version>20211018.2</version>
@@ -159,8 +163,6 @@
       <artifactId>quarkus-mailer</artifactId>
     </dependency>
   </dependencies>
-
-
   <build>
     <resources>
       <resource>
@@ -204,7 +206,6 @@
         <version>${maven.checkstyle.plugin}</version>
         <executions>
           <execution>
-            <?m2e ignore?>
             <id>validate</id>
             <phase>validate</phase>
             <goals>
@@ -242,8 +243,7 @@
       </plugin>
     </plugins>
   </build>
-
-    <profiles>
+  <profiles>
     <profile>
       <id>vue</id>
       <build>

@@ -42,7 +42,7 @@ public class Application {
             minioreadinesscheck.isMinioReady();
             LOG.info("Minio is Ready...");
         } catch (Exception ex) {
-            LOG.severe("Readiness Exception ... Exiting Quarkus Backend");
+            LOG.severe("Readiness Exception ... Exiting PALANTIR PORTAL Backend");
             Quarkus.asyncExit();
         }
 
