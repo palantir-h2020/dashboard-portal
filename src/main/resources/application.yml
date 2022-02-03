@@ -61,6 +61,20 @@ mp:
         value:
           serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
     incoming:
+      actions-notifications:
+        connector: smallrye-kafka
+        failure-strategy: ignore
+        health-readiness-enabled: false
+        topic: actions-notifications
+        value:
+          deserializer: eu.palantir.portal.kafka.ActionsNotificationsDeserializer
+      incidents-notifications:
+        connector: smallrye-kafka
+        failure-strategy: ignore
+        health-readiness-enabled: false
+        topic: incidents-notifications
+        value:
+          deserializer: eu.palantir.portal.kafka.IncidentNotificationsDeserializer
       cmr-responses:
         connector: smallrye-kafka
         failure-strategy: ignore
@@ -89,6 +103,20 @@ mp:
         topic: ti.anomaly_detection
         value:
           deserializer: eu.palantir.portal.kafka.TIAnomalyDetectionDeserializer
+      ir-notify_portal:
+        connector: smallrye-kafka
+        failure-strategy: ignore
+        health-readiness-enabled: false
+        topic: ir.notify_portal
+        value:
+          deserializer: eu.palantir.portal.kafka.IRNotificationDeserializer
+      rs-notify_portal:
+        connector: smallrye-kafka
+        failure-strategy: ignore
+        health-readiness-enabled: false
+        topic: rs.notify_portal
+        value:
+          deserializer: eu.palantir.portal.kafka.RSNotificationDeserializer
 
 # keycloak:
 #   baseurl:
