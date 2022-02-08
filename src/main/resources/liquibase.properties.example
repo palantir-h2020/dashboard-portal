@@ -1,0 +1,7 @@
+url=jdbc:postgresql://127.0.0.1:5432/palantir-portal
+username=username_TO_ADD
+password=password_TO_ADD
+driver=org.postgresql.Driver
+diffChangeLogFile=src/main/resources/liquibase-diffChangeLog.xml
+referenceUrl=hibernate:spring:eu.palantir.portal.model
+  ?dialect=org.hibernate.dialect.PostgreSQL10Dialect

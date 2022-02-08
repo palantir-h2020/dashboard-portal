@@ -18,6 +18,7 @@
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     <testcontainers.keycloak.vesion>1.8.0</testcontainers.keycloak.vesion>
     <testcontainers.version>1.15.3</testcontainers.version>
+    <liquibase.version>4.7.1</liquibase.version> <!-- Best to follow quarkus liquibase dependency version -->
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -141,6 +142,11 @@
       <artifactId>quarkus-liquibase</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-maven-plugin</artifactId>
+      <version>${liquibase.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
       <artifactId>owasp-java-html-sanitizer</artifactId>
       <version>20211018.2</version>
@@ -241,6 +247,29 @@
         <artifactId>sonar-maven-plugin</artifactId>
         <version>3.7.0.1746</version>
       </plugin>
+    <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>${liquibase.version}</version>
+        <configuration>
+            <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+            <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.liquibase.ext</groupId>
+            <artifactId>liquibase-hibernate5</artifactId>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            </dependency>
+        </dependencies>
+    </plugin>
     </plugins>
   </build>
   <profiles>

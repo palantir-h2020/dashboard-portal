@@ -47,3 +47,6 @@ release.properties
 
 #.directory
 .directory
+
+# DB: Liquibase properties for changelog generation
+liquibase.properties
