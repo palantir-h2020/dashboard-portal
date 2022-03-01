@@ -4,7 +4,6 @@ package eu.palantir.portal.dto.message.ti;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,7 +18,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "Classification_Confidence",
         "Outlier_Score"
 })
-@Generated("jsonschema2pojo")
 public class ThreatFindingNetFlow implements Serializable {
 
     @JsonProperty("Threat_Finding")
@@ -27,29 +25,30 @@ public class ThreatFindingNetFlow implements Serializable {
     @JsonProperty("Threat_Label")
     private String threatLabel;
     @JsonProperty("Classification_Confidence")
-    private Integer classificationConfidence;
+    private Float classificationConfidence;
     @JsonProperty("Outlier_Score")
-    private Double outlierScore;
+    private Float outlierScore;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     private final static long serialVersionUID = 3118137542568392060L;
 
     /**
      * No args constructor for use in serialization
-     * 
+     *
      */
     public ThreatFindingNetFlow() {
     }
 
     /**
-     * 
+     *
      * @param threatFinding
      * @param outlierScore
      * @param threatLabel
      * @param classificationConfidence
      */
-    public ThreatFindingNetFlow(ThreatFinding threatFinding, String threatLabel, Integer classificationConfidence,
-            Double outlierScore) {
+    public ThreatFindingNetFlow(ThreatFinding threatFinding, String threatLabel,
+            Float classificationConfidence,
+            Float outlierScore) {
         super();
         this.threatFinding = threatFinding;
         this.threatLabel = threatLabel;
@@ -78,22 +77,22 @@ public class ThreatFindingNetFlow implements Serializable {
     }
 
     @JsonProperty("Classification_Confidence")
-    public Integer getClassificationConfidence() {
+    public Float getClassificationConfidence() {
         return classificationConfidence;
     }
 
     @JsonProperty("Classification_Confidence")
-    public void setClassificationConfidence(Integer classificationConfidence) {
+    public void setClassificationConfidence(Float classificationConfidence) {
         this.classificationConfidence = classificationConfidence;
     }
 
     @JsonProperty("Outlier_Score")
-    public Double getOutlierScore() {
+    public Float getOutlierScore() {
         return outlierScore;
     }
 
     @JsonProperty("Outlier_Score")
-    public void setOutlierScore(Double outlierScore) {
+    public void setOutlierScore(Float outlierScore) {
         this.outlierScore = outlierScore;
     }
 

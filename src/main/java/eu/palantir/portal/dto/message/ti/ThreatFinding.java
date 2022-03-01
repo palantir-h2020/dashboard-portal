@@ -2,10 +2,11 @@
 package eu.palantir.portal.dto.message.ti;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,13 +27,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "Input_packets",
         "Input_bytes"
 })
-@Generated("jsonschema2pojo")
 public class ThreatFinding implements Serializable {
 
     @JsonProperty("Time_Start")
-    private String timeStart;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+    private Date timeStart;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
     @JsonProperty("Time_End")
-    private String timeEnd;
+    private Date timeEnd;
     @JsonProperty("Time_Duration")
     private Double timeDuration;
     @JsonProperty("Source_Address")
@@ -58,7 +60,7 @@ public class ThreatFinding implements Serializable {
     private final static long serialVersionUID = -5779869128532782590L;
 
     /**
-     * 
+     *
      * @param timeEnd
      * @param destinationPort
      * @param inputPackets
@@ -72,7 +74,7 @@ public class ThreatFinding implements Serializable {
      * @param soureTos
      * @param timeDuration
      */
-    public ThreatFinding(String timeStart, String timeEnd, Double timeDuration, String sourceAddress,
+    public ThreatFinding(Date timeStart, Date timeEnd, Double timeDuration, String sourceAddress,
             String destinationAddress, Integer sourcePort, Integer destinationPort, String protocol, String flag,
             Integer soureTos, Integer inputPackets, Integer inputBytes) {
         super();
@@ -91,12 +93,12 @@ public class ThreatFinding implements Serializable {
     }
 
     @JsonProperty("Time_Start")
-    public String getTimeStart() {
+    public Date getTimeStart() {
         return timeStart;
     }
 
     @JsonProperty("Time_End")
-    public String getTimeEnd() {
+    public Date getTimeEnd() {
         return timeEnd;
     }
 
