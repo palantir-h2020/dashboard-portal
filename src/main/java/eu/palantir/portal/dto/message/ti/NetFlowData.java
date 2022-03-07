@@ -53,7 +53,9 @@ public class NetFlowData implements Serializable {
     private Integer inputBytes;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = 1329503975368942486L;
+
+    public NetFlowData() {
+    }
 
     public NetFlowData(String timeStart, String timeEnd, Double timeDuration, String sourceAddress,
             String destinationAddress, Integer sourcePort, Integer destinationPort, String protocol, String flag,

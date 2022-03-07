@@ -28,12 +28,7 @@ public class RSPortalNotification implements Serializable {
     private String failedAttestation;
     @JsonProperty("failedDescription")
     private String failedDescription;
-    private final static long serialVersionUID = -6620096027865071907L;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
     public RSPortalNotification() {
     }
 

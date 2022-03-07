@@ -22,12 +22,7 @@ public class IncidentNotification implements Serializable {
     private String incidentLocation;
     @JsonProperty("incidentDescription")
     private String incidentDescription;
-    private final static long serialVersionUID = -1611233582978641175L;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
     public IncidentNotification() {
     }
 

@@ -57,7 +57,9 @@ public class ThreatFinding implements Serializable {
     private Integer inputBytes;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = -5779869128532782590L;
+
+    public ThreatFinding() {
+    }
 
     /**
      *

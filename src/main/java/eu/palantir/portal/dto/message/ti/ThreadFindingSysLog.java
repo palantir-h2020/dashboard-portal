@@ -29,7 +29,9 @@ public class ThreadFindingSysLog implements Serializable {
     private Double outlierScore;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = -2763086239213065091L;
+
+    public ThreadFindingSysLog() {
+    }
 
     public ThreadFindingSysLog(String anomalyDetectionSyslog, String threatLabel, Double classificationConfidence,
             Double outlierScore) {

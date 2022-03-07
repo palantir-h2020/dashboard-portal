@@ -35,17 +35,12 @@ public class SmScContent implements Serializable {
     private String typeCounterMeasure;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = -2863181581075168496L;
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
     public SmScContent() {
     }
 
     /**
-     * 
+     *
      * @param deploymentModel
      * @param infrastructureId
      * @param typeCounterMeasure

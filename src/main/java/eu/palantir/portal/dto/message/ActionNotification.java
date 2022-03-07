@@ -29,12 +29,7 @@ public class ActionNotification implements Serializable {
     private String actionDescription;
     @JsonProperty("onIps")
     private List<String> onIps = null;
-    private final static long serialVersionUID = -1661316220453409630L;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
     public ActionNotification() {
     }
 

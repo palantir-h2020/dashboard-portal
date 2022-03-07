@@ -30,17 +30,12 @@ public class SMRequest implements Serializable {
     private List<SMRequestParameter> parameter = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = -759967919371307969L;
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
     public SMRequest() {
     }
 
     /**
-     * 
+     *
      * @param session
      * @param parameter
      * @param action

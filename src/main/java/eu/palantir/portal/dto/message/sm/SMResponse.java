@@ -1,4 +1,3 @@
-
 package eu.palantir.portal.dto.message.sm;
 
 import java.io.Serializable;
@@ -29,17 +28,12 @@ public class SMResponse implements Serializable {
     private Content content;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = 1815121366803791971L;
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
     public SMResponse() {
     }
 
     /**
-     * 
+     *
      * @param session
      * @param success
      * @param error

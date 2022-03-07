@@ -1,6 +1,7 @@
 quarkus:
   http:
     host: 0.0.0.0
+    port: 8081
     test-port: 8083
     test-ssl-port: 8446
 

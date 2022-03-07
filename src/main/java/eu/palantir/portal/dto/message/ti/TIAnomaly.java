@@ -26,7 +26,9 @@ public class TIAnomaly implements Serializable {
     private Double anomalyScore;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = 7537544701803972856L;
+
+    public TIAnomaly() {
+    }
 
     public TIAnomaly(NetFlowData netFlowData, String anomalyDetectionMethod, Double anomalyScore) {
         super();

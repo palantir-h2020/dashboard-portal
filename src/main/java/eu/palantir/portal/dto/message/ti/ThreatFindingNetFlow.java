@@ -30,12 +30,7 @@ public class ThreatFindingNetFlow implements Serializable {
     private Float outlierScore;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = 3118137542568392060L;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
     public ThreatFindingNetFlow() {
     }
 

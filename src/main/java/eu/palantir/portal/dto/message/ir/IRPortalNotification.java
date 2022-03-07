@@ -22,12 +22,7 @@ public class IRPortalNotification implements Serializable {
     private String incidentLocation;
     @JsonProperty("incidentDescription")
     private String incidentDescription;
-    private final static long serialVersionUID = 5794950001150088660L;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
     public IRPortalNotification() {
     }
 

@@ -1,4 +1,3 @@
-
 package eu.palantir.portal.dto.message.sm;
 
 import java.io.Serializable;
@@ -27,17 +26,12 @@ public class Content implements Serializable {
     private Boolean effectivelyDeployed;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = 7654476732310284946L;
 
-    /**
-     * No args constructor for use in serialization
-     * 
-     */
     public Content() {
     }
 
     /**
-     * 
+     *
      * @param cost
      * @param content
      * @param effectivelyDeployed

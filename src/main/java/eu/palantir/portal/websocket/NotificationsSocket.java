@@ -11,18 +11,26 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+
+import eu.palantir.portal.dto.message.FrontendNotification;
+import eu.palantir.portal.websocket.encoder.FrontendNotificationEncoder;
+
 import javax.websocket.Session;
 
-@ServerEndpoint("/websocket/notifications-stream")
+@ServerEndpoint(value = "/websocket/notifications-stream/{userID}", encoders = {
+        FrontendNotificationEncoder.class }, decoders = {})
 @ApplicationScoped
 public class NotificationsSocket {
+    // CHANGE LATER: Handle more than one sessions for a single user.
+    // CHANGE LATER: Add authentication and filtering based on userID.
+
     private static final Logger LOG = Logger.getLogger(NotificationsSocket.class.getName());
     Map<String, Session> sessions = new ConcurrentHashMap<>();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("userID") String userID) {
         sessions.put(userID, session);
-        broadcast("User " + userID + " joined");
+
     }
 
     @OnClose
@@ -41,11 +49,22 @@ public class NotificationsSocket {
 
     }
 
-    private void broadcast(String message) {
+    public void broadcast(String message) {
         sessions.values().forEach(s -> {
             s.getAsyncRemote().sendObject(message, result -> {
                 if (result.getException() != null) {
-                    LOG.severe("Unable to send alert: " + result.getException());
+                    LOG.severe("Unable to send notification: " + result.getException());
+                }
+            });
+        });
+    }
+
+    public void sendNotification(FrontendNotification notification) {
+        // CHANGE LATER: Send notification to specific users.
+        sessions.values().forEach(s -> {
+            s.getAsyncRemote().sendObject(notification, result -> {
+                if (result.getException() != null) {
+                    LOG.severe("Unable to send notification: " + result.getException());
                 }
             });
         });
