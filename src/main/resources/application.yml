@@ -69,56 +69,56 @@ mp:
         health-readiness-enabled: false
         topic: actions-notifications
         value:
-          deserializer: eu.palantir.portal.kafka.ActionsNotificationsDeserializer
+          deserializer: eu.palantir.portal.kafka.serialization.ActionsNotificationsDeserializer
       incidents-notifications:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
         topic: incidents-notifications
         value:
-          deserializer: eu.palantir.portal.kafka.IncidentNotificationsDeserializer
+          deserializer: eu.palantir.portal.kafka.serialization.IncidentNotificationsDeserializer
       cmr-responses:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
         topic: cmr.responses
         value:
-          deserializer: eu.palantir.portal.kafka.SMResponsesDeserializer
+          deserializer: eu.palantir.portal.kafka.serialization.SMResponsesDeserializer
       ti-threat-findings-netflow:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
         topic: ti.threat_findings_netflow
         value:
-          deserializer: eu.palantir.portal.kafka.ThreatFindingsNetFlowDeserializer
+          deserializer: eu.palantir.portal.kafka.serialization.ThreatFindingsNetFlowDeserializer
       ti-threat-findings-syslog:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
         topic: ti.threat_findings_syslog
         value:
-          deserializer: eu.palantir.portal.kafka.ThreatFindingsSysLogDeserializer
+          deserializer: eu.palantir.portal.kafka.serialization.ThreatFindingsSysLogDeserializer
       ti-anomaly-detection:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
         topic: ti.anomaly_detection
         value:
-          deserializer: eu.palantir.portal.kafka.TIAnomalyDetectionDeserializer
+          deserializer: eu.palantir.portal.kafka.serialization.TIAnomalyDetectionDeserializer
       ir-notify_portal:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
         topic: ir.notify_portal
         value:
-          deserializer: eu.palantir.portal.kafka.IRNotificationDeserializer
+          deserializer: eu.palantir.portal.kafka.serialization.IRNotificationDeserializer
       rs-notify_portal:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
         topic: rs.notify_portal
         value:
-          deserializer: eu.palantir.portal.kafka.RSNotificationDeserializer
+          deserializer: eu.palantir.portal.kafka.serialization.RSNotificationDeserializer
 
 # keycloak:
 #   baseurl:

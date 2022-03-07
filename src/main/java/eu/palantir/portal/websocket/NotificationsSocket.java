@@ -13,10 +13,10 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import javax.websocket.Session;
 
-@ServerEndpoint("/websocket/alert-stream")
+@ServerEndpoint("/websocket/notifications-stream")
 @ApplicationScoped
-public class AlertSocket {
-    private static final Logger LOG = Logger.getLogger(AlertSocket.class.getName());
+public class NotificationsSocket {
+    private static final Logger LOG = Logger.getLogger(NotificationsSocket.class.getName());
     Map<String, Session> sessions = new ConcurrentHashMap<>();
 
     @OnOpen

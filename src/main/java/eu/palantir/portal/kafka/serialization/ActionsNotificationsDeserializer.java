@@ -1,4 +1,4 @@
-package eu.palantir.portal.kafka;
+package eu.palantir.portal.kafka.serialization;
 
 import eu.palantir.portal.dto.message.ActionNotification;
 import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer;
