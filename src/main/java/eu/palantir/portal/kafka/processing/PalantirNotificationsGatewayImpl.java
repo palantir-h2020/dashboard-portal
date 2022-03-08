@@ -6,9 +6,11 @@ import javax.inject.Inject;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.jboss.logging.Logger;
 
+import eu.palantir.portal.dto.mappers.IncidentMapper;
 import eu.palantir.portal.dto.message.ActionNotification;
 import eu.palantir.portal.dto.message.FrontendNotification;
 import eu.palantir.portal.dto.message.IncidentNotification;
+import eu.palantir.portal.dto.message.frontend.NotificationType;
 import eu.palantir.portal.dto.message.ir.IRPortalNotification;
 import eu.palantir.portal.dto.message.rs.RSPortalNotification;
 import eu.palantir.portal.dto.message.sm.SMResponse;
@@ -22,11 +24,14 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
 
     private static final Logger LOGGER = Logger.getLogger(PalantirNotificationsGatewayImpl.class);
 
-    private NotificationsSocket notificationsSocket;
+    private final NotificationsSocket notificationsSocket;
+
+    private final IncidentMapper incidentMapper;
 
     @Inject
-    public PalantirNotificationsGatewayImpl(NotificationsSocket notificationsSocket) {
+    public PalantirNotificationsGatewayImpl(NotificationsSocket notificationsSocket, IncidentMapper incidentMapper) {
         this.notificationsSocket = notificationsSocket;
+        this.incidentMapper = incidentMapper;
     }
 
     @Incoming("actions-notifications")
@@ -34,8 +39,10 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
     public void acceptActionsNotifications(ActionNotification actionNotification) {
         LOGGER.infof("Received %s from actions-notifications", actionNotification);
 
-        // TODO CHANGE
-        notificationsSocket.sendNotification(new FrontendNotification("action", actionNotification, null));
+        // TODO CHANGE: Persistence
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.ACTION, actionNotification, null));
     }
 
     @Incoming("incidents-notifications")
@@ -43,8 +50,10 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
     public void acceptIncidentNotifications(IncidentNotification incidentNotification) {
         LOGGER.infof("Received %s from incidents-notifications", incidentNotification);
 
-        // TODO CHANGE
-        notificationsSocket.sendNotification(new FrontendNotification("incident", null, incidentNotification));
+        // TODO CHANGE: Persistence
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
 
     }
 
@@ -52,17 +61,24 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
     @Override
     public void acceptIRNotification(IRPortalNotification irPortalNotification) {
         LOGGER.infof("Received %s from ir-notify_portal", irPortalNotification);
+        IncidentNotification incidentNotification = incidentMapper.toIncidentNotification(irPortalNotification);
 
-        // TODO
-
+        // TODO CHANGE: Persistence
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
     }
 
     @Incoming("rs-notify_portal")
     @Override
     public void acceptRSNotification(RSPortalNotification rsPortalNotification) {
         LOGGER.infof("Received %s from rs-notify_portal", rsPortalNotification);
+        IncidentNotification incidentNotification = incidentMapper.toIncidentNotification(rsPortalNotification);
 
-        // TODO
+        // TODO CHANGE: Persistence
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
 
     }
 
@@ -79,27 +95,36 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
     @Override
     public void acceptThreatFindingsNetFlow(ThreatFindingNetFlow threatFindingNetFlow) {
         LOGGER.infof("Received %s from ti-threat-findings-netflow", threatFindingNetFlow);
+        IncidentNotification incidentNotification = incidentMapper.toIncidentNotification(threatFindingNetFlow);
 
-        // TODO
-
+        // TODO CHANGE: Persistence
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
     }
 
     @Incoming("ti-threat-findings-syslog")
     @Override
     public void acceptThreadFindingSysLog(ThreadFindingSysLog threadFindingSysLog) {
         LOGGER.infof("Received %s from ti-threat-findings-syslog", threadFindingSysLog);
+        IncidentNotification incidentNotification = incidentMapper.toIncidentNotification(threadFindingSysLog);
 
-        // TODO
-
+        // TODO CHANGE: Persistence
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
     }
 
     @Incoming("ti-anomaly-detection")
     @Override
     public void acceptTIAnomaly(TIAnomaly tiAnomaly) {
         LOGGER.infof("Received %s from ti-anomaly-detection", tiAnomaly);
+        IncidentNotification incidentNotification = incidentMapper.toIncidentNotification(tiAnomaly);
 
-        // TODO
-
+        // TODO CHANGE: Persistence
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
     }
 
 }

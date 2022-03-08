@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import eu.palantir.portal.dto.message.frontend.NotificationType;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "type",
@@ -15,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class FrontendNotification {
 
     @JsonProperty("type")
-    private String type;
+    private NotificationType type;
 
     @JsonProperty("action")
     private ActionNotification action;
@@ -26,17 +28,17 @@ public class FrontendNotification {
     public FrontendNotification() {
     }
 
-    public FrontendNotification(String type, ActionNotification action, IncidentNotification incident) {
+    public FrontendNotification(NotificationType type, ActionNotification action, IncidentNotification incident) {
         this.type = type;
         this.action = action;
         this.incident = incident;
     }
 
-    public String getType() {
+    public NotificationType getType() {
         return this.type;
     }
 
-    public void setType(String type) {
+    public void setType(NotificationType type) {
         this.type = type;
     }
 
@@ -56,7 +58,7 @@ public class FrontendNotification {
         this.incident = incident;
     }
 
-    public FrontendNotification type(String type) {
+    public FrontendNotification type(NotificationType type) {
         setType(type);
         return this;
     }
