@@ -62,6 +62,22 @@ public class IncidentNotification implements Serializable {
         return incidentDescription;
     }
 
+    public void setIncidentType(String incidentType) {
+        this.incidentType = incidentType;
+    }
+
+    public void setDetectedIncident(String detectedIncident) {
+        this.detectedIncident = detectedIncident;
+    }
+
+    public void setIncidentLocation(String incidentLocation) {
+        this.incidentLocation = incidentLocation;
+    }
+
+    public void setIncidentDescription(String incidentDescription) {
+        this.incidentDescription = incidentDescription;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

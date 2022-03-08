@@ -37,6 +37,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -249,15 +250,17 @@ public class AuthService {
             throw new BadRequestAlertException("Passwords do not match", "authorization", "passwordsNotMatch");
         }
         User user = userMapper.toUser(signUpDto);
-        User tempUser = User.find(User_.USERNAME, user.getUsername()).firstResult();
+        User tempUser = (User) User.find(User_.USERNAME, user.getUsername()).firstResult().await().atMost(
+                Duration.ofSeconds(5));
         if (tempUser != null) {
             throw new UsernameAlreadyExistsException();
         }
-        tempUser = User.find(User_.EMAIL, user.getEmail()).firstResult();
+        tempUser = (User) User.find(User_.EMAIL, user.getEmail()).firstResult().await().atMost(
+                Duration.ofSeconds(5));
         if (tempUser != null) {
             throw new EmailAlreadyExistsException();
         }
-        user.persist();
+        user.persist().onItem();
         UserRepresentation keycloakUser = new UserRepresentation();
         keycloakUser.setUsername(user.getUsername());
         keycloakUser.setEmail(user.getEmail());
@@ -322,7 +325,7 @@ public class AuthService {
         if (!resetPasswordDto.getPassword().equals(resetPasswordDto.getConfirmPassword())) {
             throw new BadRequestAlertException("Passwords do not match", "authorization", "passwordsNotMatch");
         }
-        Token token = Token.find(Token_.UUID, uuid).firstResult();
+        Token token = (Token) Token.find(Token_.UUID, uuid).firstResult();
         if (token == null || token.hasExpired()) {
             throw new BadRequestAlertException("Token not valid or have expired", "authorization", "notValid");
         }
@@ -332,8 +335,11 @@ public class AuthService {
 
     @Transactional
     public void resetPasswordFromProfile(Long id, ResetPasswordDto resetPasswordDto) {
-        User user = (User) User.findByIdOptional(id)
-                .orElseThrow(() -> new NotFoundAlertException(User.class.getName()));
+        User user = null;
+        user = (User) User.findById(id).await().atMost(Duration.ofSeconds(5));
+        if (user == null) {
+            throw new NotFoundAlertException(User.class.getName());
+        }
         if (!resetPasswordDto.getPassword().equals(resetPasswordDto.getConfirmPassword())) {
             throw new BadRequestAlertException("Passwords do not match", "authorization", "passwordsNotMatch");
         }
@@ -351,7 +357,7 @@ public class AuthService {
 
     @Transactional
     public void verifyEmail(String uuid) {
-        Token token = Token.find(Token_.UUID, uuid).firstResult();
+        Token token = (Token) Token.find(Token_.UUID, uuid).firstResult().await().atMost(Duration.ofSeconds(5));
         if (token == null || token.hasExpired()) {
             throw new BadRequestAlertException("Token not valid or have expired", "authorization", "notValid");
         }
@@ -380,7 +386,7 @@ public class AuthService {
 
     @Transactional
     public void sendResetPasswordEmail(String username) {
-        User user = User.find(User_.USERNAME, username).firstResult();
+        User user = (User) User.find(User_.USERNAME, username).firstResult().await().atMost(Duration.ofSeconds(5));
         if (user == null) {
             throw new NotFoundAlertException("user");
         }
@@ -394,7 +400,7 @@ public class AuthService {
 
     @Transactional
     public void sendVerifyEmail(String username) {
-        User user = User.find(User_.USERNAME, username).firstResult();
+        User user = (User) User.find(User_.USERNAME, username).firstResult().await().atMost(Duration.ofSeconds(5));
         if (user == null) {
             throw new NotFoundAlertException("user");
         }

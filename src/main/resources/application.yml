@@ -142,6 +142,9 @@ mp:
         sql: true
     mailer:
       mock: true
+    kafka:
+      bootstrap:
+        servers: 10.101.41.255:9092 #TEST
   # domain:
 
 "%test":

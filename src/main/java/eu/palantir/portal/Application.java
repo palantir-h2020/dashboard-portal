@@ -23,28 +23,28 @@ public class Application {
     public Application() {
     }
 
-    @Inject
-    @Readiness
-    KeycloakReadinessCheck keycloakreadinesscheck;
+    // @Inject
+    // @Readiness
+    // KeycloakReadinessCheck keycloakreadinesscheck;
 
-    @Inject
-    @Readiness
-    MinioReadinessCheck minioreadinesscheck;
+    // @Inject
+    // @Readiness
+    // MinioReadinessCheck minioreadinesscheck;
 
     @Transactional
     void onStart(@Observes StartupEvent ev) {
         LOG.info("The application is starting...");
         LOG.info("Default timezone: " + TimeZone.getDefault().getDisplayName() + " with id " + ZoneId.systemDefault());
-        // Readiness checks
-        try {
-            keycloakreadinesscheck.isKeycloakReady();
-            LOG.info("Keycloak is Ready...");
-            minioreadinesscheck.isMinioReady();
-            LOG.info("Minio is Ready...");
-        } catch (Exception ex) {
-            LOG.severe("Readiness Exception ... Exiting PALANTIR PORTAL Backend");
-            Quarkus.asyncExit();
-        }
+        // // Readiness checks
+        // try {
+        // keycloakreadinesscheck.isKeycloakReady();
+        // LOG.info("Keycloak is Ready...");
+        // minioreadinesscheck.isMinioReady();
+        // LOG.info("Minio is Ready...");
+        // } catch (Exception ex) {
+        // LOG.severe("Readiness Exception ... Exiting PALANTIR PORTAL Backend");
+        // Quarkus.asyncExit();
+        // }
 
     }
 

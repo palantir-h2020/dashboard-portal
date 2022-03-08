@@ -83,6 +83,30 @@ public class ActionNotification implements Serializable {
         return onIps;
     }
 
+    public void setComponentType(String componentType) {
+        this.componentType = componentType;
+    }
+
+    public void setComponentId(String componentId) {
+        this.componentId = componentId;
+    }
+
+    public void setComponentIP(String componentIP) {
+        this.componentIP = componentIP;
+    }
+
+    public void setActionName(String actionName) {
+        this.actionName = actionName;
+    }
+
+    public void setActionDescription(String actionDescription) {
+        this.actionDescription = actionDescription;
+    }
+
+    public void setOnIps(List<String> onIps) {
+        this.onIps = onIps;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
