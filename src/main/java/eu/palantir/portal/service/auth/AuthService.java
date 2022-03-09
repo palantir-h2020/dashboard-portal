@@ -56,8 +56,6 @@ public class AuthService {
     String adminUsername;
     @ConfigProperty(name = "keycloak.admin.password")
     String adminPassword;
-    @ConfigProperty(name = "domain")
-    String domain;
 
     @Inject
     UserMapper userMapper;
@@ -392,10 +390,6 @@ public class AuthService {
         }
         Token token = new Token(user, Token.Type.RESET_PASSWORD);
         token.persistAndFlush();
-        Templates.reset_password(domain + "/auth/reset-password?uuid=" + token.getUuid()).to(user.getEmail())
-                .subject("Reset your password").send()
-                .subscribeAsCompletionStage()
-                .thenApply(x -> Response.accepted().build());
     }
 
     @Transactional
@@ -406,10 +400,6 @@ public class AuthService {
         }
         Token token = new Token(user, Token.Type.VERIFY_EMAIL);
         token.persistAndFlush();
-        Templates.verify_email(domain + "/auth/verify-email?uuid=" + token.getUuid()).to(user.getEmail())
-                .subject("Verify email").send()
-                .subscribeAsCompletionStage()
-                .thenApply(x -> Response.accepted().build());
     }
 
 }

@@ -10,14 +10,12 @@ quarkus:
 
   datasource:
     db-kind: postgresql
-    jdbc:
-      driver: org.postgresql.Driver
 
   hibernate-orm:
     jdbc:
       timezone: "UTC"
     database:
-      generation: validate
+      generation: "drop-and-create"
     sql-load-script: no-file
 
   ssl:
@@ -132,8 +130,6 @@ mp:
   quarkus:
     datasource:
       db-kind: postgresql
-      jdbc:
-        url: org.postgresql.Driver
       metrics:
         enabled: true
     hibernate-orm:
@@ -166,8 +162,6 @@ mp:
       type: uber-jar
     datasource:
       db-kind: postgresql
-      jdbc:
-        url: org.postgresql.Driver
       metrics:
         enabled: true
     hibernate-orm:
