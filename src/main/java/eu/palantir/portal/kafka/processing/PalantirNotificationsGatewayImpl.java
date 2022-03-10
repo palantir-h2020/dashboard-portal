@@ -17,19 +17,20 @@ import eu.palantir.portal.dto.message.sm.SMResponse;
 import eu.palantir.portal.dto.message.ti.TIAnomaly;
 import eu.palantir.portal.dto.message.ti.ThreadFindingSysLog;
 import eu.palantir.portal.dto.message.ti.ThreatFindingNetFlow;
-import eu.palantir.portal.websocket.NotificationsSocket;
+import eu.palantir.portal.websocket.FrontendNotificationsGateway;
 
 @ApplicationScoped
 public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGateway {
 
     private static final Logger LOGGER = Logger.getLogger(PalantirNotificationsGatewayImpl.class);
 
-    private final NotificationsSocket notificationsSocket;
+    private final FrontendNotificationsGateway notificationsSocket;
 
     private final IncidentMapper incidentMapper;
 
     @Inject
-    public PalantirNotificationsGatewayImpl(NotificationsSocket notificationsSocket, IncidentMapper incidentMapper) {
+    public PalantirNotificationsGatewayImpl(FrontendNotificationsGateway notificationsSocket,
+            IncidentMapper incidentMapper) {
         this.notificationsSocket = notificationsSocket;
         this.incidentMapper = incidentMapper;
     }
@@ -53,7 +54,7 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
         // TODO CHANGE: Persistence
         // ADD LATER: User filtering
         notificationsSocket
-                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, null, incidentNotification));
 
     }
 
@@ -66,7 +67,7 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
         // TODO CHANGE: Persistence
         // ADD LATER: User filtering
         notificationsSocket
-                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, null, incidentNotification));
     }
 
     @Incoming("rs-notify_portal")
@@ -78,7 +79,7 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
         // TODO CHANGE: Persistence
         // ADD LATER: User filtering
         notificationsSocket
-                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, null, incidentNotification));
 
     }
 
@@ -100,7 +101,7 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
         // TODO CHANGE: Persistence
         // ADD LATER: User filtering
         notificationsSocket
-                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, null, incidentNotification));
     }
 
     @Incoming("ti-threat-findings-syslog")
@@ -112,7 +113,7 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
         // TODO CHANGE: Persistence
         // ADD LATER: User filtering
         notificationsSocket
-                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, null, incidentNotification));
     }
 
     @Incoming("ti-anomaly-detection")
@@ -124,7 +125,7 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
         // TODO CHANGE: Persistence
         // ADD LATER: User filtering
         notificationsSocket
-                .sendNotification(new FrontendNotification(NotificationType.NOTIFICATION, null, incidentNotification));
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, null, incidentNotification));
     }
 
 }
