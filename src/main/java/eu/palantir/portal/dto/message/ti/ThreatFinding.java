@@ -161,67 +161,21 @@ public class ThreatFinding implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(ThreatFinding.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this)))
-                .append('[');
-        sb.append("timeStart");
-        sb.append('=');
-        sb.append(((this.timeStart == null) ? "<null>" : this.timeStart));
-        sb.append(',');
-        sb.append("timeEnd");
-        sb.append('=');
-        sb.append(((this.timeEnd == null) ? "<null>" : this.timeEnd));
-        sb.append(',');
-        sb.append("timeDuration");
-        sb.append('=');
-        sb.append(((this.timeDuration == null) ? "<null>" : this.timeDuration));
-        sb.append(',');
-        sb.append("sourceAddress");
-        sb.append('=');
-        sb.append(((this.sourceAddress == null) ? "<null>" : this.sourceAddress));
-        sb.append(',');
-        sb.append("destinationAddress");
-        sb.append('=');
-        sb.append(((this.destinationAddress == null) ? "<null>" : this.destinationAddress));
-        sb.append(',');
-        sb.append("sourcePort");
-        sb.append('=');
-        sb.append(((this.sourcePort == null) ? "<null>" : this.sourcePort));
-        sb.append(',');
-        sb.append("destinationPort");
-        sb.append('=');
-        sb.append(((this.destinationPort == null) ? "<null>" : this.destinationPort));
-        sb.append(',');
-        sb.append("protocol");
-        sb.append('=');
-        sb.append(((this.protocol == null) ? "<null>" : this.protocol));
-        sb.append(',');
-        sb.append("flag");
-        sb.append('=');
-        sb.append(((this.flag == null) ? "<null>" : this.flag));
-        sb.append(',');
-        sb.append("soureTos");
-        sb.append('=');
-        sb.append(((this.soureTos == null) ? "<null>" : this.soureTos));
-        sb.append(',');
-        sb.append("inputPackets");
-        sb.append('=');
-        sb.append(((this.inputPackets == null) ? "<null>" : this.inputPackets));
-        sb.append(',');
-        sb.append("inputBytes");
-        sb.append('=');
-        sb.append(((this.inputBytes == null) ? "<null>" : this.inputBytes));
-        sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
-        sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "{" +
+                " timeStart='" + getTimeStart() + "'" +
+                ", timeEnd='" + getTimeEnd() + "'" +
+                ", timeDuration='" + getTimeDuration() + "'" +
+                ", sourceAddress='" + getSourceAddress() + "'" +
+                ", destinationAddress='" + getDestinationAddress() + "'" +
+                ", sourcePort='" + getSourcePort() + "'" +
+                ", destinationPort='" + getDestinationPort() + "'" +
+                ", protocol='" + getProtocol() + "'" +
+                ", flag='" + getFlag() + "'" +
+                ", soureTos='" + getSoureTos() + "'" +
+                ", inputPackets='" + getInputPackets() + "'" +
+                ", inputBytes='" + getInputBytes() + "'" +
+                ", additionalProperties='" + getAdditionalProperties() + "'" +
+                "}";
     }
 
     @Override

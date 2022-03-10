@@ -59,31 +59,12 @@ public class TIAnomaly implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(TIAnomaly.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this)))
-                .append('[');
-        sb.append("netFlowData");
-        sb.append('=');
-        sb.append(((this.netFlowData == null) ? "<null>" : this.netFlowData));
-        sb.append(',');
-        sb.append("anomalyDetectionMethod");
-        sb.append('=');
-        sb.append(((this.anomalyDetectionMethod == null) ? "<null>" : this.anomalyDetectionMethod));
-        sb.append(',');
-        sb.append("anomalyScore");
-        sb.append('=');
-        sb.append(((this.anomalyScore == null) ? "<null>" : this.anomalyScore));
-        sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
-        sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "{" +
+                " netFlowData='" + getNetFlowData() + "'" +
+                ", anomalyDetectionMethod='" + getAnomalyDetectionMethod() + "'" +
+                ", anomalyScore='" + getAnomalyScore() + "'" +
+                ", additionalProperties='" + getAdditionalProperties() + "'" +
+                "}";
     }
 
     @Override

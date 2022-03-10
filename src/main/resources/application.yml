@@ -58,7 +58,7 @@ mp:
     outgoing:
       cmr-requests:
         connector: smallrye-kafka
-        topic: cmr.requests
+        topic: "cmr.requests"
         value:
           serializer: io.quarkus.kafka.client.serialization.ObjectMapperSerializer
     incoming:
@@ -66,56 +66,56 @@ mp:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
-        topic: actions-notifications
+        topic: "actions-notifications"
         value:
           deserializer: eu.palantir.portal.kafka.serialization.ActionsNotificationsDeserializer
       incidents-notifications:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
-        topic: incidents-notifications
+        topic: "incidents-notifications"
         value:
           deserializer: eu.palantir.portal.kafka.serialization.IncidentNotificationsDeserializer
       cmr-responses:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
-        topic: cmr.responses
+        topic: "cmr.responses"
         value:
           deserializer: eu.palantir.portal.kafka.serialization.SMResponsesDeserializer
       ti-threat-findings-netflow:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
-        topic: ti.threat_findings_netflow
+        topic: "ti.threat_findings_netflow"
         value:
           deserializer: eu.palantir.portal.kafka.serialization.ThreatFindingsNetFlowDeserializer
       ti-threat-findings-syslog:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
-        topic: ti.threat_findings_syslog
+        topic: "ti.threat_findings_syslog"
         value:
           deserializer: eu.palantir.portal.kafka.serialization.ThreatFindingsSysLogDeserializer
       ti-anomaly-detection:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
-        topic: ti.anomaly_detection
+        topic: "ti.anomaly_detection"
         value:
           deserializer: eu.palantir.portal.kafka.serialization.TIAnomalyDetectionDeserializer
       ir-notify_portal:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
-        topic: ir.notify_portal
+        topic: "ir.notify_portal"
         value:
           deserializer: eu.palantir.portal.kafka.serialization.IRNotificationDeserializer
       rs-notify_portal:
         connector: smallrye-kafka
         failure-strategy: ignore
         health-readiness-enabled: false
-        topic: rs.notify_portal
+        topic: "rs.notify_portal"
         value:
           deserializer: eu.palantir.portal.kafka.serialization.RSNotificationDeserializer
 
@@ -139,8 +139,8 @@ mp:
     mailer:
       mock: true
     kafka:
-      bootstrap:
-        servers: 10.101.41.255:9092 #TEST
+      devservices:
+        enabled: false
   # domain:
 
 "%test":
@@ -172,7 +172,4 @@ mp:
       mock: false
     liquibase:
       contexts: "!fake-data"
-    kafka:
-      bootstrap:
-        servers: kafka:9092
   # domain:

@@ -85,39 +85,14 @@ public class SMRequestParameter implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(SMRequestParameter.class.getName()).append('@')
-                .append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("mechName");
-        sb.append('=');
-        sb.append(((this.mechName == null) ? "<null>" : this.mechName));
-        sb.append(',');
-        sb.append("nature");
-        sb.append('=');
-        sb.append(((this.nature == null) ? "<null>" : this.nature));
-        sb.append(',');
-        sb.append("scId");
-        sb.append('=');
-        sb.append(((this.scId == null) ? "<null>" : this.scId));
-        sb.append(',');
-        sb.append("billingPeriod");
-        sb.append('=');
-        sb.append(((this.billingPeriod == null) ? "<null>" : this.billingPeriod));
-        sb.append(',');
-        sb.append("name");
-        sb.append('=');
-        sb.append(((this.name == null) ? "<null>" : this.name));
-        sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
-        sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "{" +
+                " mechName='" + getMechName() + "'" +
+                ", nature='" + getNature() + "'" +
+                ", scId='" + getScId() + "'" +
+                ", billingPeriod='" + getBillingPeriod() + "'" +
+                ", name='" + getName() + "'" +
+                ", additionalProperties='" + getAdditionalProperties() + "'" +
+                "}";
     }
 
     @Override

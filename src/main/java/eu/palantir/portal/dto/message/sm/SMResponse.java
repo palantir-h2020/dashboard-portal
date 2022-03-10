@@ -74,35 +74,13 @@ public class SMResponse implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(SMResponse.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this)))
-                .append('[');
-        sb.append("session");
-        sb.append('=');
-        sb.append(((this.session == null) ? "<null>" : this.session));
-        sb.append(',');
-        sb.append("success");
-        sb.append('=');
-        sb.append(((this.success == null) ? "<null>" : this.success));
-        sb.append(',');
-        sb.append("error");
-        sb.append('=');
-        sb.append(((this.error == null) ? "<null>" : this.error));
-        sb.append(',');
-        sb.append("content");
-        sb.append('=');
-        sb.append(((this.content == null) ? "<null>" : this.content));
-        sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
-        sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "{" +
+                " session='" + getSession() + "'" +
+                ", success='" + getSuccess() + "'" +
+                ", error='" + getError() + "'" +
+                ", content='" + getContent() + "'" +
+                ", additionalProperties='" + getAdditionalProperties() + "'" +
+                "}";
     }
 
     @Override

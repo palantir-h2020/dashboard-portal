@@ -65,31 +65,12 @@ public class Content implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(Content.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this)))
-                .append('[');
-        sb.append("cost");
-        sb.append('=');
-        sb.append(((this.cost == null) ? "<null>" : this.cost));
-        sb.append(',');
-        sb.append("content");
-        sb.append('=');
-        sb.append(((this.content == null) ? "<null>" : this.content));
-        sb.append(',');
-        sb.append("effectivelyDeployed");
-        sb.append('=');
-        sb.append(((this.effectivelyDeployed == null) ? "<null>" : this.effectivelyDeployed));
-        sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
-        sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "{" +
+                " cost='" + getCost() + "'" +
+                ", content='" + getContent() + "'" +
+                ", effectivelyDeployed='" + getEffectivelyDeployed() + "'" +
+                ", additionalProperties='" + getAdditionalProperties() + "'" +
+                "}";
     }
 
     @Override

@@ -96,43 +96,15 @@ public class SmScContent implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(SmScContent.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this)))
-                .append('[');
-        sb.append("scId");
-        sb.append('=');
-        sb.append(((this.scId == null) ? "<null>" : this.scId));
-        sb.append(',');
-        sb.append("billingModel");
-        sb.append('=');
-        sb.append(((this.billingModel == null) ? "<null>" : this.billingModel));
-        sb.append(',');
-        sb.append("sla");
-        sb.append('=');
-        sb.append(((this.sla == null) ? "<null>" : this.sla));
-        sb.append(',');
-        sb.append("infrastructureId");
-        sb.append('=');
-        sb.append(((this.infrastructureId == null) ? "<null>" : this.infrastructureId));
-        sb.append(',');
-        sb.append("deploymentModel");
-        sb.append('=');
-        sb.append(((this.deploymentModel == null) ? "<null>" : this.deploymentModel));
-        sb.append(',');
-        sb.append("typeCounterMeasure");
-        sb.append('=');
-        sb.append(((this.typeCounterMeasure == null) ? "<null>" : this.typeCounterMeasure));
-        sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
-        sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "{" +
+                " scId='" + getScId() + "'" +
+                ", billingModel='" + getBillingModel() + "'" +
+                ", sla='" + getSla() + "'" +
+                ", infrastructureId='" + getInfrastructureId() + "'" +
+                ", deploymentModel='" + getDeploymentModel() + "'" +
+                ", typeCounterMeasure='" + getTypeCounterMeasure() + "'" +
+                ", additionalProperties='" + getAdditionalProperties() + "'" +
+                "}";
     }
 
     @Override

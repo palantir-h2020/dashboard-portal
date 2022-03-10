@@ -64,31 +64,12 @@ public class IRPortalNotification implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(IRPortalNotification.class.getName()).append('@')
-                .append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("message");
-        sb.append('=');
-        sb.append(((this.message == null) ? "<null>" : this.message));
-        sb.append(',');
-        sb.append("detectedIncident");
-        sb.append('=');
-        sb.append(((this.detectedIncident == null) ? "<null>" : this.detectedIncident));
-        sb.append(',');
-        sb.append("incidentLocation");
-        sb.append('=');
-        sb.append(((this.incidentLocation == null) ? "<null>" : this.incidentLocation));
-        sb.append(',');
-        sb.append("incidentDescription");
-        sb.append('=');
-        sb.append(((this.incidentDescription == null) ? "<null>" : this.incidentDescription));
-        sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "{" +
+                " message='" + getMessage() + "'" +
+                ", detectedIncident='" + getDetectedIncident() + "'" +
+                ", incidentLocation='" + getIncidentLocation() + "'" +
+                ", incidentDescription='" + getIncidentDescription() + "'" +
+                "}";
     }
 
     @Override

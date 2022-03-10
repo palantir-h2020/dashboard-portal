@@ -109,39 +109,14 @@ public class ActionNotification implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(ActionNotification.class.getName()).append('@')
-                .append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("componentType");
-        sb.append('=');
-        sb.append(((this.componentType == null) ? "<null>" : this.componentType));
-        sb.append(',');
-        sb.append("componentId");
-        sb.append('=');
-        sb.append(((this.componentId == null) ? "<null>" : this.componentId));
-        sb.append(',');
-        sb.append("componentIP");
-        sb.append('=');
-        sb.append(((this.componentIP == null) ? "<null>" : this.componentIP));
-        sb.append(',');
-        sb.append("actionName");
-        sb.append('=');
-        sb.append(((this.actionName == null) ? "<null>" : this.actionName));
-        sb.append(',');
-        sb.append("actionDescription");
-        sb.append('=');
-        sb.append(((this.actionDescription == null) ? "<null>" : this.actionDescription));
-        sb.append(',');
-        sb.append("onIps");
-        sb.append('=');
-        sb.append(((this.onIps == null) ? "<null>" : this.onIps));
-        sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "{" +
+                " componentType='" + getComponentType() + "'" +
+                ", componentId='" + getComponentId() + "'" +
+                ", componentIP='" + getComponentIP() + "'" +
+                ", actionName='" + getActionName() + "'" +
+                ", actionDescription='" + getActionDescription() + "'" +
+                ", onIps='" + getOnIps() + "'" +
+                "}";
     }
 
     @Override

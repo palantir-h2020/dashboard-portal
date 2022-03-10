@@ -76,35 +76,13 @@ public class SMRequest implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(SMRequest.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this)))
-                .append('[');
-        sb.append("session");
-        sb.append('=');
-        sb.append(((this.session == null) ? "<null>" : this.session));
-        sb.append(',');
-        sb.append("realm");
-        sb.append('=');
-        sb.append(((this.realm == null) ? "<null>" : this.realm));
-        sb.append(',');
-        sb.append("action");
-        sb.append('=');
-        sb.append(((this.action == null) ? "<null>" : this.action));
-        sb.append(',');
-        sb.append("parameter");
-        sb.append('=');
-        sb.append(((this.parameter == null) ? "<null>" : this.parameter));
-        sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
-        sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "{" +
+                " session='" + getSession() + "'" +
+                ", realm='" + getRealm() + "'" +
+                ", action='" + getAction() + "'" +
+                ", parameter='" + getParameter() + "'" +
+                ", additionalProperties='" + getAdditionalProperties() + "'" +
+                "}";
     }
 
     @Override

@@ -69,35 +69,13 @@ public class ThreadFindingSysLog implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(ThreadFindingSysLog.class.getName()).append('@')
-                .append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("anomalyDetectionSyslog");
-        sb.append('=');
-        sb.append(((this.anomalyDetectionSyslog == null) ? "<null>" : this.anomalyDetectionSyslog));
-        sb.append(',');
-        sb.append("threatLabel");
-        sb.append('=');
-        sb.append(((this.threatLabel == null) ? "<null>" : this.threatLabel));
-        sb.append(',');
-        sb.append("classificationConfidence");
-        sb.append('=');
-        sb.append(((this.classificationConfidence == null) ? "<null>" : this.classificationConfidence));
-        sb.append(',');
-        sb.append("outlierScore");
-        sb.append('=');
-        sb.append(((this.outlierScore == null) ? "<null>" : this.outlierScore));
-        sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null) ? "<null>" : this.additionalProperties));
-        sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "{" +
+                " anomalyDetectionSyslog='" + getAnomalyDetectionSyslog() + "'" +
+                ", threatLabel='" + getThreatLabel() + "'" +
+                ", classificationConfidence='" + getClassificationConfidence() + "'" +
+                ", outlierScore='" + getOutlierScore() + "'" +
+                ", additionalProperties='" + getAdditionalProperties() + "'" +
+                "}";
     }
 
     @Override

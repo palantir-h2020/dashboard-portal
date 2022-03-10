@@ -84,39 +84,14 @@ public class RSPortalNotification implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(RSPortalNotification.class.getName()).append('@')
-                .append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("message");
-        sb.append('=');
-        sb.append(((this.message == null) ? "<null>" : this.message));
-        sb.append(',');
-        sb.append("serviceIP");
-        sb.append('=');
-        sb.append(((this.serviceIP == null) ? "<null>" : this.serviceIP));
-        sb.append(',');
-        sb.append("nodeType");
-        sb.append('=');
-        sb.append(((this.nodeType == null) ? "<null>" : this.nodeType));
-        sb.append(',');
-        sb.append("nodeId");
-        sb.append('=');
-        sb.append(((this.nodeId == null) ? "<null>" : this.nodeId));
-        sb.append(',');
-        sb.append("failedAttestation");
-        sb.append('=');
-        sb.append(((this.failedAttestation == null) ? "<null>" : this.failedAttestation));
-        sb.append(',');
-        sb.append("failedDescription");
-        sb.append('=');
-        sb.append(((this.failedDescription == null) ? "<null>" : this.failedDescription));
-        sb.append(',');
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "{" +
+                " message='" + getMessage() + "'" +
+                ", serviceIP='" + getServiceIP() + "'" +
+                ", nodeType='" + getNodeType() + "'" +
+                ", nodeId='" + getNodeId() + "'" +
+                ", failedAttestation='" + getFailedAttestation() + "'" +
+                ", failedDescription='" + getFailedDescription() + "'" +
+                "}";
     }
 
     @Override
