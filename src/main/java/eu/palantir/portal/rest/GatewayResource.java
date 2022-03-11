@@ -52,7 +52,7 @@ public class GatewayResource {
         ThreadFindingSysLog threadFindingSysLog = new ThreadFindingSysLog(
                 "Mar  4 18:01:44 mail HORDE: Guest user is not authorized for Horde (Host: 192.168.10.81). [pid 6193 on line 324 of \"/usr/share/php/Horde/Registry.php\"]",
                 "nikto",
-                0.9532062624908422, -0.6513663945875967);
+                0.9532062624908422, "0.6513663945875967", "10.101.41.33");
 
         notificationsGateway.acceptThreadFindingSysLog(threadFindingSysLog);
 

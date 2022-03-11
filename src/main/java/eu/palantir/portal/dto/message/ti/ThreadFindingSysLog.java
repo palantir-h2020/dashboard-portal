@@ -22,7 +22,7 @@ public class ThreadFindingSysLog implements Serializable {
     @JsonProperty("Threat_Label")
     private String threatLabel;
     @JsonProperty("Classification_Confidence")
-    private Float classificationConfidence;
+    private Double classificationConfidence;
     @JsonProperty("Outlier_Score")
     private String outlierScore;
     @JsonProperty("Source_IP")
@@ -39,7 +39,7 @@ public class ThreadFindingSysLog implements Serializable {
      * @param threatLabel
      * @param classificationConfidence
      */
-    public ThreadFindingSysLog(String anomalyDetectionSyslog, String threatLabel, Float classificationConfidence,
+    public ThreadFindingSysLog(String anomalyDetectionSyslog, String threatLabel, Double classificationConfidence,
             String outlierScore, String sourceIP) {
         super();
         this.anomalyDetectionSyslog = anomalyDetectionSyslog;
@@ -70,12 +70,12 @@ public class ThreadFindingSysLog implements Serializable {
     }
 
     @JsonProperty("Classification_Confidence")
-    public Float getClassificationConfidence() {
+    public Double getClassificationConfidence() {
         return classificationConfidence;
     }
 
     @JsonProperty("Classification_Confidence")
-    public void setClassificationConfidence(Float classificationConfidence) {
+    public void setClassificationConfidence(Double classificationConfidence) {
         this.classificationConfidence = classificationConfidence;
     }
 

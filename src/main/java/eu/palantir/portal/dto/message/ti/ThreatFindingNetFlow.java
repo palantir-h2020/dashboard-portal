@@ -24,9 +24,9 @@ public class ThreatFindingNetFlow implements Serializable {
     @JsonProperty("Threat_Category")
     private String threatCategory;
     @JsonProperty("Classification_Confidence")
-    private Float classificationConfidence;
+    private Double classificationConfidence;
     @JsonProperty("Outlier_Score")
-    private Float outlierScore;
+    private Double outlierScore;
 
     public ThreatFindingNetFlow() {
     }
@@ -40,7 +40,7 @@ public class ThreatFindingNetFlow implements Serializable {
      * @param classificationConfidence
      */
     public ThreatFindingNetFlow(ThreatFinding threatFinding, String threatLabel, String threatCategory,
-            Float classificationConfidence, Float outlierScore) {
+            Double classificationConfidence, Double outlierScore) {
         super();
         this.threatFinding = threatFinding;
         this.threatLabel = threatLabel;
@@ -80,22 +80,22 @@ public class ThreatFindingNetFlow implements Serializable {
     }
 
     @JsonProperty("Classification_Confidence")
-    public Float getClassificationConfidence() {
+    public Double getClassificationConfidence() {
         return classificationConfidence;
     }
 
     @JsonProperty("Classification_Confidence")
-    public void setClassificationConfidence(Float classificationConfidence) {
+    public void setClassificationConfidence(Double classificationConfidence) {
         this.classificationConfidence = classificationConfidence;
     }
 
     @JsonProperty("Outlier_Score")
-    public Float getOutlierScore() {
+    public Double getOutlierScore() {
         return outlierScore;
     }
 
     @JsonProperty("Outlier_Score")
-    public void setOutlierScore(Float outlierScore) {
+    public void setOutlierScore(Double outlierScore) {
         this.outlierScore = outlierScore;
     }
 
