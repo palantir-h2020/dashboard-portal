@@ -1,13 +1,8 @@
-
 package eu.palantir.portal.dto.message.ti;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -30,13 +25,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class ThreatFinding implements Serializable {
 
     @JsonProperty("Time_Start")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
-    private Date timeStart;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+    private String timeStart;
     @JsonProperty("Time_End")
-    private Date timeEnd;
+    private String timeEnd;
     @JsonProperty("Time_Duration")
-    private Double timeDuration;
+    private String timeDuration;
     @JsonProperty("Source_Address")
     private String sourceAddress;
     @JsonProperty("Destination_Address")
@@ -55,8 +48,6 @@ public class ThreatFinding implements Serializable {
     private Integer inputPackets;
     @JsonProperty("Input_bytes")
     private Integer inputBytes;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public ThreatFinding() {
     }
@@ -76,7 +67,7 @@ public class ThreatFinding implements Serializable {
      * @param soureTos
      * @param timeDuration
      */
-    public ThreatFinding(Date timeStart, Date timeEnd, Double timeDuration, String sourceAddress,
+    public ThreatFinding(String timeStart, String timeEnd, String timeDuration, String sourceAddress,
             String destinationAddress, Integer sourcePort, Integer destinationPort, String protocol, String flag,
             Integer soureTos, Integer inputPackets, Integer inputBytes) {
         super();
@@ -95,18 +86,33 @@ public class ThreatFinding implements Serializable {
     }
 
     @JsonProperty("Time_Start")
-    public Date getTimeStart() {
+    public String getTimeStart() {
         return timeStart;
     }
 
+    @JsonProperty("Time_Start")
+    public void setTimeStart(String timeStart) {
+        this.timeStart = timeStart;
+    }
+
     @JsonProperty("Time_End")
-    public Date getTimeEnd() {
+    public String getTimeEnd() {
         return timeEnd;
     }
 
+    @JsonProperty("Time_End")
+    public void setTimeEnd(String timeEnd) {
+        this.timeEnd = timeEnd;
+    }
+
     @JsonProperty("Time_Duration")
-    public Double getTimeDuration() {
+    public String getTimeDuration() {
         return timeDuration;
+    }
+
+    @JsonProperty("Time_Duration")
+    public void setTimeDuration(String timeDuration) {
+        this.timeDuration = timeDuration;
     }
 
     @JsonProperty("Source_Address")
@@ -114,9 +120,19 @@ public class ThreatFinding implements Serializable {
         return sourceAddress;
     }
 
+    @JsonProperty("Source_Address")
+    public void setSourceAddress(String sourceAddress) {
+        this.sourceAddress = sourceAddress;
+    }
+
     @JsonProperty("Destination_Address")
     public String getDestinationAddress() {
         return destinationAddress;
+    }
+
+    @JsonProperty("Destination_Address")
+    public void setDestinationAddress(String destinationAddress) {
+        this.destinationAddress = destinationAddress;
     }
 
     @JsonProperty("Source_Port")
@@ -124,9 +140,19 @@ public class ThreatFinding implements Serializable {
         return sourcePort;
     }
 
+    @JsonProperty("Source_Port")
+    public void setSourcePort(Integer sourcePort) {
+        this.sourcePort = sourcePort;
+    }
+
     @JsonProperty("Destination_Port")
     public Integer getDestinationPort() {
         return destinationPort;
+    }
+
+    @JsonProperty("Destination_Port")
+    public void setDestinationPort(Integer destinationPort) {
+        this.destinationPort = destinationPort;
     }
 
     @JsonProperty("Protocol")
@@ -134,9 +160,19 @@ public class ThreatFinding implements Serializable {
         return protocol;
     }
 
+    @JsonProperty("Protocol")
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
     @JsonProperty("Flag")
     public String getFlag() {
         return flag;
+    }
+
+    @JsonProperty("Flag")
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 
     @JsonProperty("Soure_tos")
@@ -144,9 +180,19 @@ public class ThreatFinding implements Serializable {
         return soureTos;
     }
 
+    @JsonProperty("Soure_tos")
+    public void setSoureTos(Integer soureTos) {
+        this.soureTos = soureTos;
+    }
+
     @JsonProperty("Input_packets")
     public Integer getInputPackets() {
         return inputPackets;
+    }
+
+    @JsonProperty("Input_packets")
+    public void setInputPackets(Integer inputPackets) {
+        this.inputPackets = inputPackets;
     }
 
     @JsonProperty("Input_bytes")
@@ -154,9 +200,35 @@ public class ThreatFinding implements Serializable {
         return inputBytes;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+    @JsonProperty("Input_bytes")
+    public void setInputBytes(Integer inputBytes) {
+        this.inputBytes = inputBytes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof ThreatFinding)) {
+            return false;
+        }
+        ThreatFinding threatFinding = (ThreatFinding) o;
+        return Objects.equals(timeStart, threatFinding.timeStart) && Objects.equals(timeEnd, threatFinding.timeEnd)
+                && Objects.equals(timeDuration, threatFinding.timeDuration)
+                && Objects.equals(sourceAddress, threatFinding.sourceAddress)
+                && Objects.equals(destinationAddress, threatFinding.destinationAddress)
+                && Objects.equals(sourcePort, threatFinding.sourcePort)
+                && Objects.equals(destinationPort, threatFinding.destinationPort)
+                && Objects.equals(protocol, threatFinding.protocol) && Objects.equals(flag, threatFinding.flag)
+                && Objects.equals(soureTos, threatFinding.soureTos)
+                && Objects.equals(inputPackets, threatFinding.inputPackets)
+                && Objects.equals(inputBytes, threatFinding.inputBytes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(timeStart, timeEnd, timeDuration, sourceAddress, destinationAddress, sourcePort,
+                destinationPort, protocol, flag, soureTos, inputPackets, inputBytes);
     }
 
     @Override
@@ -174,61 +246,7 @@ public class ThreatFinding implements Serializable {
                 ", soureTos='" + getSoureTos() + "'" +
                 ", inputPackets='" + getInputPackets() + "'" +
                 ", inputBytes='" + getInputBytes() + "'" +
-                ", additionalProperties='" + getAdditionalProperties() + "'" +
                 "}";
-    }
-
-    @Override
-    public int hashCode() {
-        int result = 1;
-        result = ((result * 31) + ((this.timeEnd == null) ? 0 : this.timeEnd.hashCode()));
-        result = ((result * 31) + ((this.destinationPort == null) ? 0 : this.destinationPort.hashCode()));
-        result = ((result * 31) + ((this.sourcePort == null) ? 0 : this.sourcePort.hashCode()));
-        result = ((result * 31) + ((this.sourceAddress == null) ? 0 : this.sourceAddress.hashCode()));
-        result = ((result * 31) + ((this.destinationAddress == null) ? 0 : this.destinationAddress.hashCode()));
-        result = ((result * 31) + ((this.flag == null) ? 0 : this.flag.hashCode()));
-        result = ((result * 31) + ((this.timeDuration == null) ? 0 : this.timeDuration.hashCode()));
-        result = ((result * 31) + ((this.inputPackets == null) ? 0 : this.inputPackets.hashCode()));
-        result = ((result * 31) + ((this.inputBytes == null) ? 0 : this.inputBytes.hashCode()));
-        result = ((result * 31) + ((this.protocol == null) ? 0 : this.protocol.hashCode()));
-        result = ((result * 31) + ((this.timeStart == null) ? 0 : this.timeStart.hashCode()));
-        result = ((result * 31) + ((this.soureTos == null) ? 0 : this.soureTos.hashCode()));
-        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof ThreatFinding) == false) {
-            return false;
-        }
-        ThreatFinding rhs = ((ThreatFinding) other);
-        return ((((((((((((((this.timeEnd == rhs.timeEnd)
-                || ((this.timeEnd != null) && this.timeEnd.equals(rhs.timeEnd)))
-                && ((this.destinationPort == rhs.destinationPort)
-                        || ((this.destinationPort != null) && this.destinationPort.equals(rhs.destinationPort))))
-                && ((this.sourcePort == rhs.sourcePort)
-                        || ((this.sourcePort != null) && this.sourcePort.equals(rhs.sourcePort))))
-                && ((this.sourceAddress == rhs.sourceAddress)
-                        || ((this.sourceAddress != null) && this.sourceAddress.equals(rhs.sourceAddress))))
-                && ((this.destinationAddress == rhs.destinationAddress) || ((this.destinationAddress != null)
-                        && this.destinationAddress.equals(rhs.destinationAddress))))
-                && ((this.flag == rhs.flag) || ((this.flag != null) && this.flag.equals(rhs.flag))))
-                && ((this.timeDuration == rhs.timeDuration)
-                        || ((this.timeDuration != null) && this.timeDuration.equals(rhs.timeDuration))))
-                && ((this.inputPackets == rhs.inputPackets)
-                        || ((this.inputPackets != null) && this.inputPackets.equals(rhs.inputPackets))))
-                && ((this.inputBytes == rhs.inputBytes)
-                        || ((this.inputBytes != null) && this.inputBytes.equals(rhs.inputBytes))))
-                && ((this.protocol == rhs.protocol) || ((this.protocol != null) && this.protocol.equals(rhs.protocol))))
-                && ((this.timeStart == rhs.timeStart)
-                        || ((this.timeStart != null) && this.timeStart.equals(rhs.timeStart))))
-                && ((this.soureTos == rhs.soureTos) || ((this.soureTos != null) && this.soureTos.equals(rhs.soureTos))))
-                && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null)
-                        && this.additionalProperties.equals(rhs.additionalProperties))));
     }
 
 }

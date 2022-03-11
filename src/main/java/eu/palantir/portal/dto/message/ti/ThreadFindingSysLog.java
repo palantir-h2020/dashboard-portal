@@ -1,11 +1,8 @@
-
 package eu.palantir.portal.dto.message.ti;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -15,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "AnomalyDetectionSyslog",
         "Threat_Label",
         "Classification_Confidence",
-        "Outlier_Score"
+        "Outlier_Score",
+        "Source_IP"
 })
 public class ThreadFindingSysLog implements Serializable {
 
@@ -24,22 +22,31 @@ public class ThreadFindingSysLog implements Serializable {
     @JsonProperty("Threat_Label")
     private String threatLabel;
     @JsonProperty("Classification_Confidence")
-    private Double classificationConfidence;
+    private Float classificationConfidence;
     @JsonProperty("Outlier_Score")
-    private Double outlierScore;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private String outlierScore;
+    @JsonProperty("Source_IP")
+    private String sourceIP;
 
     public ThreadFindingSysLog() {
     }
 
-    public ThreadFindingSysLog(String anomalyDetectionSyslog, String threatLabel, Double classificationConfidence,
-            Double outlierScore) {
+    /**
+     *
+     * @param anomalyDetectionSyslog
+     * @param sourceIP
+     * @param outlierScore
+     * @param threatLabel
+     * @param classificationConfidence
+     */
+    public ThreadFindingSysLog(String anomalyDetectionSyslog, String threatLabel, Float classificationConfidence,
+            String outlierScore, String sourceIP) {
         super();
         this.anomalyDetectionSyslog = anomalyDetectionSyslog;
         this.threatLabel = threatLabel;
         this.classificationConfidence = classificationConfidence;
         this.outlierScore = outlierScore;
+        this.sourceIP = sourceIP;
     }
 
     @JsonProperty("AnomalyDetectionSyslog")
@@ -47,24 +54,69 @@ public class ThreadFindingSysLog implements Serializable {
         return anomalyDetectionSyslog;
     }
 
+    @JsonProperty("AnomalyDetectionSyslog")
+    public void setAnomalyDetectionSyslog(String anomalyDetectionSyslog) {
+        this.anomalyDetectionSyslog = anomalyDetectionSyslog;
+    }
+
     @JsonProperty("Threat_Label")
     public String getThreatLabel() {
         return threatLabel;
     }
 
+    @JsonProperty("Threat_Label")
+    public void setThreatLabel(String threatLabel) {
+        this.threatLabel = threatLabel;
+    }
+
     @JsonProperty("Classification_Confidence")
-    public Double getClassificationConfidence() {
+    public Float getClassificationConfidence() {
         return classificationConfidence;
     }
 
+    @JsonProperty("Classification_Confidence")
+    public void setClassificationConfidence(Float classificationConfidence) {
+        this.classificationConfidence = classificationConfidence;
+    }
+
     @JsonProperty("Outlier_Score")
-    public Double getOutlierScore() {
+    public String getOutlierScore() {
         return outlierScore;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+    @JsonProperty("Outlier_Score")
+    public void setOutlierScore(String outlierScore) {
+        this.outlierScore = outlierScore;
+    }
+
+    @JsonProperty("Source_IP")
+    public String getSourceIP() {
+        return sourceIP;
+    }
+
+    @JsonProperty("Source_IP")
+    public void setSourceIP(String sourceIP) {
+        this.sourceIP = sourceIP;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof ThreadFindingSysLog)) {
+            return false;
+        }
+        ThreadFindingSysLog threadFindingSysLog = (ThreadFindingSysLog) o;
+        return Objects.equals(anomalyDetectionSyslog, threadFindingSysLog.anomalyDetectionSyslog)
+                && Objects.equals(threatLabel, threadFindingSysLog.threatLabel)
+                && Objects.equals(classificationConfidence, threadFindingSysLog.classificationConfidence)
+                && Objects.equals(outlierScore, threadFindingSysLog.outlierScore)
+                && Objects.equals(sourceIP, threadFindingSysLog.sourceIP);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(anomalyDetectionSyslog, threatLabel, classificationConfidence, outlierScore, sourceIP);
     }
 
     @Override
@@ -74,43 +126,8 @@ public class ThreadFindingSysLog implements Serializable {
                 ", threatLabel='" + getThreatLabel() + "'" +
                 ", classificationConfidence='" + getClassificationConfidence() + "'" +
                 ", outlierScore='" + getOutlierScore() + "'" +
-                ", additionalProperties='" + getAdditionalProperties() + "'" +
+                ", sourceIP='" + getSourceIP() + "'" +
                 "}";
-    }
-
-    @Override
-    public int hashCode() {
-        int result = 1;
-        result = ((result * 31) + ((this.threatLabel == null) ? 0 : this.threatLabel.hashCode()));
-        result = ((result * 31) + ((this.anomalyDetectionSyslog == null) ? 0 : this.anomalyDetectionSyslog.hashCode()));
-        result = ((result * 31) + ((this.additionalProperties == null) ? 0 : this.additionalProperties.hashCode()));
-        result = ((result * 31)
-                + ((this.classificationConfidence == null) ? 0 : this.classificationConfidence.hashCode()));
-        result = ((result * 31) + ((this.outlierScore == null) ? 0 : this.outlierScore.hashCode()));
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof ThreadFindingSysLog) == false) {
-            return false;
-        }
-        ThreadFindingSysLog rhs = ((ThreadFindingSysLog) other);
-        return ((((((this.threatLabel == rhs.threatLabel)
-                || ((this.threatLabel != null) && this.threatLabel.equals(rhs.threatLabel)))
-                && ((this.anomalyDetectionSyslog == rhs.anomalyDetectionSyslog)
-                        || ((this.anomalyDetectionSyslog != null)
-                                && this.anomalyDetectionSyslog.equals(rhs.anomalyDetectionSyslog))))
-                && ((this.additionalProperties == rhs.additionalProperties) || ((this.additionalProperties != null)
-                        && this.additionalProperties.equals(rhs.additionalProperties))))
-                && ((this.classificationConfidence == rhs.classificationConfidence)
-                        || ((this.classificationConfidence != null)
-                                && this.classificationConfidence.equals(rhs.classificationConfidence))))
-                && ((this.outlierScore == rhs.outlierScore)
-                        || ((this.outlierScore != null) && this.outlierScore.equals(rhs.outlierScore))));
     }
 
 }

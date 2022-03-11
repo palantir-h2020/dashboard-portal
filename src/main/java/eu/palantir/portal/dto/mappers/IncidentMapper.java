@@ -21,13 +21,13 @@ public interface IncidentMapper {
     // Specific incident to generic incident mappings
 
     @Mappings({
-            @Mapping(target = "incidentType", constant = "threat (fsm)"),
+            @Mapping(target = "incidentType", constant = "threat:fsm"),
             @Mapping(target = "incidentDescription", expression = "java( irCompleteIncidentDescription(irPortalNotification) )"),
     })
     IncidentNotification toIncidentNotification(IRPortalNotification irPortalNotification);
 
     @Mappings({
-            @Mapping(target = "incidentType", constant = "failed attestation (fsm)"),
+            @Mapping(target = "incidentType", constant = "failed_attestation:fsm"),
             @Mapping(target = "detectedIncident", source = "failedAttestation"),
             @Mapping(target = "incidentLocation", source = "serviceIP"),
             @Mapping(target = "incidentDescription", expression = "java( rsCompleteIncidentDescription(rsPortalNotification) )"),
@@ -35,17 +35,17 @@ public interface IncidentMapper {
     IncidentNotification toIncidentNotification(RSPortalNotification rsPortalNotification);
 
     @Mappings({
-            @Mapping(target = "incidentType", constant = "threat (netflow)"),
-            @Mapping(target = "detectedIncident", source = "threatLabel"),
+            @Mapping(target = "incidentType", constant = "threat:netflow"),
+            @Mapping(target = "detectedIncident", expression = "java( netflowCompleteDetectedThreat(threatFindingNetFlow) )"),
             @Mapping(target = "incidentLocation", expression = "java( netflowThreatCompleteLocation(threatFindingNetFlow) )"),
             @Mapping(target = "incidentDescription", expression = "java( netflowThreatCompleteDescription(threatFindingNetFlow) )"),
     })
     IncidentNotification toIncidentNotification(ThreatFindingNetFlow threatFindingNetFlow);
 
     @Mappings({
-            @Mapping(target = "incidentType", constant = "threat (syslog)"),
+            @Mapping(target = "incidentType", constant = "threat:syslog"),
             @Mapping(target = "detectedIncident", source = "threatLabel"),
-            // No incident location, as it is included in description
+            @Mapping(target = "incidentLocation", source = "sourceIP"),
             @Mapping(target = "incidentDescription", source = "anomalyDetectionSyslog"),
     })
     IncidentNotification toIncidentNotification(ThreadFindingSysLog threadFindingSysLog);
@@ -73,6 +73,11 @@ public interface IncidentMapper {
                 + rsPortalNotification.getFailedDescription();
     }
 
+    default String netflowCompleteDetectedThreat(ThreatFindingNetFlow threatFindingNetFlow) {
+        return threatFindingNetFlow.getThreatCategory() + ":"
+                + threatFindingNetFlow.getThreatLabel();
+    }
+
     default String netflowThreatCompleteLocation(ThreatFindingNetFlow threatFindingNetFlow) {
         ThreatFinding threatFinding = threatFindingNetFlow.getThreatFinding();
         return "Source IP and port: "
@@ -87,7 +92,8 @@ public interface IncidentMapper {
 
     default String netflowThreatCompleteDescription(ThreatFindingNetFlow threatFindingNetFlow) {
         ThreatFinding threatFinding = threatFindingNetFlow.getThreatFinding();
-        return threatFindingNetFlow.getThreatLabel()
+        return threatFindingNetFlow.getThreatLabel() + " "
+                + threatFindingNetFlow.getThreatCategory()
                 + " threat detected! Flagged as "
                 + threatFinding.getFlag()
                 + " on "

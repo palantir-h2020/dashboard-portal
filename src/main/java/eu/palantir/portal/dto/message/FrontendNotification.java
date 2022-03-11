@@ -1,5 +1,6 @@
 package eu.palantir.portal.dto.message;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,7 +15,7 @@ import eu.palantir.portal.dto.message.frontend.NotificationType;
         "incident",
         "action",
 })
-public class FrontendNotification {
+public class FrontendNotification implements Serializable {
 
     @JsonProperty("type")
     private NotificationType type;
