@@ -1,23 +1,15 @@
-package eu.palantir.portal.model;
+package eu.palantir.portal.dto.events;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
 import org.hibernate.annotations.CreationTimestamp;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class IncidentDto implements Serializable {
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Incident extends PanacheEntityBase {
-    @Id
-    @GeneratedValue
     private Long id;
 
     private String type;
@@ -28,19 +20,17 @@ public class Incident extends PanacheEntityBase {
 
     private String description;
 
-    // CHANGE add organization later.
-
     @CreationTimestamp
     private Instant createdTimestamp;
 
-    public Incident() {
+    public IncidentDto() {
     }
 
-    public Incident(Long id, String type, String sourceIpAddress, String name, String description,
+    public IncidentDto(Long id, String type, String location, String name, String description,
             Instant createdTimestamp) {
         this.id = id;
         this.type = type;
-        this.location = sourceIpAddress;
+        this.location = location;
         this.name = name;
         this.description = description;
         this.createdTimestamp = createdTimestamp;
@@ -98,10 +88,10 @@ public class Incident extends PanacheEntityBase {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof Incident)) {
+        if (!(o instanceof IncidentDto)) {
             return false;
         }
-        Incident incident = (Incident) o;
+        IncidentDto incident = (IncidentDto) o;
         return Objects.equals(id, incident.id) && Objects.equals(type, incident.type)
                 && Objects.equals(location, incident.location) && Objects.equals(name, incident.name)
                 && Objects.equals(description, incident.description)

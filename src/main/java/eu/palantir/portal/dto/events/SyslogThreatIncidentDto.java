@@ -1,24 +1,25 @@
-package eu.palantir.portal.model;
+package eu.palantir.portal.dto.events;
 
 import java.time.Instant;
 import java.util.Objects;
 
-import javax.persistence.Entity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-@Entity
-public class SyslogThreatIncident extends Incident {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SyslogThreatIncidentDto extends IncidentDto {
+
+    private String sourceIpAddress;
 
     private String classificationConfidence;
 
     private String outlierScore;
 
-    private String sourceIpAddress;
-
-    public SyslogThreatIncident() {
+    public SyslogThreatIncidentDto() {
     }
 
-    public SyslogThreatIncident(Long id, String type, String location, String name, String description,
-            Instant createdTimestamp, String sourceIpAddress, String classificationConfidence, String outlierScore) {
+    public SyslogThreatIncidentDto(Long id, String type, String location, String name, String description,
+            Instant createdTimestamp, String sourceIpAddress, String classificationConfidence,
+            String outlierScore) {
         this.setId(id);
         this.setType(type);
         this.setLocation(location);
@@ -58,14 +59,14 @@ public class SyslogThreatIncident extends Incident {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof SyslogThreatIncident)) {
+        if (!(o instanceof SyslogThreatIncidentDto)) {
             return false;
         }
-        SyslogThreatIncident syslogThreatIncident = (SyslogThreatIncident) o;
-        return super.equals((Incident) o)
-                && Objects.equals(sourceIpAddress, syslogThreatIncident.sourceIpAddress)
-                && Objects.equals(classificationConfidence, syslogThreatIncident.classificationConfidence)
-                && Objects.equals(outlierScore, syslogThreatIncident.outlierScore);
+        SyslogThreatIncidentDto syslogThreatIncidentDto = (SyslogThreatIncidentDto) o;
+        return super.equals((IncidentDto) o)
+                && Objects.equals(sourceIpAddress, syslogThreatIncidentDto.sourceIpAddress)
+                && Objects.equals(classificationConfidence, syslogThreatIncidentDto.classificationConfidence)
+                && Objects.equals(outlierScore, syslogThreatIncidentDto.outlierScore);
     }
 
     @Override

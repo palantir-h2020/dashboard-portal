@@ -1,23 +1,24 @@
-package eu.palantir.portal.model;
+package eu.palantir.portal.dto.events;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "id",
+        "name",
+        "componentType",
+        "componentId",
+        "componentIP",
+        "targetIPs",
+        "description"
+})
+public class ActionDto implements Serializable {
 
-@Entity
-public class Action extends PanacheEntityBase {
-
-    @Id
-    @GeneratedValue
     private Long id;
 
     private String componentType;
@@ -26,22 +27,19 @@ public class Action extends PanacheEntityBase {
 
     private String componentIP;
 
-    @ElementCollection
-    @CollectionTable(name = "ActionTargetIPs", joinColumns = @JoinColumn(name = "id"))
-    @Column(name = "targetIP")
     private List<String> targetIPs;
 
     private String name;
 
     private String description;
 
-    // CHANGE add organization later.
-
-    public Action() {
+    public ActionDto() {
     }
 
-    public Action(Long id, String componentType, String componentId, String componentIP, List<String> targetIPs,
-            String name, String description) {
+    public ActionDto(Long id, String componentType, String componentId, String componentIP,
+            List<String> targetIPs,
+            String name,
+            String description) {
         this.id = id;
         this.componentType = componentType;
         this.componentId = componentId;
@@ -107,53 +105,18 @@ public class Action extends PanacheEntityBase {
         this.description = description;
     }
 
-    public Action id(Long id) {
-        setId(id);
-        return this;
-    }
-
-    public Action componentType(String componentType) {
-        setComponentType(componentType);
-        return this;
-    }
-
-    public Action componentId(String componentId) {
-        setComponentId(componentId);
-        return this;
-    }
-
-    public Action componentIP(String componentIP) {
-        setComponentIP(componentIP);
-        return this;
-    }
-
-    public Action targetIPs(List<String> targetIPs) {
-        setTargetIPs(targetIPs);
-        return this;
-    }
-
-    public Action name(String name) {
-        setName(name);
-        return this;
-    }
-
-    public Action description(String description) {
-        setDescription(description);
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof Action)) {
+        if (!(o instanceof ActionDto)) {
             return false;
         }
-        Action action = (Action) o;
-        return Objects.equals(id, action.id) && Objects.equals(componentType, action.componentType)
-                && Objects.equals(componentId, action.componentId) && Objects.equals(componentIP, action.componentIP)
-                && Objects.equals(targetIPs, action.targetIPs) && Objects.equals(name, action.name)
-                && Objects.equals(description, action.description);
+        ActionDto actionDto = (ActionDto) o;
+        return Objects.equals(id, actionDto.id) && Objects.equals(componentType, actionDto.componentType)
+                && Objects.equals(componentId, actionDto.componentId)
+                && Objects.equals(componentIP, actionDto.componentIP) && Objects.equals(targetIPs, actionDto.targetIPs)
+                && Objects.equals(name, actionDto.name) && Objects.equals(description, actionDto.description);
     }
 
     @Override

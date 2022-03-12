@@ -7,13 +7,15 @@ import java.util.Objects;
 import javax.persistence.Entity;
 
 @Entity
-public class NetflowThreatIncident extends Incident {
+public class NetflowIncident extends Incident {
 
     private Date timeStart;
 
     private Date timeEnd;
 
     private Double duration;
+
+    private String sourceIpAddress;
 
     private String destinationIpAddress;
 
@@ -27,36 +29,23 @@ public class NetflowThreatIncident extends Incident {
 
     private Float outlierScore;
 
-    public NetflowThreatIncident() {
+    public NetflowIncident() {
     }
 
-    public NetflowThreatIncident(Long id, String type, String sourceIpAddress, String name, String description,
-            Instant createdTimestamp, Date timeStart, Date timeEnd, Double duration, String destinationIpAddress,
-            Integer sourcePort, Integer destinationPort, String protocol, Float classificationConfidence,
-            Float outlierScore) {
+    public NetflowIncident(Long id, String type, String location, String name, String description,
+            Instant createdTimestamp, Date timeStart, Date timeEnd, Double duration, String sourceIpAddress,
+            String destinationIpAddress, Integer sourcePort, Integer destinationPort, String protocol,
+            Float classificationConfidence, Float outlierScore) {
         this.setId(id);
         this.setType(type);
-        this.setSourceIpAddress(sourceIpAddress);
+        this.setLocation(location);
         this.setName(name);
         this.setDescription(description);
         this.setCreatedTimestamp(createdTimestamp);
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
         this.duration = duration;
-        this.destinationIpAddress = destinationIpAddress;
-        this.sourcePort = sourcePort;
-        this.destinationPort = destinationPort;
-        this.protocol = protocol;
-        this.classificationConfidence = classificationConfidence;
-        this.outlierScore = outlierScore;
-    }
-
-    public NetflowThreatIncident(Date timeStart, Date timeEnd, Double duration, String destinationIpAddress,
-            Integer sourcePort, Integer destinationPort, String protocol, Float classificationConfidence,
-            Float outlierScore) {
-        this.timeStart = timeStart;
-        this.timeEnd = timeEnd;
-        this.duration = duration;
+        this.sourceIpAddress = sourceIpAddress;
         this.destinationIpAddress = destinationIpAddress;
         this.sourcePort = sourcePort;
         this.destinationPort = destinationPort;
@@ -87,6 +76,14 @@ public class NetflowThreatIncident extends Incident {
 
     public void setDuration(Double duration) {
         this.duration = duration;
+    }
+
+    public String getSourceIpAddress() {
+        return this.sourceIpAddress;
+    }
+
+    public void setSourceIpAddress(String sourceIpAddress) {
+        this.sourceIpAddress = sourceIpAddress;
     }
 
     public String getDestinationIpAddress() {
@@ -137,60 +134,15 @@ public class NetflowThreatIncident extends Incident {
         this.outlierScore = outlierScore;
     }
 
-    public NetflowThreatIncident timeStart(Date timeStart) {
-        setTimeStart(timeStart);
-        return this;
-    }
-
-    public NetflowThreatIncident timeEnd(Date timeEnd) {
-        setTimeEnd(timeEnd);
-        return this;
-    }
-
-    public NetflowThreatIncident duration(Double duration) {
-        setDuration(duration);
-        return this;
-    }
-
-    public NetflowThreatIncident destinationIpAddress(String destinationIpAddress) {
-        setDestinationIpAddress(destinationIpAddress);
-        return this;
-    }
-
-    public NetflowThreatIncident sourcePort(Integer sourcePort) {
-        setSourcePort(sourcePort);
-        return this;
-    }
-
-    public NetflowThreatIncident destinationPort(Integer destinationPort) {
-        setDestinationPort(destinationPort);
-        return this;
-    }
-
-    public NetflowThreatIncident protocol(String protocol) {
-        setProtocol(protocol);
-        return this;
-    }
-
-    public NetflowThreatIncident classificationConfidence(Float classificationConfidence) {
-        setClassificationConfidence(classificationConfidence);
-        return this;
-    }
-
-    public NetflowThreatIncident outlierScore(Float outlierScore) {
-        setOutlierScore(outlierScore);
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof NetflowThreatIncident)) {
+        if (!(o instanceof NetflowIncident)) {
             return false;
         }
-        NetflowThreatIncident netflowThreatIncident = (NetflowThreatIncident) o;
-        return super.equals(o)
+        NetflowIncident netflowThreatIncident = (NetflowIncident) o;
+        return super.equals((Incident) o)
                 && Objects.equals(timeStart, netflowThreatIncident.timeStart)
                 && Objects.equals(timeEnd, netflowThreatIncident.timeEnd)
                 && Objects.equals(duration, netflowThreatIncident.duration)

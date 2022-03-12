@@ -1,12 +1,11 @@
-package eu.palantir.portal.model;
+package eu.palantir.portal.dto.events;
 
 import java.time.Instant;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-import javax.persistence.Entity;
-
-@Entity
-public class AttestationIncident extends Incident {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class AttestationIncidentDto extends IncidentDto {
 
     private String attestationInfo;
 
@@ -14,10 +13,10 @@ public class AttestationIncident extends Incident {
 
     private String nodeType;
 
-    public AttestationIncident() {
+    public AttestationIncidentDto() {
     }
 
-    public AttestationIncident(Long id, String type, String location, String name, String description,
+    public AttestationIncidentDto(Long id, String type, String location, String name, String description,
             Instant createdTimestamp, String attestationInfo, String attestationInstance, String nodeType) {
         this.setId(id);
         this.setType(type);
@@ -30,7 +29,7 @@ public class AttestationIncident extends Incident {
         this.nodeType = nodeType;
     }
 
-    public AttestationIncident(String attestationInfo, String attestationInstance, String nodeType) {
+    public AttestationIncidentDto(String attestationInfo, String attestationInstance, String nodeType) {
         this.attestationInfo = attestationInfo;
         this.attestationInstance = attestationInstance;
         this.nodeType = nodeType;
@@ -60,30 +59,15 @@ public class AttestationIncident extends Incident {
         this.nodeType = nodeType;
     }
 
-    public AttestationIncident attestationInfo(String attestationInfo) {
-        setAttestationInfo(attestationInfo);
-        return this;
-    }
-
-    public AttestationIncident attestationInstance(String attestationInstance) {
-        setAttestationInstance(attestationInstance);
-        return this;
-    }
-
-    public AttestationIncident nodeType(String nodeType) {
-        setNodeType(nodeType);
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof AttestationIncident)) {
+        if (!(o instanceof AttestationIncidentDto)) {
             return false;
         }
-        AttestationIncident attestationIncident = (AttestationIncident) o;
-        return super.equals((Incident) o)
+        AttestationIncidentDto attestationIncident = (AttestationIncidentDto) o;
+        return super.equals((IncidentDto) o)
                 && Objects.equals(attestationInfo, attestationIncident.attestationInfo)
                 && Objects.equals(attestationInstance, attestationIncident.attestationInstance)
                 && Objects.equals(nodeType, attestationIncident.nodeType);
