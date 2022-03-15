@@ -8,10 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 
 @Entity
-public class Asset extends PanacheEntityBase {
+public class Asset extends PanacheEntity {
     @Id
     @GeneratedValue
     private Long id;

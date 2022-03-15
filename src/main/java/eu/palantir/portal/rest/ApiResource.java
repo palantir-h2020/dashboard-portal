@@ -9,14 +9,14 @@ public class ApiResource {
 
     private final AuthResource authResource;
     private final ProfileResource profileResource;
-    private final AlertResource alertResource;
+    private final EventsResource eventsResource;
 
     @Inject
-    public ApiResource(AuthResource authResource, ProfileResource profileResource, AlertResource alertResource) {
+    public ApiResource(AuthResource authResource, ProfileResource profileResource, EventsResource eventsResource) {
         this.authResource = authResource;
         this.profileResource = profileResource;
 
-        this.alertResource = alertResource;
+        this.eventsResource = eventsResource;
     }
 
     @Path("/auth")
@@ -29,9 +29,9 @@ public class ApiResource {
         return profileResource;
     }
 
-    @Path("/alert")
-    public AlertResource getAlertResource() {
-        return alertResource;
+    @Path("/events")
+    public EventsResource getEventsResource() {
+        return this.eventsResource;
     }
 
 }

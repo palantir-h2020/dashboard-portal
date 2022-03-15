@@ -1,6 +1,6 @@
 package eu.palantir.portal.model;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Entity
-public class Token extends PanacheEntityBase {
+public class Token extends PanacheEntity {
 
     @Id
     @GeneratedValue

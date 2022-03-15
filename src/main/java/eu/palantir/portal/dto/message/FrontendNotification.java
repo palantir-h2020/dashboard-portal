@@ -1,6 +1,7 @@
 package eu.palantir.portal.dto.message;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,13 +13,22 @@ import eu.palantir.portal.dto.message.frontend.NotificationType;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "type",
+        "collection",
+        "id",
         "incident",
         "action",
+        "path"
 })
 public class FrontendNotification implements Serializable {
 
     @JsonProperty("type")
     private NotificationType type;
+
+    @JsonProperty("collection")
+    private String collection;
+
+    @JsonProperty("id")
+    private String id;
 
     @JsonProperty("action")
     private ActionNotification action;
@@ -26,13 +36,20 @@ public class FrontendNotification implements Serializable {
     @JsonProperty("incident")
     private IncidentNotification incident;
 
+    @JsonProperty("path")
+    private URI path;
+
     public FrontendNotification() {
     }
 
-    public FrontendNotification(NotificationType type, ActionNotification action, IncidentNotification incident) {
+    public FrontendNotification(NotificationType type, String collection, String id, ActionNotification action,
+            IncidentNotification incident, URI path) {
         this.type = type;
+        this.collection = collection;
+        this.id = id;
         this.action = action;
         this.incident = incident;
+        this.path = path;
     }
 
     public NotificationType getType() {
@@ -41,6 +58,22 @@ public class FrontendNotification implements Serializable {
 
     public void setType(NotificationType type) {
         this.type = type;
+    }
+
+    public String getCollection() {
+        return this.collection;
+    }
+
+    public void setCollection(String collection) {
+        this.collection = collection;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public ActionNotification getAction() {
@@ -59,19 +92,12 @@ public class FrontendNotification implements Serializable {
         this.incident = incident;
     }
 
-    public FrontendNotification type(NotificationType type) {
-        setType(type);
-        return this;
+    public URI getPath() {
+        return this.path;
     }
 
-    public FrontendNotification action(ActionNotification action) {
-        setAction(action);
-        return this;
-    }
-
-    public FrontendNotification incident(IncidentNotification incident) {
-        setIncident(incident);
-        return this;
+    public void setPath(URI path) {
+        this.path = path;
     }
 
     @Override
@@ -82,21 +108,27 @@ public class FrontendNotification implements Serializable {
             return false;
         }
         FrontendNotification frontendNotification = (FrontendNotification) o;
-        return Objects.equals(type, frontendNotification.type) && Objects.equals(action, frontendNotification.action)
-                && Objects.equals(incident, frontendNotification.incident);
+        return Objects.equals(type, frontendNotification.type)
+                && Objects.equals(collection, frontendNotification.collection)
+                && Objects.equals(id, frontendNotification.id) && Objects.equals(action, frontendNotification.action)
+                && Objects.equals(incident, frontendNotification.incident)
+                && Objects.equals(path, frontendNotification.path);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, action, incident);
+        return Objects.hash(type, collection, id, action, incident, path);
     }
 
     @Override
     public String toString() {
         return "{" +
                 " type='" + getType() + "'" +
+                ", collection='" + getCollection() + "'" +
+                ", id='" + getId() + "'" +
                 ", action='" + getAction() + "'" +
                 ", incident='" + getIncident() + "'" +
+                ", path='" + getPath() + "'" +
                 "}";
     }
 

@@ -11,10 +11,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 
 @Entity
-public class Action extends PanacheEntityBase {
+public class Action extends PanacheEntity {
 
     @Id
     @GeneratedValue

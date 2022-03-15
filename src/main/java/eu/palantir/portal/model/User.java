@@ -1,6 +1,6 @@
 package eu.palantir.portal.model;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "userp")
-public class User extends PanacheEntityBase {
+public class User extends PanacheEntity {
 
     @Id
     @GeneratedValue

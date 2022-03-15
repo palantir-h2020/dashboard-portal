@@ -1,6 +1,6 @@
 package eu.palantir.portal.model;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Entity
-public class Organization extends PanacheEntityBase {
+public class Organization extends PanacheEntity {
 
     @Id
     @GeneratedValue

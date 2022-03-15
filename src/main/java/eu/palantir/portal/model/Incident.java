@@ -11,11 +11,11 @@ import javax.persistence.InheritanceType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Incident extends PanacheEntityBase {
+public class Incident extends PanacheEntity {
     @Id
     @GeneratedValue
     private Long id;
