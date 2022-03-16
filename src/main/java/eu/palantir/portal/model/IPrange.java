@@ -10,11 +10,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import eu.palantir.portal.util.IpUtil;
-import io.quarkus.hibernate.reactive.panache.PanacheEntity;
+import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 
 @Entity
 @Table(name = "org_ip_seq_range")
-public class IPrange extends PanacheEntity {
+public class IPrange extends PanacheEntityBase {
     @Id
     @GeneratedValue
     private Long id;

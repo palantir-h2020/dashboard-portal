@@ -1,6 +1,6 @@
 package eu.palantir.portal.model;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntity;
+import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.GeneratedValue;
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 @Where(clause = "deprecated = false")
-public abstract class ValueEnumeration extends PanacheEntity {
+public abstract class ValueEnumeration extends PanacheEntityBase {
 
     @Id
     @GeneratedValue

@@ -1,7 +1,6 @@
 package eu.palantir.portal.dto.events;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,9 +8,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class NetflowIncidentDto extends IncidentDto {
 
-    private Date timeStart;
+    private String timeStart;
 
-    private Date timeEnd;
+    private String timeEnd;
 
     private Double duration;
 
@@ -33,7 +32,7 @@ public class NetflowIncidentDto extends IncidentDto {
     }
 
     public NetflowIncidentDto(Long id, String type, String location, String name, String description,
-            Instant createdTimestamp, Date timeStart, Date timeEnd, Double duration, String sourceIpAddress,
+            Instant createdTimestamp, String timeStart, String timeEnd, Double duration, String sourceIpAddress,
             String destinationIpAddress, Integer sourcePort, Integer destinationPort, String protocol,
             Float classificationConfidence, Float outlierScore) {
         this.setId(id);
@@ -54,19 +53,19 @@ public class NetflowIncidentDto extends IncidentDto {
         this.outlierScore = outlierScore;
     }
 
-    public Date getTimeStart() {
+    public String getTimeStart() {
         return this.timeStart;
     }
 
-    public void setTimeStart(Date timeStart) {
+    public void setTimeStart(String timeStart) {
         this.timeStart = timeStart;
     }
 
-    public Date getTimeEnd() {
+    public String getTimeEnd() {
         return this.timeEnd;
     }
 
-    public void setTimeEnd(Date timeEnd) {
+    public void setTimeEnd(String timeEnd) {
         this.timeEnd = timeEnd;
     }
 
