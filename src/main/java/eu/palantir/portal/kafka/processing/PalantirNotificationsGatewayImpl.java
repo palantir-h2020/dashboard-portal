@@ -35,7 +35,7 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
     private static final Logger LOGGER = Logger.getLogger(PalantirNotificationsGatewayImpl.class);
 
     private static final Consumer<Throwable> logStorageErrorLambda = (failure) -> {
-        LOGGER.errorf("Failed to store entity for incoming event, with: ", failure);
+        LOGGER.errorf("Failed to store entity for incoming event, with: %s", failure);
     };
 
     private final FrontendNotificationsGateway notificationsSocket;
