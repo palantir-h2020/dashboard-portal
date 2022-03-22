@@ -110,25 +110,3 @@ java -jar target/portal-${release}-runner.jar
 ./mvnw clean package -Dquarkus.container-image.build=true -Pvue
 docker run --env-file .env --network=host palantir/dashboard-portal:${release}
 ```
-
-## Extras
-
-### Backend Development Tool: Migrating database changes, after changing the Model, semi-automatically
-
->Note: Proper usage of this development tool **requires knowledge of liquibase**. If changes are to be made in the model, then the changelog has to be generated, based on the difference from the current database. Instructions on how to do this are included in a later section. In order to make this possible **create a `src/main/resources/liquibase.properties` file** based on the `src/main/resources/liquibase.properties.example` file that exists. Make sure the same credentials are used as in the `.env` file created.
-
-In case changes are done to `src/main/java/eu/palantir/portal/model`, the changes can be migrated to the database easily by automatically generating a liquibase changelog. **Make sure the liquibase.properties file has already been properly configured** before continuing. The only changes from the example should be url, username and password.
-
-In order to find the difference between the current DB and the current JPA model in the project:
-
-```sh
-./mvnw liquibase:diff
-```
-
-The generated changelog can be found as `src/main/resources/liquibase-diffChangeLog.xml`.
-After this the generated changelog can be added to the overall changelogs as expected by liquibase.
-Inspect the diff changelog, verify it has the changes you want in it.
-To include the changelog in the migration to be executed:
-
-1. Rename the diff file into a name of your choosing, for example `my_changes.xml`, and move it into the `src/main/resources/db/changelog` directory.
-2. Add an entry to the `src/main/resources/db/changelog.xml` file that points to the file, as a last entry of the `</databaseChangeLog>` element. **Notice**: Make sure the `<include>` elements are in the proper sequence of changes in the file. The entry for the example above would be `<include file="db/changelog/my_changes.xml" relativeToChangelogFile="false"/>`

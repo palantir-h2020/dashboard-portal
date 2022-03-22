@@ -12,8 +12,40 @@ export default new Vuex.Store({
     roles: null,
     timezone: null,
     dateFormat: null,
+    socket: {
+      isConnected: false,
+      lastMessage: '',
+      reconnectError: false,
+    },
   },
   mutations: {
+    // Socket mutations
+    SOCKET_ONOPEN(state, event) {
+      Vue.prototype.$socket = event.currentTarget;
+      state.socket.isConnected = true;
+      console.log('Socket opened', event);
+    },
+    SOCKET_ONCLOSE(state, event) {
+      state.socket.isConnected = false;
+      console.log('Socket closed', event);
+    },
+    SOCKET_ONERROR(state, event) {
+      console.error(state, event);
+    },
+    // default handler called for all methods
+    SOCKET_ONMESSAGE(state, message) {
+      message = JSON.parse(message);
+      state.socket.lastMessage = message;
+      console.log('Received message:', message);
+    },
+    // mutations for reconnect methods
+    SOCKET_RECONNECT(state, count) {
+      console.info(state, count);
+    },
+    SOCKET_RECONNECT_ERROR(state) {
+      state.socket.reconnectError = true;
+    },
+    // Basic mutations
     initialiseStore(state) {
       if (localStorage.avatar) {
         state.avatar = localStorage.avatar;

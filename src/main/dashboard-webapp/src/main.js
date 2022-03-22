@@ -2,7 +2,6 @@ import 'intersection-observer';
 import Vue from 'vue';
 import './plugins/axios';
 import App from './App.vue';
-import VueSocketIO from 'vue-socket.io'
 import vuetify from './plugins/vuetify';
 import router from './router';
 import store from './store/store';
@@ -15,8 +14,9 @@ import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
 import '@mdi/font/css/materialdesignicons.min.css';
 import 'typeface-roboto/index.css';
-
 import './styles/app.scss';
+import VueNativeSock from 'vue-native-websocket';
+import { methods as utilMethods } from '@/mixins/util.js';
 
 //fixes issue with marker not being visible
 delete Icon.Default.prototype._getIconUrl;
@@ -36,17 +36,13 @@ Vue.use(TiptapVuetifyPlugin, {
   iconsGroup: 'mdi',
 });
 
-// EXAMPLE TO FOLLOW: https://github.com/dalailomo/vue-socket-io-example
-const options = { path: '/websocket/' }; //Options object to pass into SocketIO
-Vue.use(new VueSocketIO({
-  debug: true,
-  connection: SocketIO('http://localhost:8080', options),
-  vuex: {
-    store,
-    actionPrefix: 'SOCKET_',
-    mutationPrefix: 'SOCKET_'
-  },
-}))
+Vue.use(VueNativeSock, `ws://websocket/notifications-stream/${utilMethods.makeId(10)}`, {
+  connectManually: false,
+  store: store,
+  reconnection: true,
+  reconnectionAttempts: 5,
+  reconnectionDelay: 3000,
+});
 
 new Vue({
   vuetify,

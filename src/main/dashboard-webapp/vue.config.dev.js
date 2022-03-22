@@ -8,6 +8,6 @@ module.exports = {
         changeOrigin: true
       }
     },
-    port: 8081
+    port: 8080
   }
 };
