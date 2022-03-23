@@ -750,5 +750,9 @@ export default {
       }
       return result;
     },
+    currentIP() {
+      const host = window.location.host;
+      return host.split(':')[0];
+    },
   },
 };

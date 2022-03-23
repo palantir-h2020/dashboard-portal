@@ -16,7 +16,7 @@ import '@mdi/font/css/materialdesignicons.min.css';
 import 'typeface-roboto/index.css';
 import './styles/app.scss';
 import VueNativeSock from 'vue-native-websocket';
-import { methods as utilMethods } from '@/mixins/util.js';
+import util from './mixins/util.js';
 
 //fixes issue with marker not being visible
 delete Icon.Default.prototype._getIconUrl;
@@ -36,13 +36,17 @@ Vue.use(TiptapVuetifyPlugin, {
   iconsGroup: 'mdi',
 });
 
-Vue.use(VueNativeSock, `ws://websocket/notifications-stream/${utilMethods.makeId(10)}`, {
-  connectManually: false,
-  store: store,
-  reconnection: true,
-  reconnectionAttempts: 5,
-  reconnectionDelay: 3000,
-});
+Vue.use(
+  VueNativeSock,
+  `ws://${util.methods.currentIP()}:8081/websocket/notifications-stream/${util.methods.makeId(10)}`,
+  {
+    connectManually: false,
+    store: store,
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 3000,
+  },
+);
 
 new Vue({
   vuetify,

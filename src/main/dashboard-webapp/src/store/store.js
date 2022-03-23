@@ -34,9 +34,10 @@ export default new Vuex.Store({
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE(state, message) {
-      message = JSON.parse(message);
+      console.log('Received message', message);
+      message = JSON.parse(message.data);
       state.socket.lastMessage = message;
-      console.log('Received message:', message);
+      console.log('Received JSON:', message);
     },
     // mutations for reconnect methods
     SOCKET_RECONNECT(state, count) {
