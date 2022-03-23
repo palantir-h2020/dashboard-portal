@@ -3,11 +3,13 @@ package eu.palantir.portal.model;
 import java.time.Instant;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
 public class AttestationIncident extends Incident {
 
+    @Column(columnDefinition = "TEXT")
     private String attestationInfo;
 
     private String attestationInstance;

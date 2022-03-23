@@ -3,6 +3,7 @@ package eu.palantir.portal.model;
 import java.time.Instant;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,6 +27,7 @@ public class Incident extends PanacheEntityBase {
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     // CHANGE add organization later.
