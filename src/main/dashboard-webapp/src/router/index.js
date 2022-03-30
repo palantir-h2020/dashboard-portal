@@ -5,6 +5,7 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    // Generic Views / Components
     path: '/',
     component: () => import('../views/Dashboard.vue'),
     meta: { title: '', requiresAuth: true },
@@ -18,50 +19,175 @@ const routes = [
       {
         name: 'Dashboard',
         path: 'dashboard',
-        meta: { title: 'Dashboard', requiresAuth: true, authorize: ['trainee'] },
-        component: () => import('../components/trainee/DashboardContent.vue'),
+        redirect: () => {
+          let dashboardType = '/';
+          const userRole = localStorage.roles;
+          if (userRole === 'network_operator' || userRole === 'sme_manager') {
+            dashboardType = `${dashboardType}management`;
+          } else if (userRole === 'sc_developer') {
+            dashboardType = `${dashboardType}developer`;
+          }
+          return { path: `${dashboardType}/dashboard` };
+        },
       },
     ],
   },
   {
-    path: '/trainer',
+    // Network Operator or SME Manager
+    path: '/management',
     component: () => import('../views/Dashboard.vue'),
     children: [
       {
-        name: 'DashboardTrainer',
+        name: 'ThreatsDashboard',
         path: 'dashboard',
-        meta: { title: 'Dashboard', requiresAuth: true, authorize: ['trainer'] },
-        component: () => import('../components/trainer/DashboardContent.vue'),
+        meta: {
+          title: 'Threats Dashboard',
+          requiresAuth: true,
+          authorize: ['network_operator', 'sme_manager'],
+        },
+        component: () => import('../components/management/DashboardContent.vue'),
       },
       {
-        name: 'Person',
-        path: 'person',
-        meta: { title: 'Person', requiresAuth: true, authorize: ['trainer'] },
-        component: () => import('../components/trainer/Person.vue'),
+        name: 'SecurityReports',
+        path: 'reports',
+        meta: {
+          title: 'Security Reports',
+          requiresAuth: true,
+          authorize: ['network_operator', 'sme_manager'],
+        },
+        component: () => import('../components/management/SecurityReports.vue'),
       },
       {
-        name: 'PersonElastic',
-        path: 'person-elastic',
-        meta: { title: 'Person', requiresAuth: true, authorize: ['trainer'] },
-        component: () => import('../components/trainer/PersonElastic.vue'),
+        name: 'FinancialDashboard',
+        path: 'sme/financial',
+        meta: {
+          title: 'Financial Dashboard',
+          requiresAuth: true,
+          authorize: ['sme_manager'],
+        },
+        component: () => import('../components/management/sme/FinancialDashboard.vue'),
       },
       {
-        name: 'PersonAdd',
-        path: 'person/add',
-        meta: { title: 'Person', requiresAuth: true, authorize: ['trainer'] },
-        component: () => import('../components/trainer/PersonAdd.vue'),
+        name: 'FinancialStatus',
+        path: 'net/financial',
+        meta: {
+          title: 'Financial Status',
+          requiresAuth: true,
+          authorize: ['network_operator'],
+        },
+        component: () => import('../components/management/net/FinancialStatus.vue'),
       },
       {
-        name: 'PersonView',
-        path: 'person/view',
-        meta: { title: 'Person', requiresAuth: true, authorize: ['trainer'] },
-        component: () => import('../components/trainer/PersonView.vue'),
+        // Redirects to appropriate based on role
+        name: 'Financial',
+        path: 'financial',
+        redirect: () => {
+          let redirectTarget = '/management/';
+          const userRole = localStorage.roles;
+          if (userRole === 'network_operator') {
+            redirectTarget = `${redirectTarget}net/financial`;
+          } else if (userRole === 'sme_manager') {
+            redirectTarget = `${redirectTarget}sme/financial`;
+          }
+          return { path: redirectTarget };
+        },
       },
       {
-        name: 'Organization',
-        path: 'organization',
-        meta: { title: 'Organization', requiresAuth: true, authorize: ['trainer'] },
-        component: () => import('../components/trainer/Organization.vue'),
+        name: 'SCStatus',
+        path: 'sme/capabilities',
+        meta: {
+          title: 'Security Capabilities Status',
+          requiresAuth: true,
+          authorize: ['sme_manager'],
+        },
+        component: () => import('../components/management/sme/SCStatus.vue'),
+      },
+      {
+        name: 'SCManagement',
+        path: 'net/capabilities',
+        meta: {
+          title: 'Security Capabilities Management',
+          requiresAuth: true,
+          authorize: ['network_operator'],
+        },
+        component: () => import('../components/management/net/SCManagement.vue'),
+      },
+      {
+        // Redirects to appropriate based on role
+        name: 'SecurityCapabilities',
+        path: 'capabilities',
+        redirect: () => {
+          let redirectTarget = '/management/';
+          const userRole = localStorage.roles;
+          if (userRole === 'network_operator') {
+            redirectTarget = `${redirectTarget}net/capabilities`;
+          } else if (userRole === 'sme_manager') {
+            redirectTarget = `${redirectTarget}sme/capabilities`;
+          }
+          return { path: redirectTarget };
+        },
+      },
+      {
+        name: 'SCMarketplace',
+        path: 'capabilities/marketplace',
+        meta: {
+          title: 'Security Capabilities Marketplace',
+          requiresAuth: true,
+          authorize: ['network_operator', 'sme_manager'],
+        },
+        component: () => import('../components/management/SecurityCapabilitiesMarketplace.vue'),
+      },
+      {
+        name: 'RiskAssessment',
+        path: 'risk',
+        meta: {
+          title: 'Risk Assessment',
+          requiresAuth: true,
+          authorize: ['network_operator', 'sme_manager'],
+        },
+        component: () => import('../components/management/RiskAssessment.vue'),
+      },
+      {
+        name: 'ThreatSharing',
+        path: 'capabilities/marketplace',
+        meta: {
+          title: 'Threat Sharing',
+          requiresAuth: true,
+          authorize: ['network_operator', 'sme_manager'],
+        },
+        component: () => import('../components/management/ThreatSharing.vue'),
+      },
+    ],
+  },
+  {
+    // SC Developer
+    path: '/developer',
+    component: () => import('../views/Dashboard.vue'),
+    meta: { requiresAuth: true, authorize: ['sc_developer'] },
+    children: [
+      {
+        name: 'DevDashboard',
+        path: 'dashboard',
+        meta: {
+          title: 'Developer Dashboard',
+        },
+        component: () => import('../components/developer/DashboardContent.vue'),
+      },
+      {
+        name: 'SCRegistration',
+        path: 'registration',
+        meta: {
+          title: 'Security Capability Registration',
+        },
+        component: () => import('../components/developer/SCRegistration.vue'),
+      },
+      {
+        name: 'SecurityCapabilities',
+        path: 'capabilities',
+        meta: {
+          title: 'Security Capabilities',
+        },
+        component: () => import('../components/developer/SecurityCapabilities.vue'),
       },
     ],
   },
@@ -135,13 +261,14 @@ router.beforeEach((to, from, next) => {
   // check if route is restricted by role
   let userRole = localStorage.roles;
   if (userRole && to.meta.authorize && !to.meta.authorize.includes(userRole)) {
-    // role not authorised so redirect to home page
-    if (userRole === 'trainee') {
-      return next({ name: 'Dashboard' });
-    } else if (userRole === 'trainer') {
-      return next({ name: 'DashboardTrainer' });
+    if (userRole === 'network_operator' || userRole === 'sme_manager') {
+      return next({ name: 'ThreatsDashboard' });
+    } else if (userRole === 'sc_developer') {
+      return next({ name: 'DevDashboard' });
     }
   }
+  // Start websocket if it is not up
+  // TODO
   let currentPathName = to.name;
   if (localStorage[currentPathName] && localStorage[currentPathName] !== to.fullPath) {
     next({

@@ -56,7 +56,7 @@ public class GatewayResource {
 
         notificationsGateway.acceptThreadFindingSysLog(threadFindingSysLog);
 
-        return Response.ok().build();
+        return Response.ok().entity("Test done!").build();
     }
 
     @GET

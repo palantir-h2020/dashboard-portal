@@ -55,6 +55,10 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-reactive</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
@@ -110,10 +114,14 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-oidc</artifactId>
+      <!-- To be updated once keycloak reactive extension is released -->
+      <!-- <artifactId>quarkus-oidc-client-reactive-filter</artifactId> -->
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-keycloak-admin-client</artifactId>
+      <!-- To be updated once keycloak reactive extension is released -->
+      <!-- <artifactId>quarkus-keycloak-admin-client-reactive</artifactId> -->
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -129,9 +137,9 @@
       <version>20211018.2</version>
     </dependency>
     <dependency>
-      <groupId>io.minio</groupId>
-      <artifactId>minio</artifactId>
-      <version>8.2.1</version>
+      <groupId>io.quarkiverse.minio</groupId>
+      <artifactId>quarkus-minio</artifactId>
+      <version>2.0.0</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

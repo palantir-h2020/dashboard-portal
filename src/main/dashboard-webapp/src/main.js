@@ -15,7 +15,11 @@ import { Icon } from 'leaflet';
 import '@mdi/font/css/materialdesignicons.min.css';
 import 'typeface-roboto/index.css';
 import './styles/app.scss';
+// Internationalization
+import i18n from './i18n';
+// WebSocket connector
 import VueNativeSock from 'vue-native-websocket';
+// Utilities
 import util from './mixins/util.js';
 
 //fixes issue with marker not being visible
@@ -49,6 +53,7 @@ Vue.use(
 );
 
 new Vue({
+  i18n,
   vuetify,
   router,
   store: store,
