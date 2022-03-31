@@ -7,17 +7,17 @@
     id="left-sidebar"
     class="primary"
     :expand-on-hover="mini"
+    mini-variant-width="80"
   >
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title class="title d-flex align-end">
-          <div class="d-inline"><v-icon>$vuetify.icons.logo</v-icon></div>
-          <div class="ml-2 d-inline">Ubitech</div>
+          <div class="d-inline"><v-icon size="40px">$vuetify.icons.logo</v-icon></div>
+          <div class="ml-10 d-inline">PALANTIR</div>
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
     <v-list nav>
-      <v-divider class="my-2"></v-divider>
       <template v-for="item in items">
         <v-row v-if="item.heading" :key="item.heading" align="center">
           <v-col cols="6">
@@ -26,7 +26,6 @@
             </v-subheader>
           </v-col>
         </v-row>
-        <v-divider v-else-if="item.divider" :key="item.heading" class="my-2"></v-divider>
         <v-list-group
           v-else-if="item.children"
           :key="item.text"
@@ -82,13 +81,12 @@
       </template>
     </v-list>
     <template v-slot:append>
-      <v-divider></v-divider>
       <div class="pa-2" @click.stop="mini = !mini">
         <v-btn tile block text>
-          <v-icon left class="mr-6">
+          <v-icon left class="ml-2">
             {{ mini ? 'mdi-chevron-double-right' : 'mdi-chevron-double-left' }}
           </v-icon>
-          {{ mini ? 'Expand sidebar' : 'Collapse sidebar' }}
+          {{ mini ? '' : 'Collapse sidebar' }}
         </v-btn>
       </div>
     </template>

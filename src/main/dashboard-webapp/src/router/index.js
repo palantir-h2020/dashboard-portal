@@ -182,7 +182,7 @@ const routes = [
         component: () => import('../components/developer/SCRegistration.vue'),
       },
       {
-        name: 'SecurityCapabilities',
+        name: 'DevSecurityCapabilities',
         path: 'capabilities',
         meta: {
           title: 'Security Capabilities',
