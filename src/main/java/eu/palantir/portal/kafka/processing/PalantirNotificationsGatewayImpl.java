@@ -1,10 +1,10 @@
 package eu.palantir.portal.kafka.processing;
 
 import java.net.URI;
-import java.util.function.Consumer;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.jboss.logging.Logger;
@@ -27,16 +27,11 @@ import eu.palantir.portal.model.Incident;
 import eu.palantir.portal.model.NetflowIncident;
 import eu.palantir.portal.model.SyslogThreatIncident;
 import eu.palantir.portal.websocket.FrontendNotificationsGateway;
-import io.quarkus.hibernate.reactive.panache.Panache;
 
 @ApplicationScoped
 public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGateway {
 
     private static final Logger LOGGER = Logger.getLogger(PalantirNotificationsGatewayImpl.class);
-
-    private static final Consumer<Throwable> logStorageErrorLambda = (failure) -> {
-        LOGGER.errorf("Failed to store entity for incoming event, with: %s", failure);
-    };
 
     private final FrontendNotificationsGateway notificationsSocket;
 
@@ -53,89 +48,93 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
     }
 
     @Incoming("actions-notifications")
+    @Transactional
     @Override
     public void acceptActionsNotifications(ActionNotification actionNotification) {
         LOGGER.infof("Received %s from actions-notifications", actionNotification);
 
         Action newAction = actionMapper.toAction(actionNotification);
+        newAction.persist();
 
-        Panache.<Action>withTransaction(newAction::persist)
-                .subscribe().with(
-                        inserted -> {
+        if (newAction.getId() == null) {
+            LOGGER.errorf("Failed to store entity for incoming action %s", newAction);
+            return;
+        }
 
-                            // ADD LATER: User filtering
-                            notificationsSocket
-                                    .sendNotification(new FrontendNotification(NotificationType.ACTION, "action",
-                                            inserted.getId().toString(), actionNotification, null, insertedEntityPath(
-                                                    inserted.getId(), "action")));
-                        }, logStorageErrorLambda);
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.ACTION, "action",
+                        newAction.getId().toString(), actionNotification, null, insertedEntityPath(
+                                newAction.getId(), "action")));
     }
 
     @Incoming("incidents-notifications")
+    @Transactional
     @Override
     public void acceptIncidentNotifications(IncidentNotification incidentNotification) {
         LOGGER.infof("Received %s from incidents-notifications", incidentNotification);
 
         Incident newIncident = incidentMapper.toIncident(incidentNotification);
+        newIncident.persist();
 
-        Panache.<Incident>withTransaction(
-                newIncident::persist)
-                .subscribe().with(
-                        inserted -> {
+        if (newIncident.getId() == null) {
+            LOGGER.errorf("Failed to store entity for incoming generic incident %s", newIncident);
+            return;
+        }
 
-                            // ADD LATER: User filtering
-                            notificationsSocket
-                                    .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
-                                            inserted.getId().toString(), null, incidentNotification, insertedEntityPath(
-                                                    inserted.getId(), "incident")));
-                        }, logStorageErrorLambda);
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
+                        newIncident.getId().toString(), null, incidentNotification, insertedEntityPath(
+                                newIncident.getId(), "incident")));
 
     }
 
     @Incoming("ir-notify_portal")
+    @Transactional
     @Override
     public void acceptIRNotification(IRPortalNotification irPortalNotification) {
         LOGGER.infof("Received %s from ir-notify_portal", irPortalNotification);
         IncidentNotification incidentNotification = incidentMapper.toIncidentNotification(irPortalNotification);
         Incident newIncident = incidentMapper.toIncident(irPortalNotification);
+        newIncident.persist();
 
-        Panache.<Incident>withTransaction(
-                newIncident::persist)
-                .subscribe().with(
-                        inserted -> {
+        if (newIncident.getId() == null) {
+            LOGGER.errorf("Failed to store entity for incoming IR Portal Notification %s", newIncident);
+            return;
+        }
 
-                            // ADD LATER: User filtering
-                            notificationsSocket
-                                    .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
-                                            inserted.getId().toString(), null, incidentNotification, insertedEntityPath(
-                                                    inserted.getId(), "incident")));
-                        }, logStorageErrorLambda);
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
+                        newIncident.getId().toString(), null, incidentNotification, insertedEntityPath(
+                                newIncident.getId(), "incident")));
     }
 
     @Incoming("rs-notify_portal")
+    @Transactional
     @Override
     public void acceptRSNotification(RSPortalNotification rsPortalNotification) {
         LOGGER.infof("Received %s from rs-notify_portal", rsPortalNotification);
         IncidentNotification incidentNotification = incidentMapper.toIncidentNotification(rsPortalNotification);
         AttestationIncident newIncident = incidentMapper.toAttestationIncident(rsPortalNotification);
+        newIncident.persist();
 
-        Panache.<AttestationIncident>withTransaction(
-                newIncident::persist)
-                .subscribe().with(
-                        inserted -> {
+        if (newIncident.getId() == null) {
+            LOGGER.errorf("Failed to store entity for incoming RS PORTAL Notification %s", newIncident);
+            return;
+        }
 
-                            // ADD LATER: User filtering
-                            notificationsSocket
-                                    .sendNotification(
-                                            new FrontendNotification(NotificationType.INCIDENT, "attestation_incident",
-                                                    inserted.getId().toString(), null, incidentNotification,
-                                                    insertedEntityPath(
-                                                            inserted.getId(), "attestation_incident")));
-                        }, logStorageErrorLambda);
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
+                        newIncident.getId().toString(), null, incidentNotification, insertedEntityPath(
+                                newIncident.getId(), "incident")));
 
     }
 
     @Incoming("cmr-responses")
+    @Transactional
     @Override
     public void acceptSMResponses(SMResponse smResponse) {
         LOGGER.infof("Received %s from cmr-responses", smResponse);
@@ -145,70 +144,67 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
     }
 
     @Incoming("ti-threat-findings-netflow")
+    @Transactional
     @Override
     public void acceptThreatFindingsNetFlow(ThreatFindingNetFlow threatFindingNetFlow) {
         LOGGER.infof("Received %s from ti-threat-findings-netflow", threatFindingNetFlow);
         IncidentNotification incidentNotification = incidentMapper.toIncidentNotification(threatFindingNetFlow);
         NetflowIncident newIncident = incidentMapper.toNetflowIncident(threatFindingNetFlow);
+        newIncident.persist();
 
-        Panache.<NetflowIncident>withTransaction(
-                newIncident::persist)
-                .subscribe().with(
-                        inserted -> {
+        if (newIncident.getId() == null) {
+            LOGGER.errorf("Failed to store entity for incoming Netflow Threat Finding %s", newIncident);
+            return;
+        }
 
-                            // ADD LATER: User filtering
-                            notificationsSocket
-                                    .sendNotification(
-                                            new FrontendNotification(NotificationType.INCIDENT, "netflow_incident",
-                                                    inserted.getId().toString(), null, incidentNotification,
-                                                    insertedEntityPath(
-                                                            inserted.getId(), "netflow_incident")));
-                        }, logStorageErrorLambda);
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
+                        newIncident.getId().toString(), null, incidentNotification, insertedEntityPath(
+                                newIncident.getId(), "incident")));
     }
 
     @Incoming("ti-threat-findings-syslog")
+    @Transactional
     @Override
     public void acceptThreadFindingSysLog(ThreadFindingSysLog threadFindingSysLog) {
         LOGGER.infof("Received %s from ti-threat-findings-syslog", threadFindingSysLog);
         IncidentNotification incidentNotification = incidentMapper.toIncidentNotification(threadFindingSysLog);
         SyslogThreatIncident newIncident = incidentMapper.toSyslogThreatIncident(threadFindingSysLog);
+        newIncident.persist();
 
-        Panache.<SyslogThreatIncident>withTransaction(
-                newIncident::persist)
-                .subscribe().with(
-                        inserted -> {
+        if (newIncident.getId() == null) {
+            LOGGER.errorf("Failed to store entity for incoming SysLog Threat Finding %s", newIncident);
+            return;
+        }
 
-                            // ADD LATER: User filtering
-                            notificationsSocket
-                                    .sendNotification(new FrontendNotification(NotificationType.INCIDENT,
-                                            "syslog_threat_incidents",
-                                            inserted.getId().toString(), null, incidentNotification,
-                                            insertedEntityPath(
-                                                    inserted.getId(), "syslog_threat_incidents")));
-                        }, logStorageErrorLambda);
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
+                        newIncident.getId().toString(), null, incidentNotification, insertedEntityPath(
+                                newIncident.getId(), "incident")));
     }
 
     @Incoming("ti-anomaly-detection")
+    @Transactional
     @Override
     public void acceptTIAnomaly(TIAnomaly tiAnomaly) {
         LOGGER.infof("Received %s from ti-anomaly-detection", tiAnomaly);
         IncidentNotification incidentNotification = incidentMapper.toIncidentNotification(tiAnomaly);
 
         NetflowIncident newIncident = incidentMapper.toNetflowIncident(tiAnomaly);
+        newIncident.persist();
 
-        Panache.<NetflowIncident>withTransaction(
-                newIncident::persist)
-                .subscribe().with(
-                        inserted -> {
+        if (newIncident.getId() == null) {
+            LOGGER.errorf("Failed to store entity for incoming Anomaly detected by TI: %s", newIncident);
+            return;
+        }
 
-                            // ADD LATER: User filtering
-                            notificationsSocket
-                                    .sendNotification(
-                                            new FrontendNotification(NotificationType.INCIDENT, "netflow_incident",
-                                                    inserted.getId().toString(), null, incidentNotification,
-                                                    insertedEntityPath(
-                                                            inserted.getId(), "netflow_incident")));
-                        }, logStorageErrorLambda);
+        // ADD LATER: User filtering
+        notificationsSocket
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
+                        newIncident.getId().toString(), null, incidentNotification, insertedEntityPath(
+                                newIncident.getId(), "incident")));
     }
 
     private URI insertedEntityPath(Long id, String collection) {

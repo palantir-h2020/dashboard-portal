@@ -8,6 +8,8 @@ import eu.palantir.portal.dto.events.ActionDto;
 import eu.palantir.portal.dto.message.ActionNotification;
 import eu.palantir.portal.model.Action;
 
+import java.util.List;
+
 import org.mapstruct.InjectionStrategy;
 
 @Mapper(componentModel = "cdi", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
@@ -21,4 +23,8 @@ public interface ActionMapper {
             @Mapping(target = "description", source = "actionDescription"),
     })
     Action toAction(ActionNotification actionNotification);
+
+    // List Mappings
+
+    List<ActionDto> getActionDtos(List<Action> actions);
 }

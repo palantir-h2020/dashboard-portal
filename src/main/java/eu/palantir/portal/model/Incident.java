@@ -12,7 +12,7 @@ import javax.persistence.InheritanceType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

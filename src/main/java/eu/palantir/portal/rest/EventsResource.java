@@ -1,6 +1,9 @@
 package eu.palantir.portal.rest;
 
-import org.jboss.logging.Logger;
+// import org.jboss.logging.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -20,13 +23,12 @@ import eu.palantir.portal.model.AttestationIncident;
 import eu.palantir.portal.model.Incident;
 import eu.palantir.portal.model.NetflowIncident;
 import eu.palantir.portal.model.SyslogThreatIncident;
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
-import io.smallrye.mutiny.Uni;
+import javax.transaction.Transactional;
 
 @Singleton
 public class EventsResource {
 
-    private static final Logger LOGGER = Logger.getLogger(EventsResource.class);
+    // private static final Logger LOGGER = Logger.getLogger(EventsResource.class);
 
     private final ActionMapper actionMapper;
 
@@ -40,42 +42,86 @@ public class EventsResource {
 
     @GET
     @Path("/action/{id}")
-    @ReactiveTransactional
-    public Uni<ActionDto> getAction(@PathParam("id") Long id) {
-        return Action.<Action>findById(id).onItem().<ActionDto>transform(action -> actionMapper.toActionDto(action));
+    @Transactional
+    public ActionDto getAction(@PathParam("id") Long id) {
+        Action action = Action.findById(id);
+        if (action == null) {
+            return new ActionDto();
+        } else {
+            return actionMapper.toActionDto(action);
+        }
+    }
+
+    @GET
+    @Path("/action")
+    @Transactional
+    public List<ActionDto> getActions() {
+        List<Action> actions = Action.listAll();
+        if (actions == null) {
+            return new ArrayList<ActionDto>();
+        } else {
+            return actionMapper.getActionDtos(actions);
+        }
     }
 
     @GET
     @Path("/incident/{id}")
-    @ReactiveTransactional
-    public Uni<IncidentDto> getIncident(@PathParam("id") Long id) {
-        return Incident.<Incident>findById(id).onItem().<IncidentDto>transform(
-                incident -> incidentMapper.toIncidentDto(incident));
+    @Transactional
+    public IncidentDto getIncident(@PathParam("id") Long id) {
+        Incident incident = Incident.findById(id);
+        if (incident == null) {
+            return new IncidentDto();
+        } else {
+            return incidentMapper.toIncidentDto(incident);
+        }
+    }
+
+    @GET
+    @Path("/incident")
+    @Transactional
+    public List<IncidentDto> getIncidents() {
+        List<Incident> incidents = Incident.listAll();
+        if (incidents == null) {
+            return new ArrayList<IncidentDto>();
+        } else {
+            return incidentMapper.getIncidentDtos(incidents);
+        }
     }
 
     @GET
     @Path("/attestation_incident/{id}")
-    @ReactiveTransactional
-    public Uni<AttestationIncidentDto> getAttestationIncident(@PathParam("id") Long id) {
-        return AttestationIncident.<AttestationIncident>findById(id).onItem().<AttestationIncidentDto>transform(
-                incident -> incidentMapper.toAttestationIncidentDto(incident));
+    @Transactional
+    public AttestationIncidentDto getAttestationIncident(@PathParam("id") Long id) {
+        AttestationIncident incident = AttestationIncident.findById(id);
+        if (incident == null) {
+            return new AttestationIncidentDto();
+        } else {
+            return incidentMapper.toAttestationIncidentDto(incident);
+        }
     }
 
     @GET
     @Path("/netflow_incident/{id}")
-    @ReactiveTransactional
-    public Uni<NetflowIncidentDto> getNetflowIncident(@PathParam("id") Long id) {
-        return NetflowIncident.<NetflowIncident>findById(id).onItem().<NetflowIncidentDto>transform(
-                incident -> incidentMapper.toNetflowIncidentDto(incident));
+    @Transactional
+    public NetflowIncidentDto getNetflowIncident(@PathParam("id") Long id) {
+        NetflowIncident incident = NetflowIncident.findById(id);
+        if (incident == null) {
+            return new NetflowIncidentDto();
+        } else {
+            return incidentMapper.toNetflowIncidentDto(incident);
+        }
     }
 
     @GET
     @Path("/syslog_threat_incidents/{id}")
-    @ReactiveTransactional
-    public Uni<SyslogThreatIncidentDto> getSyslogThreatIncident(@PathParam("id") Long id) {
-        LOGGER.infof("Received this: %s", id); // TEST
-        return SyslogThreatIncident.<SyslogThreatIncident>findById(id).onItem().<SyslogThreatIncidentDto>transform(
-                incident -> incidentMapper.toSyslogThreatIncidentDto(incident));
+    @Transactional
+    public SyslogThreatIncidentDto getSyslogThreatIncident(@PathParam("id") Long id) {
+        SyslogThreatIncident incident = SyslogThreatIncident.findById(id);
+        if (incident == null) {
+            return new SyslogThreatIncidentDto();
+        } else {
+            return incidentMapper.toSyslogThreatIncidentDto(incident);
+        }
     }
 
 }

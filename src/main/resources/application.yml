@@ -10,8 +10,6 @@ quarkus:
 
   datasource:
     db-kind: postgresql
-    reactive:
-      max-size: 40
 
   hibernate-orm:
     jdbc:
