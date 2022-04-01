@@ -8,7 +8,7 @@
         <v-btn x-large text tile v-bind="attrs" v-on="on" data-cy="notificationsMenu">
           <notification-bell
             :size="33"
-            :count="0"
+            :count="latestNotifications.length"
             :ding="true"
             :upperLimit="50"
             counterLocation="upperLeft"
