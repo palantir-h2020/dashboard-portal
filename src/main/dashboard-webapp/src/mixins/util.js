@@ -94,10 +94,12 @@ export default {
       if (jwt.userfullname) {
         localStorage.userfullname = jwt.userfullname;
       }
-      localStorage.userid = jwt.userid;
+      if (jwt.userid) localStorage.userid = jwt.userid;
       localStorage.roles = jwt.realm_access.roles;
       if (jwt.avatar) {
         localStorage.avatar = jwt.avatar;
+      } else {
+        localStorage.avatar = 2; // Fallback
       }
       if (jwt.timezone) {
         localStorage.timezone = jwt.timezone;
@@ -753,6 +755,20 @@ export default {
     currentIP() {
       const host = window.location.host;
       return host.split(':')[0];
+    },
+    uppercaseFirstLetters: mySentence => {
+      const words = mySentence.split(' ');
+      for (let i = 0; i < words.length; i++) {
+        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+      }
+      return words.join(' ');
+    },
+    uppercaseWords: (mySentence, upperLimit) => {
+      const words = mySentence.split(' ');
+      for (let i = 0; i < words.length; i++) {
+        if (words[i].length <= upperLimit) words[i] = words[i].toUpperCase();
+      }
+      return words.join(' ');
     },
   },
 };

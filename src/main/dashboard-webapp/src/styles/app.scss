@@ -1,3 +1,8 @@
+// Set up snotify style
+$snotify-width: 1024px;
+$snotify-offset: 60px;
+@import "~vue-snotify/styles/material";
+
 .v-time-picker-clock__container {
   flex-basis: 290px;
 }

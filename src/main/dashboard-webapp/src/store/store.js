@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import sharedMutations from 'vuex-shared-mutations';
+import EventBus from '../helpers/event-bus.js';
 //then you use Vuex
 Vue.use(Vuex);
 
@@ -17,6 +18,11 @@ export default new Vuex.Store({
       lastMessage: '',
       reconnectError: false,
     },
+    notificationCollections: {
+      action: {},
+      incident: {},
+    },
+    notificationList: [],
   },
   mutations: {
     // Socket mutations
@@ -38,6 +44,15 @@ export default new Vuex.Store({
       message = JSON.parse(message.data);
       state.socket.lastMessage = message;
       console.log('Received JSON:', message);
+      EventBus.$emit('newEvent', message);
+      // Push notification to temporary notifications list.
+      state.notificationList.push(message);
+      // Index notification in collections.
+      if (!state.notificationCollections[message.type][message.collection]) {
+        state.notificationCollections[message.type][message.collection] = {};
+      }
+      state.notificationCollections[message.type][message.collection][message.id] = message;
+      // TODO LATER... Clean up old from temp list and index.
     },
     // mutations for reconnect methods
     SOCKET_RECONNECT(state, count) {
@@ -125,6 +140,12 @@ export default new Vuex.Store({
     },
     fullName: state => {
       return state.fullName ? state.fullName : 'Undefined';
+    },
+    notificationCollections: state => {
+      return state.notificationCollections;
+    },
+    notificationList: state => {
+      return state.notificationList;
     },
   },
   plugins: [

@@ -65,6 +65,8 @@ export default {
       credentials.password = this.password;
       credentials.grant_type = 'password';
       this.loading = true;
+      // Fallback username
+      localStorage.userfullname = credentials.username;
       this.axios
         .post('/api/v1/auth/login', credentials)
         .then(res => {

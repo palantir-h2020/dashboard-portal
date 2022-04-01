@@ -19,6 +19,8 @@ import './styles/app.scss';
 import i18n from './i18n';
 // WebSocket connector
 import VueNativeSock from 'vue-native-websocket';
+// Notifications utility
+import Snotify, { SnotifyPosition } from 'vue-snotify';
 // Utilities
 import util from './mixins/util.js';
 
@@ -51,6 +53,18 @@ Vue.use(
     reconnectionDelay: 3000,
   },
 );
+
+Vue.use(Snotify, {
+  toast: {
+    position: SnotifyPosition.rightTop,
+    titleMaxLength: 300,
+    bodyMaxLength: 3000,
+    buttons: [
+      { text: 'Ok', action: null, bold: false },
+      { text: 'Check', action: null, bold: false },
+    ],
+  },
+});
 
 new Vue({
   i18n,

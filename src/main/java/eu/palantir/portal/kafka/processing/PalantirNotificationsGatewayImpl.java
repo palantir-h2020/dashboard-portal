@@ -127,9 +127,9 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
 
         // ADD LATER: User filtering
         notificationsSocket
-                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "attestation_incident",
                         newIncident.getId().toString(), null, incidentNotification, insertedEntityPath(
-                                newIncident.getId(), "incident")));
+                                newIncident.getId(), "attestation_incident")));
 
     }
 
@@ -159,9 +159,9 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
 
         // ADD LATER: User filtering
         notificationsSocket
-                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "netflow_incident",
                         newIncident.getId().toString(), null, incidentNotification, insertedEntityPath(
-                                newIncident.getId(), "incident")));
+                                newIncident.getId(), "netflow_incident")));
     }
 
     @Incoming("ti-threat-findings-syslog")
@@ -180,9 +180,9 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
 
         // ADD LATER: User filtering
         notificationsSocket
-                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "syslog_threat_incidents",
                         newIncident.getId().toString(), null, incidentNotification, insertedEntityPath(
-                                newIncident.getId(), "incident")));
+                                newIncident.getId(), "syslog_threat_incidents")));
     }
 
     @Incoming("ti-anomaly-detection")
@@ -202,9 +202,9 @@ public class PalantirNotificationsGatewayImpl implements PalantirNotificationsGa
 
         // ADD LATER: User filtering
         notificationsSocket
-                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "incident",
+                .sendNotification(new FrontendNotification(NotificationType.INCIDENT, "netflow_incident",
                         newIncident.getId().toString(), null, incidentNotification, insertedEntityPath(
-                                newIncident.getId(), "incident")));
+                                newIncident.getId(), "netflow_incident")));
     }
 
     private URI insertedEntityPath(Long id, String collection) {
