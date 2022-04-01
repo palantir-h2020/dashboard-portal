@@ -22,5 +22,13 @@ export default {
     TopMenu,
     LeftSidebar,
   },
+  beforeMount() {
+    // Connect WebSocket once user is logged in / dashboard is loaded.
+    this.$connect();
+  },
+  beforeDestroy() {
+    // Disconnect WebSocket.
+    this.$disconnect();
+  },
 };
 </script>

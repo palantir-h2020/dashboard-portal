@@ -44,7 +44,7 @@ Vue.use(
   VueNativeSock,
   `ws://${util.methods.currentIP()}:8081/websocket/notifications-stream/${util.methods.makeId(10)}`,
   {
-    connectManually: false,
+    connectManually: true,
     store: store,
     reconnection: true,
     reconnectionAttempts: 5,

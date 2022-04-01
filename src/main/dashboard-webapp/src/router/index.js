@@ -139,7 +139,7 @@ const routes = [
       },
       {
         name: 'RiskAssessment',
-        path: 'risk',
+        path: 'risk_assessment',
         meta: {
           title: 'Risk Assessment',
           requiresAuth: true,
@@ -149,7 +149,7 @@ const routes = [
       },
       {
         name: 'ThreatSharing',
-        path: 'capabilities/marketplace',
+        path: 'threat_sharing',
         meta: {
           title: 'Threat Sharing',
           requiresAuth: true,
@@ -267,8 +267,7 @@ router.beforeEach((to, from, next) => {
       return next({ name: 'DevDashboard' });
     }
   }
-  // Start websocket if it is not up
-  // TODO
+
   let currentPathName = to.name;
   if (localStorage[currentPathName] && localStorage[currentPathName] !== to.fullPath) {
     next({
