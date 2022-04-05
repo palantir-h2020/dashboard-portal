@@ -145,7 +145,7 @@ export default new Vuex.Store({
       return state.notificationCollections;
     },
     notificationList: state => {
-      return state.notificationList;
+      return state.notificationList.reverse();
     },
   },
   plugins: [

@@ -3,7 +3,7 @@
     <v-app-bar-nav-icon @click.stop="$emit('toggle-drawer')"></v-app-bar-nav-icon>
 
     <v-spacer></v-spacer>
-    <v-menu offset-y min-width="240" max-width="500">
+    <v-menu offset-y min-width="240" max-width="1000">
       <template v-slot:activator="{ on, attrs }">
         <v-btn x-large text tile v-bind="attrs" v-on="on" data-cy="notificationsMenu">
           <notification-bell
@@ -20,10 +20,33 @@
           />
         </v-btn>
       </template>
-      <v-list class="pl-2">
-        <v-list-item>
-          <v-list-item-title class="title" data-cy="notificationsList">Hello</v-list-item-title>
+      <v-list v-if="latestNotifications.length > 0" three-line>
+        <v-list-item class="h5">
+          Latest notifications:
         </v-list-item>
+        <v-list-item v-for="(item, index) in latestNotifications" :key="index" link>
+          <!-- Add :to destination link -->
+          <v-list-item-title class="title" data-cy="notificationsList">
+            {{ uppercaseFirstLetters(item.type) }} -
+            {{
+              item.type == 'incident'
+                ? item.incident.incidentType
+                : `${item.action.actionName} by ${item.action.componentType} ${item.action.componentId}`
+            }}
+            <!-- {{
+              item.type == 'incident'
+                ? item.incident.detectedIncident
+                : item.action.componentType + ' with id' + item.action.componentId
+            }} -->
+          </v-list-item-title>
+          <br />
+          <v-list-item-subtitle
+            v-html="item[item.type][item.type + 'Description']"
+          ></v-list-item-subtitle>
+        </v-list-item>
+      </v-list>
+      <v-list v-else>
+        <v-list-item><v-list-item-subtitle>No notifications</v-list-item-subtitle></v-list-item>
       </v-list>
     </v-menu>
     <v-tooltip bottom v-if="logoutTimer">
