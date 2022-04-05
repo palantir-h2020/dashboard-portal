@@ -1,9 +1,12 @@
 <template>
   <v-app-bar elevate-on-scroll>
     <v-app-bar-nav-icon @click.stop="$emit('toggle-drawer')"></v-app-bar-nav-icon>
-
     <v-spacer></v-spacer>
-    <v-menu offset-y min-width="240" max-width="1000">
+    <v-toolbar-title class="font-weight-bold primary--text">{{
+      this.$route.meta.title
+    }}</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-menu offset-y min-width="600" max-width="1000">
       <template v-slot:activator="{ on, attrs }">
         <v-btn x-large text tile v-bind="attrs" v-on="on" data-cy="notificationsMenu">
           <notification-bell
@@ -24,7 +27,11 @@
         <v-list-item class="h5">
           Latest notifications:
         </v-list-item>
-        <v-list-item v-for="(item, index) in latestNotifications" :key="index" link>
+        <v-list-item
+          v-for="(item, index) in latestNotifications.slice(-8).reverse()"
+          :key="index"
+          link
+        >
           <!-- Add :to destination link -->
           <v-list-item-title class="title" data-cy="notificationsList">
             {{ uppercaseFirstLetters(item.type) }} -

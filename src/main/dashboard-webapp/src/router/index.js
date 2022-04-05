@@ -51,7 +51,7 @@ const routes = [
         name: 'SecurityReports',
         path: 'reports',
         meta: {
-          title: 'Security Reports',
+          title: 'Security Incident Reports',
           requiresAuth: true,
           authorize: ['network_operator', 'sme_manager'],
         },

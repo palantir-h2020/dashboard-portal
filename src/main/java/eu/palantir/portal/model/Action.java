@@ -1,11 +1,15 @@
 package eu.palantir.portal.model;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,13 +40,16 @@ public class Action extends PanacheEntityBase {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @CreationTimestamp
+    private Instant createdTimestamp;
+
     // CHANGE add organization later.
 
     public Action() {
     }
 
     public Action(Long id, String componentType, String componentId, String componentIP, List<String> targetIPs,
-            String name, String description) {
+            String name, String description, Instant createdTimestamp) {
         this.id = id;
         this.componentType = componentType;
         this.componentId = componentId;
@@ -50,6 +57,7 @@ public class Action extends PanacheEntityBase {
         this.targetIPs = targetIPs;
         this.name = name;
         this.description = description;
+        this.createdTimestamp = createdTimestamp;
     }
 
     public Long getId() {
@@ -108,39 +116,12 @@ public class Action extends PanacheEntityBase {
         this.description = description;
     }
 
-    public Action id(Long id) {
-        setId(id);
-        return this;
+    public Instant getCreatedTimestamp() {
+        return this.createdTimestamp;
     }
 
-    public Action componentType(String componentType) {
-        setComponentType(componentType);
-        return this;
-    }
-
-    public Action componentId(String componentId) {
-        setComponentId(componentId);
-        return this;
-    }
-
-    public Action componentIP(String componentIP) {
-        setComponentIP(componentIP);
-        return this;
-    }
-
-    public Action targetIPs(List<String> targetIPs) {
-        setTargetIPs(targetIPs);
-        return this;
-    }
-
-    public Action name(String name) {
-        setName(name);
-        return this;
-    }
-
-    public Action description(String description) {
-        setDescription(description);
-        return this;
+    public void setCreatedTimestamp(Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
     }
 
     @Override
@@ -154,12 +135,14 @@ public class Action extends PanacheEntityBase {
         return Objects.equals(id, action.id) && Objects.equals(componentType, action.componentType)
                 && Objects.equals(componentId, action.componentId) && Objects.equals(componentIP, action.componentIP)
                 && Objects.equals(targetIPs, action.targetIPs) && Objects.equals(name, action.name)
-                && Objects.equals(description, action.description);
+                && Objects.equals(description, action.description)
+                && Objects.equals(createdTimestamp, action.createdTimestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, componentType, componentId, componentIP, targetIPs, name, description);
+        return Objects.hash(id, componentType, componentId, componentIP, targetIPs, name, description,
+                createdTimestamp);
     }
 
     @Override
@@ -172,6 +155,7 @@ public class Action extends PanacheEntityBase {
                 ", targetIPs='" + getTargetIPs() + "'" +
                 ", name='" + getName() + "'" +
                 ", description='" + getDescription() + "'" +
+                ", createdTimestamp='" + getCreatedTimestamp() + "'" +
                 "}";
     }
 
