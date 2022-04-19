@@ -8,15 +8,23 @@
       :server-items-length="totalItems"
       :loading="loading"
       :multi-sort="true"
-      :footer-props="{
-        showFirstLastPage: false,
-        itemsPerPageOptions: [10, 15, 25, 50, 100, 150, 200],
-      }"
+      :hide-default-footer="true"
       item-class="properties"
       :dense="false"
     >
-      <template v-if="totalItems === 2147483647" #footer.page-text="props">
-        {{ props.pageStart }} - {{ props.pageStop }}
+      <template v-slot:top="{ pagination, options, updateOptions }">
+        <v-data-footer
+          :items-per-page-options="[10, 15, 25, 50, 100, 150, 200]"
+          :pagination="pagination"
+          :options="options"
+          @update:options="updateOptions"
+          items-per-page-text="$vuetify.dataTable.itemsPerPageText"
+          showFirstLastPage
+          firstIcon="mdi-arrow-collapse-left"
+          lastIcon="mdi-arrow-collapse-right"
+          prevIcon="mdi-arrow-left"
+          nextIcon="mdi-arrow-right"
+        />
       </template>
       <template v-slot:item="{ item }">
         <tr>
@@ -36,7 +44,7 @@
               formatDateTimeLocale(getDescendantProp(item, header.value))
             }}</span>
             <span v-else-if="header.type == 'Enum'">{{
-              getDescendantProp(item, header.value + '.description')
+              $t(getDescendantProp(item, header.value + '.id'))
             }}</span>
             <span v-else-if="header.type == 'List'">{{
               getDescendantProp(item, header.value)
@@ -44,6 +52,9 @@
                   return item[header.property];
                 })
                 .join(', ')
+            }}</span>
+            <span v-else-if="header.type == 'EnumEntity'">{{
+              $t(getDescendantProp(item, header.value + '.description'))
             }}</span>
             <span v-else>{{ getDescendantProp(item, header.value) }}</span>
           </td>
@@ -55,7 +66,7 @@
                     mdi-file-find-outline
                   </v-icon>
                 </template>
-                <span>View</span>
+                <span>{{ $t('view') }}</span>
               </v-tooltip>
               <v-tooltip top v-if="editRouter">
                 <template v-slot:activator="{ on }">
@@ -63,9 +74,9 @@
                     mdi-file-document-edit-outline
                   </v-icon>
                 </template>
-                <span>Edit</span>
+                <span>{{ $t('edit') }}</span>
               </v-tooltip>
-              <v-tooltip top>
+              <v-tooltip top v-if="!noDelete">
                 <template v-slot:activator="{ on }">
                   <v-icon
                     v-on="on"
@@ -75,7 +86,7 @@
                     mdi-delete-outline
                   </v-icon>
                 </template>
-                <span>Delete</span>
+                <span>{{ $t('delete.message') }}</span>
               </v-tooltip>
             </v-layout>
           </td>
@@ -85,17 +96,17 @@
 
     <v-dialog v-if="itemToBeDeleted !== null" v-model="deleteDialog" max-width="500">
       <v-card>
-        <v-card-title class="headline">Delete</v-card-title>
+        <v-card-title class="headline">{{ $t('delete.message') }}</v-card-title>
         <v-card-text>
-          Are you sure you want to delete this item?
+          {{ $t('delete.confirm') }}
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="secondary" text @click="deleteDialog = false">
-            Cancel
+            {{ $t('cancel') }}
           </v-btn>
           <v-btn color="red darken-1" text @click="onDeleteItem" :disabled="disableDelete">
-            Delete
+            {{ $t('delete.message') }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -112,12 +123,16 @@ export default {
   mixins: [util],
   props: {
     headers: Array,
-    url: String,
     urlApi: String,
+    /*
+    if you do not want to use generic urlApi, use urlApiDelete
+     */
+    urlApiDelete: String,
     search: Object,
     searchAttributes: Array,
     editRouter: String,
     viewRouter: String,
+    noDelete: Boolean,
   },
   data: () => ({
     firstLoad: true,
@@ -197,7 +212,7 @@ export default {
       localStorage[currentPathName] = this.$router.currentRoute.fullPath;
     },
     getDataFromApi() {
-      console.log('[Table] Loading data');
+      console.log('[Table] Loading data from url', this.urlApi);
       this.loading = true;
       EventBus.$emit('waiting', true);
       return new Promise(resolve => {
@@ -209,8 +224,9 @@ export default {
             let items = [];
             let total = 0;
             if (res.status === 200) {
-              items = res.data.content;
-              total = res.data.total;
+              console.log('[Table] fetched data:', res.data);
+              items = res.data;
+              total = res.data.length;
             }
             setTimeout(() => {
               this.loading = false;
@@ -273,11 +289,11 @@ export default {
       console.log('Click Delete ' + value.id);
       EventBus.$emit('waiting', true);
       this.axios
-        .delete(this.urlApi + '/' + value.id)
+        .delete((this.urlApiDelete ? this.urlApiDelete : this.urlApi) + '/' + value.id)
         .then(() => {
           console.log('Success');
           EventBus.$emit('snackbar', {
-            text: 'Delete successfully.',
+            text: this.$i18n.t('delete.success'),
           });
           this.deleteDialog = false;
           this.getDataFromApi().then(data => {
@@ -291,6 +307,12 @@ export default {
           this.disableDelete = false;
         })
         .finally(EventBus.$emit('waiting', false));
+    },
+    updateTable() {
+      this.getDataFromApi().then(data => {
+        this.items = data.items;
+        this.totalItems = data.total;
+      });
     },
   },
 };
