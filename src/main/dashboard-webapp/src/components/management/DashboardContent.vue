@@ -1,9 +1,11 @@
 <template>
-  <div id="dashboardContent">
-    <v-row justify="center">
-      <img :src="image" />
-    </v-row>
-  </div>
+  <v-main>
+    <div id="dashboardContent">
+      <v-row cols="12" justify="center">
+        <img :src="image" />
+      </v-row>
+    </div>
+  </v-main>
 </template>
 
 <script>

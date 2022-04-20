@@ -1,15 +1,17 @@
 <template>
-  <div>
+  <div id="app">
     <top-menu
       app
       @toggle-drawer="$refs.drawer.drawer = !$refs.drawer.drawer"
       :logoutTimer="false"
     />
     <left-sidebar ref="drawer" />
-    <v-container fluid class="pa-4 overflow-y-auto" over>
-      <vue-snotify></vue-snotify>
-      <router-view></router-view>
-    </v-container>
+    <v-app>
+      <v-container fluid class="pa-4 overflow-y-auto" over>
+        <vue-snotify></vue-snotify>
+        <router-view></router-view>
+      </v-container>
+    </v-app>
   </div>
 </template>
 

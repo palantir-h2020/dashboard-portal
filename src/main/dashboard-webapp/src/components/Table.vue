@@ -1,7 +1,8 @@
 <template>
+  <!-- MAKE SURE THAT THIS COMPONENT IS WITHIN A v-main -->
   <div>
     <v-data-table
-      :headers="headers"
+      :headers="dataTableHeaders"
       :items="items"
       class="elevation-0"
       :options.sync="options"
@@ -11,6 +12,7 @@
       :hide-default-footer="true"
       item-class="properties"
       :dense="false"
+      item-key="id"
     >
       <template v-slot:top="{ pagination, options, updateOptions }">
         <v-data-footer
@@ -26,8 +28,9 @@
           nextIcon="mdi-arrow-right"
         />
       </template>
-      <template v-slot:item="{ item }">
+      <template v-slot:item="{ item, index: itemIndex }">
         <tr>
+          <td>{{ itemIndex + 1 }}</td>
           <td
             class="d-block d-sm-table-cell"
             v-for="(header, index) in headers"
@@ -143,6 +146,7 @@ export default {
     itemToBeDeleted: null,
     deleteDialog: false,
     disableDelete: false,
+    dataTableHeaders: [{ text: '#' }],
   }),
   watch: {
     options: {
@@ -159,10 +163,18 @@ export default {
       deep: true,
     },
   },
+  beforeMount() {
+    let dataTableHeaders = [{ text: '#', sortable: false, align: 'start' }].concat(this.headers);
+    if (this.viewRouter || this.editRouter || !this.noDelete) {
+      dataTableHeaders = dataTableHeaders.concat([
+        { text: 'Actions', sortable: false, align: 'end' },
+      ]);
+    }
+    this.dataTableHeaders = dataTableHeaders;
+  },
   mounted() {
     console.log('[Table] Mounted');
     if (this.firstLoad) {
-      /* Populate table from route */
       this.options.page = this.$route.query.index ? Number(this.$route.query.index) + 1 : 1;
       this.options.itemsPerPage = this.$route.query.size ? Number(this.$route.query.size) : 10;
       this.options.sortBy = [];
@@ -212,7 +224,12 @@ export default {
       localStorage[currentPathName] = this.$router.currentRoute.fullPath;
     },
     getDataFromApi() {
-      console.log('[Table] Loading data from url', this.urlApi);
+      console.log(
+        '[Table] Loading data from url',
+        this.urlApi,
+        'with query params',
+        this.getParams(),
+      );
       this.loading = true;
       EventBus.$emit('waiting', true);
       return new Promise(resolve => {

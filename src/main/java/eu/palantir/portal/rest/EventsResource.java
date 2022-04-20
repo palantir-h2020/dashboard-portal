@@ -11,6 +11,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.QueryParam;
+
 import eu.palantir.portal.dto.events.ActionDto;
 import eu.palantir.portal.dto.events.AttestationIncidentDto;
 import eu.palantir.portal.dto.events.IncidentDto;
@@ -23,6 +26,8 @@ import eu.palantir.portal.model.AttestationIncident;
 import eu.palantir.portal.model.Incident;
 import eu.palantir.portal.model.NetflowIncident;
 import eu.palantir.portal.model.SyslogThreatIncident;
+import io.quarkus.panache.common.Page;
+
 import javax.transaction.Transactional;
 
 @Singleton
@@ -55,8 +60,15 @@ public class EventsResource {
     @GET
     @Path("/action")
     @Transactional
-    public List<ActionDto> getActions() {
-        List<Action> actions = Action.listAll();
+    public List<ActionDto> getActions(@QueryParam("index") @DefaultValue("0") Integer index,
+            @QueryParam("size") @DefaultValue("0") Integer size) {
+        List<Action> actions;
+        if (size > 0) {
+            actions = Action.<Action>findAll().page(Page.of(index, size)).list();
+        } else {
+            actions = Action.<Action>listAll();
+        }
+
         if (actions == null) {
             return new ArrayList<ActionDto>();
         } else {
@@ -79,8 +91,17 @@ public class EventsResource {
     @GET
     @Path("/incident")
     @Transactional
-    public List<IncidentDto> getIncidents() {
-        List<Incident> incidents = Incident.listAll();
+    public List<IncidentDto> getIncidents(
+            @QueryParam("index") @DefaultValue("0") Integer index,
+            @QueryParam("size") @DefaultValue("0") Integer size) {
+
+        List<Incident> incidents;
+        if (size > 0) {
+            incidents = Incident.<Incident>findAll().page(Page.of(index, size)).list();
+        } else {
+            incidents = Incident.<Incident>listAll();
+        }
+
         if (incidents == null) {
             return new ArrayList<IncidentDto>();
         } else {
