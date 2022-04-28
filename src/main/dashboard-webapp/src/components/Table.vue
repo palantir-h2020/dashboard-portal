@@ -30,7 +30,7 @@
       </template>
       <template v-slot:item="{ item, index: itemIndex }">
         <tr>
-          <td>{{ itemIndex + 1 }}</td>
+          <td>{{ options.itemsPerPage * (options.page - 1) + itemIndex + 1 }}</td>
           <td
             class="d-block d-sm-table-cell"
             v-for="(header, index) in headers"
@@ -224,12 +224,7 @@ export default {
       localStorage[currentPathName] = this.$router.currentRoute.fullPath;
     },
     getDataFromApi() {
-      console.log(
-        '[Table] Loading data from url',
-        this.urlApi,
-        'with query params',
-        this.getParams(),
-      );
+      console.log('[Table] Loading data');
       this.loading = true;
       EventBus.$emit('waiting', true);
       return new Promise(resolve => {
@@ -241,9 +236,8 @@ export default {
             let items = [];
             let total = 0;
             if (res.status === 200) {
-              console.log('[Table] fetched data:', res.data);
-              items = res.data;
-              total = res.data.length;
+              items = res.data.content;
+              total = res.data.total;
             }
             setTimeout(() => {
               this.loading = false;
