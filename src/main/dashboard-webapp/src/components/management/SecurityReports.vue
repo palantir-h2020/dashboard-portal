@@ -6,16 +6,17 @@
           <Table
             ref="incidentsTable"
             :headers="headers"
-            :urlApi="'/api/v1/events/incident'"
+            :urlApi="urlApi"
             :search="search"
             :searchAttributes="[]"
-            :viewRouter="'SecurityReportView'"
+            :viewRouter="viewRouter"
             noDelete
           >
           </Table>
         </v-col>
       </v-row>
     </v-container>
+    <router-view />
   </v-main>
 </template>
 
@@ -34,6 +35,8 @@ export default {
       { text: 'Type', value: 'type', sortable: false },
       { text: 'Name', value: 'name', sortable: false },
     ],
+    viewRouter: 'SecurityReportDetails',
+    urlApi: '/api/v1/events/incident',
   }),
   created() {
     // Event handler for updating the incidents.

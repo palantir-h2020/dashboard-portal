@@ -21,6 +21,8 @@ import i18n from './i18n';
 import VueNativeSock from 'vue-native-websocket';
 // Notifications utility
 import Snotify, { SnotifyPosition } from 'vue-snotify';
+// Portal Component, renders DOME outside of a component, anywhere. (useful for popups)
+import PortalVue from 'portal-vue';
 // Utilities
 import util from './mixins/util.js';
 
@@ -65,6 +67,8 @@ Vue.use(Snotify, {
     ],
   },
 });
+
+Vue.use(PortalVue);
 
 new Vue({
   i18n,

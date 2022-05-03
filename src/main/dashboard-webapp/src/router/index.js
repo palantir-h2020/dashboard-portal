@@ -56,6 +56,13 @@ const routes = [
           authorize: ['network_operator', 'sme_manager'],
         },
         component: () => import('../components/management/SecurityReports.vue'),
+        children: [
+          {
+            name: 'SecurityReportDetails',
+            path: 'details',
+            component: () => import('../components/DetailsPopup.vue'),
+          },
+        ],
       },
       {
         name: 'FinancialDashboard',

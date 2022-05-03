@@ -11,6 +11,7 @@
         <vue-snotify></vue-snotify>
         <router-view></router-view>
       </v-container>
+      <PortalTarget name="popup" />
     </v-app>
   </div>
 </template>
