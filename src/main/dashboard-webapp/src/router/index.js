@@ -61,6 +61,11 @@ const routes = [
             name: 'SecurityReportDetails',
             path: 'details',
             component: () => import('../components/DetailsPopup.vue'),
+            meta: {
+              title: 'Security Incident Reports',
+              requiresAuth: true,
+              authorize: ['network_operator', 'sme_manager'],
+            },
           },
         ],
       },

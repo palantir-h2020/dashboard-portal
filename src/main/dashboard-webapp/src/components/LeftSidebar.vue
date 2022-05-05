@@ -82,7 +82,7 @@
       </template>
     </v-list>
     <template v-slot:append>
-      <div class="pa-2" @click.stop="mini = !mini">
+      <div class="pa-2" @click.stop="switchMini()">
         <v-btn tile block text>
           <v-icon left class="ml-1">
             {{ mini ? 'mdi-chevron-double-right' : 'mdi-chevron-double-left' }}
@@ -193,6 +193,26 @@ export default {
         ];
       } else {
         return [{ divider: true }, { heading: 'Empty' }];
+      }
+    },
+  },
+  methods: {
+    switchMini() {
+      let needsReset = false;
+
+      if (!this.mini) needsReset = true;
+
+      let mini = !this.mini;
+
+      if (needsReset) {
+        this.mini = mini;
+        this.drawer = false;
+        setTimeout(() => {
+          this.mini = mini;
+          this.drawer = true;
+        }, 300);
+      } else {
+        this.mini = mini;
       }
     },
   },

@@ -1,18 +1,12 @@
 <template>
   <div id="app">
-    <top-menu
-      app
-      @toggle-drawer="$refs.drawer.drawer = !$refs.drawer.drawer"
-      :logoutTimer="false"
-    />
+    <top-menu @toggle-drawer="$refs.drawer.drawer = !$refs.drawer.drawer" :logoutTimer="false" />
     <left-sidebar ref="drawer" />
-    <v-app>
-      <v-container fluid class="pa-4 overflow-y-auto" over>
-        <vue-snotify></vue-snotify>
-        <router-view></router-view>
-      </v-container>
+    <v-container fluid class="pa-4 overflow-y-auto" over>
+      <vue-snotify></vue-snotify>
+      <router-view></router-view>
       <PortalTarget name="popup" />
-    </v-app>
+    </v-container>
   </div>
 </template>
 
