@@ -125,17 +125,17 @@ export default {
   name: 'Table',
   mixins: [util],
   props: {
-    headers: Array,
-    urlApi: String,
+    headers: Array, // Table headers as list.
+    urlApi: String, // REST API endpoint as Data source.
     /*
     if you do not want to use generic urlApi, use urlApiDelete
      */
-    urlApiDelete: String,
+    urlApiDelete: String, // Alternate REST API endpoint for delete.
     search: Object,
     searchAttributes: Array,
-    editRouter: String,
-    viewRouter: String,
-    noDelete: Boolean,
+    editRouter: String, // Route for edit.
+    viewRouter: String, // Route for view.
+    noDelete: Boolean, // If true, no delete allowed.
   },
   data: () => ({
     firstLoad: true,

@@ -11,8 +11,7 @@
             :searchAttributes="[]"
             :viewRouter="viewRouter"
             noDelete
-          >
-          </Table>
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -36,7 +35,7 @@ export default {
       { text: 'Name', value: 'name', sortable: false },
     ],
     viewRouter: 'SecurityReportDetails',
-    urlApi: '/api/v1/events/incident',
+    urlApi: '/api/v1/events/incident', // Data source
   }),
   created() {
     // Event handler for updating the incidents.
