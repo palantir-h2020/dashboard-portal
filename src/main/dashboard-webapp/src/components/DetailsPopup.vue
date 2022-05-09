@@ -11,12 +11,19 @@
         <!-- Extra content goes here. -->
         <v-divider class="mx-4" />
         <v-card-title>{{ title }}</v-card-title>
+        <v-divider class="mx-4" />
         <v-card-text>
-          <v-divider class="mx-4" />
-          <!-- TODO -->
-          <!-- CONTINUE WITH MAIN CONTENT HERE!!! Highlight the important/top content. -->
-          <!-- render values of importantProps -->
-          <!-- render values of secondaryProps -->
+          <v-row
+            v-for="property in importantProps"
+            :key="property"
+            align="center"
+            class="mx-0 text--primary"
+          >
+            {{ property }}: {{ detailsData[property] }}
+          </v-row>
+          <v-row v-for="property in secondaryProps" :key="property" align="center" class="mx-0">
+            {{ property }}: {{ detailsData[property] }}
+          </v-row>
           <slot> <!-- Custom main content / text --> </slot>
         </v-card-text>
         <v-divider class="mx-4" />
@@ -36,10 +43,6 @@ export default {
     title: {
       type: String,
       default: 'Details',
-    },
-    loading: {
-      type: Boolean,
-      default: false,
     },
     baseAPI: {
       type: String,
@@ -73,14 +76,16 @@ export default {
   data: () => ({
     detailsData: {},
     secondaryProps: [],
+    loading: false,
   }),
   mounted() {
     console.log('[DetailsPopup] Mounted');
     this.getDataFromApi().then(detailsData => {
+      console.log(detailsData);
       this.detailsData = detailsData;
-      let allKeys = detailsData.keys();
+      let allKeys = Object.keys(detailsData);
       this.secondaryProps = allKeys.filter(element => {
-        return !this.importantProps.includes(element) || !this.excludedProps.includes(element);
+        return !this.importantProps.includes(element) && !this.excludedProps.includes(element);
       });
     });
   },

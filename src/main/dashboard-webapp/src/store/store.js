@@ -22,6 +22,15 @@ export default new Vuex.Store({
       action: {},
       incident: {},
     },
+    // Standard mappings type -> collection
+    dataCollections: {
+      'failed_attestation:fsm': 'attestation_incident',
+      'threat:netflow': 'netflow_incident',
+      anomaly: 'netflow_incident',
+      'threat:syslog': 'syslog_threat_incidents',
+    },
+    // Cached data from current path
+    cachedData: {},
     notificationList: [],
   },
   mutations: {
@@ -124,6 +133,14 @@ export default new Vuex.Store({
         state.fullName = null;
       }
     },
+    // Careful! Data for a Cache ID is meant for a specific purpose.
+    setCachedData(state, payload) {
+      let { cachedData, cacheId } = payload;
+      state.cachedData[cacheId] = cachedData;
+    },
+    clearCachedData(state, cacheId) {
+      delete state.cachedData[cacheId];
+    },
   },
   getters: {
     avatar: state => {
@@ -146,6 +163,15 @@ export default new Vuex.Store({
     },
     notificationList: state => {
       return state.notificationList;
+    },
+    dataCollections: state => {
+      return state.dataCollections;
+    },
+    dataCollectionTypes: state => {
+      return Object.keys(state.dataCollections);
+    },
+    cachedData: state => cacheId => {
+      return state.cachedData[cacheId];
     },
   },
   plugins: [

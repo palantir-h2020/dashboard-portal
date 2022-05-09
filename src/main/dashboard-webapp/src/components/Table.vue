@@ -136,6 +136,10 @@ export default {
     editRouter: String, // Route for edit.
     viewRouter: String, // Route for view.
     noDelete: Boolean, // If true, no delete allowed.
+    cacheName: {
+      type: String,
+      default: '',
+    }, // Key for cached data fetched by table.
   },
   data: () => ({
     firstLoad: true,
@@ -147,6 +151,7 @@ export default {
     deleteDialog: false,
     disableDelete: false,
     dataTableHeaders: [{ text: '#' }],
+    tableId: '',
   }),
   watch: {
     options: {
@@ -171,6 +176,7 @@ export default {
       ]);
     }
     this.dataTableHeaders = dataTableHeaders;
+    this.tableId = 'table:' + this.makeId(10);
   },
   mounted() {
     console.log('[Table] Mounted');
@@ -199,9 +205,20 @@ export default {
     }
     this.getDataFromApi().then(data => {
       this.items = data.items;
+      let cachedItems = {};
+      for (const item of data.items) {
+        cachedItems[item.id] = item;
+      }
+      this.$store.commit('setCachedData', {
+        cachedData: cachedItems,
+        cacheId: this.cacheName ? this.cacheName : this.tableId,
+      });
       this.totalItems = data.total;
       this.firstLoad = false;
     });
+  },
+  beforeDestroy() {
+    this.$store.commit('clearCachedData', this.cacheName ? this.cacheName : this.tableId);
   },
   methods: {
     triggerSearch() {

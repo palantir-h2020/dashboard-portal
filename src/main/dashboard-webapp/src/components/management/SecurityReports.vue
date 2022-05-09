@@ -11,6 +11,7 @@
             :searchAttributes="[]"
             :viewRouter="viewRouter"
             noDelete
+            cacheName="securityReports"
           />
         </v-col>
       </v-row>

@@ -60,7 +60,7 @@ const routes = [
           {
             name: 'SecurityReportDetails',
             path: 'details',
-            component: () => import('../components/DetailsPopup.vue'), // Change...
+            component: () => import('../components/management/SecurityReportPopup.vue'),
             meta: {
               title: 'Security Incident Reports',
               requiresAuth: true,
