@@ -205,14 +205,6 @@ export default {
     }
     this.getDataFromApi().then(data => {
       this.items = data.items;
-      let cachedItems = {};
-      for (const item of data.items) {
-        cachedItems[item.id] = item;
-      }
-      this.$store.commit('setCachedData', {
-        cachedData: cachedItems,
-        cacheId: this.cacheName ? this.cacheName : this.tableId,
-      });
       this.totalItems = data.total;
       this.firstLoad = false;
     });
@@ -257,6 +249,7 @@ export default {
               total = res.data.total;
             }
             setTimeout(() => {
+              if (res.status === 200) this.cacheTableData(items);
               this.loading = false;
               resolve({
                 items,
@@ -340,6 +333,16 @@ export default {
       this.getDataFromApi().then(data => {
         this.items = data.items;
         this.totalItems = data.total;
+      });
+    },
+    cacheTableData(data) {
+      let cachedItems = {};
+      for (const item of data) {
+        cachedItems[item.id] = item;
+      }
+      this.$store.commit('setCachedData', {
+        cachedData: cachedItems,
+        cacheId: this.cacheName ? this.cacheName : this.tableId,
       });
     },
   },

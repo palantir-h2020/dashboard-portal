@@ -53,7 +53,7 @@ export default {
       default: null,
     },
     detailsId: {
-      type: String,
+      type: [String, Number],
       default: null,
     },
     importantProps: {

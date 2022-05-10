@@ -134,9 +134,13 @@ export default new Vuex.Store({
       }
     },
     // Careful! Data for a Cache ID is meant for a specific purpose.
+    // Updates the data.
     setCachedData(state, payload) {
       let { cachedData, cacheId } = payload;
-      state.cachedData[cacheId] = cachedData;
+      state.cachedData[cacheId] = {
+        ...state.cachedData[cacheId],
+        ...cachedData,
+      };
     },
     clearCachedData(state, cacheId) {
       delete state.cachedData[cacheId];
