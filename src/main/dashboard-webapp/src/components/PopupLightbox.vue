@@ -3,9 +3,7 @@
     <div class="PopupLightbox__content">
       <slot />
     </div>
-    <div class="PopupLightbox__header">
-      <v-btn color="primary" elevation="2" @click="$parent.$emit('close')">Close</v-btn>
-    </div>
+    <v-btn color="primary" elevation="2" @click="$parent.$emit('close')">Close</v-btn>
   </div>
 </template>
 

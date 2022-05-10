@@ -1,6 +1,6 @@
 <template>
   <popup-router-view label="details">
-    <v-overlay slot="backdrop"></v-overlay>
+    <v-overlay slot="backdrop" />
     <popup-lightbox>
       <!-- Main content here... -->
       <v-card elevation="1" :loading="loading" ma-5 class="mx-auto my-12">

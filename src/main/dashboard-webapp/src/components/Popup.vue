@@ -9,7 +9,7 @@
     <div class="PopupWrap__backdrop" @click="$emit('close')">
       <slot name="backdrop" />
     </div>
-    <slot />
+    <div class="PopupWrap__main"><slot /></div>
   </div>
 </template>
 
@@ -115,11 +115,15 @@ export default {
 
 <style>
 .PopupWrap {
+  position: sticky;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.PopupWrap__main {
   position: fixed;
   top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
 }
 
 .PopupWrap--centered {

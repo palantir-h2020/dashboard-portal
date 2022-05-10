@@ -1,23 +1,21 @@
 <template>
-  <v-main>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="12" md="12">
-          <Table
-            ref="incidentsTable"
-            :headers="headers"
-            :urlApi="urlApi"
-            :search="search"
-            :searchAttributes="[]"
-            :viewRouter="viewRouter"
-            noDelete
-            cacheName="securityReports"
-          />
-        </v-col>
-      </v-row>
-    </v-container>
+  <v-container fluid>
+    <v-row>
+      <v-col cols="12" md="12">
+        <Table
+          ref="incidentsTable"
+          :headers="headers"
+          :urlApi="urlApi"
+          :search="search"
+          :searchAttributes="[]"
+          :viewRouter="viewRouter"
+          noDelete
+          cacheName="securityReports"
+        />
+      </v-col>
+    </v-row>
     <router-view />
-  </v-main>
+  </v-container>
 </template>
 
 <script>
