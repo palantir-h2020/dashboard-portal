@@ -1,9 +1,8 @@
-//you need to import both vue and vuex, as both are used here
 import Vue from 'vue';
 import Vuex from 'vuex';
 import sharedMutations from 'vuex-shared-mutations';
 import EventBus from '../helpers/event-bus.js';
-//then you use Vuex
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -32,6 +31,7 @@ export default new Vuex.Store({
     // Cached data from current path
     cachedData: {},
     notificationList: [],
+    frozenUnderlayState: false,
   },
   mutations: {
     // Socket mutations
@@ -145,6 +145,12 @@ export default new Vuex.Store({
     clearCachedData(state, cacheId) {
       delete state.cachedData[cacheId];
     },
+    freezeUnderlayState(state) {
+      state.frozenUnderlayState = true;
+    },
+    unfreezeUnderlayState(state) {
+      state.frozenUnderlayState = false;
+    },
   },
   getters: {
     avatar: state => {
@@ -177,10 +183,13 @@ export default new Vuex.Store({
     cachedData: state => cacheId => {
       return state.cachedData[cacheId];
     },
+    frozenUnderlayState: state => {
+      return state.frozenUnderlayState;
+    },
   },
   plugins: [
     sharedMutations({
       predicate: ['setAvatar', 'setRoles', 'setTimezone', 'setDateFormat', 'setFullName'],
-    }),
+    }), // All data mutations shared between different tabs are put here.
   ],
 });

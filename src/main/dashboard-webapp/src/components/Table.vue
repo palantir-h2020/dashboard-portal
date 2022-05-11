@@ -1,6 +1,6 @@
 <template>
   <!-- MAKE SURE THAT THIS COMPONENT IS WITHIN A v-main -->
-  <div>
+  <div v-click-outside="clearHighlighted">
     <v-data-table
       :headers="dataTableHeaders"
       :items="items"
@@ -309,6 +309,7 @@ export default {
     },
     onViewItem(value) {
       console.log('Click View ' + value.id);
+      this.keepHighlighted(value);
       this.$router.push({
         name: this.viewRouter,
         query: { id: value.id },
@@ -316,6 +317,7 @@ export default {
     },
     onEditItem(value) {
       console.log('Click Edit ' + value.id);
+      this.keepHighlighted(value);
       this.$router.push({
         name: this.editRouter,
         query: { id: value.id },
@@ -370,12 +372,24 @@ export default {
         if (!isOn) this.selectedRows.push(row.id);
       } else this.toggleSelection(row.id);
     },
-    toggleSelection(keyID, off = false) {
-      if (this.selectedRows.includes(keyID)) {
+    toggleSelection(keyID, off = false, on = false) {
+      if (!off && this.selectedRows.includes(keyID)) {
         this.selectedRows = this.selectedRows.filter(selectedKeyID => selectedKeyID !== keyID);
-      } else if (!off) {
+      } else if (!on) {
         this.selectedRows.push(keyID);
       }
+    },
+    keepHighlighted(row) {
+      if (this.highlight) {
+        if (this.singleHighlight) {
+          this.selectedRows = [row.id];
+          this.rowClicked(row);
+        } else this.toggleSelection(row.id, false, true);
+      }
+    },
+    clearHighlighted() {
+      if (this.$store.getters.frozenUnderlayState) return;
+      this.selectedRows = [];
     },
   },
 };

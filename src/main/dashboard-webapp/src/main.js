@@ -23,6 +23,8 @@ import VueNativeSock from 'vue-native-websocket';
 import Snotify, { SnotifyPosition } from 'vue-snotify';
 // Portal Component, renders DOME outside of a component, anywhere. (useful for popups)
 import PortalVue from 'portal-vue';
+// For some reason this directive is not included, so it is now fixed.
+import vClickOutside from 'v-click-outside';
 // Utilities
 import util from './mixins/util.js';
 
@@ -69,6 +71,8 @@ Vue.use(Snotify, {
 });
 
 Vue.use(PortalVue);
+
+Vue.use(vClickOutside);
 
 new Vue({
   i18n,

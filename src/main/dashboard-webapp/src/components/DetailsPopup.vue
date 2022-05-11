@@ -79,6 +79,7 @@ export default {
     loading: false,
   }),
   mounted() {
+    this.$store.commit('freezeUnderlayState');
     console.log('[DetailsPopup] Mounted');
     this.getDataFromApi().then(detailsData => {
       console.log(detailsData);
@@ -88,6 +89,9 @@ export default {
         return !this.importantProps.includes(element) && !this.excludedProps.includes(element);
       });
     });
+  },
+  destroyed() {
+    this.$store.commit('unfreezeUnderlayState');
   },
   methods: {
     getDataFromApi() {
