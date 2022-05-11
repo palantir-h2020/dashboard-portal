@@ -24,6 +24,6 @@ export default {
 }
 
 .PopupLightbox__content {
-  margin-top: 0.5em;
+  margin-top: 4.5em;
 }
 </style>

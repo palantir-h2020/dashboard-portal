@@ -10,6 +10,8 @@
           :searchAttributes="[]"
           :viewRouter="viewRouter"
           noDelete
+          highlight
+          singleHighlight
           cacheName="securityReports"
         />
       </v-col>

@@ -29,8 +29,13 @@
         />
       </template>
       <template v-slot:item="{ item, index: itemIndex }">
-        <tr>
-          <td>{{ options.itemsPerPage * (options.page - 1) + itemIndex + 1 }}</td>
+        <tr
+          :class="selectedRows.indexOf(item.id) > -1 ? 'light-blue lighten-2' : ''"
+          @click="rowClicked(item)"
+        >
+          <td>
+            {{ options.itemsPerPage * (options.page - 1) + itemIndex + 1 }}
+          </td>
           <td
             class="d-block d-sm-table-cell"
             v-for="(header, index) in headers"
@@ -135,11 +140,22 @@ export default {
     searchAttributes: Array,
     editRouter: String, // Route for edit.
     viewRouter: String, // Route for view.
-    noDelete: Boolean, // If true, no delete allowed.
+    noDelete: {
+      type: Boolean,
+      default: false,
+    }, // If true, no delete allowed.
     cacheName: {
       type: String,
       default: '',
     }, // Key for cached data fetched by table.
+    highlight: {
+      type: Boolean,
+      default: false,
+    }, // If true, clicked item is toggled highlighted.
+    singleHighlight: {
+      type: Boolean,
+      default: false,
+    }, // If true and 'highlight' true, ONLY clicked item is toggled highlighted.
   },
   data: () => ({
     firstLoad: true,
@@ -152,6 +168,7 @@ export default {
     disableDelete: false,
     dataTableHeaders: [{ text: '#' }],
     tableId: '',
+    selectedRows: [],
   }),
   watch: {
     options: {
@@ -344,6 +361,21 @@ export default {
         cachedData: cachedItems,
         cacheId: this.cacheName ? this.cacheName : this.tableId,
       });
+    },
+    rowClicked(row) {
+      if (!this.highlight) return;
+      if (this.singleHighlight) {
+        let isOn = this.selectedRows.includes(row.id);
+        this.selectedRows = [];
+        if (!isOn) this.selectedRows.push(row.id);
+      } else this.toggleSelection(row.id);
+    },
+    toggleSelection(keyID, off = false) {
+      if (this.selectedRows.includes(keyID)) {
+        this.selectedRows = this.selectedRows.filter(selectedKeyID => selectedKeyID !== keyID);
+      } else if (!off) {
+        this.selectedRows.push(keyID);
+      }
     },
   },
 };
