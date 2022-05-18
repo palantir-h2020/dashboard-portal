@@ -34,6 +34,12 @@ export default {
     headers: [
       { text: 'Type', value: 'type', sortable: false },
       { text: 'Name', value: 'name', sortable: false },
+      {
+        text: 'Time (YYYY-MM-DD hh:mm)',
+        value: 'createdTimestamp',
+        sortable: false,
+        type: 'DateTime',
+      },
     ],
     viewRouter: 'SecurityReportDetails',
     urlApi: '/api/v1/events/incident', // Data source

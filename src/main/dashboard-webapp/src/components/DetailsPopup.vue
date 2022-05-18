@@ -19,10 +19,10 @@
             align="center"
             class="mx-0 text--primary"
           >
-            {{ property }}: {{ detailsData[property] }}
+            {{ keysTransformer(property) }}: {{ detailsData[property] }}
           </v-row>
           <v-row v-for="property in secondaryProps" :key="property" align="center" class="mx-0">
-            {{ property }}: {{ detailsData[property] }}
+            {{ keysTransformer(property) }}: {{ detailsData[property] }}
           </v-row>
           <slot> <!-- Custom main content / text --> </slot>
         </v-card-text>
@@ -36,9 +36,11 @@
 <script>
 import PopupRouterView from '@/views/PopupRouterView';
 import PopupLightbox from './PopupLightbox.vue';
+import util from '@/mixins/util.js';
 
 export default {
   name: 'DetailsPopup',
+  mixins: [util],
   props: {
     title: {
       type: String,
@@ -66,6 +68,26 @@ export default {
       type: Array,
       default() {
         return [];
+      },
+    },
+    keysTransformer: {
+      // Invoked on render
+      type: Function,
+      // USE THIS default AS BASIS for override!
+      default: property => {
+        return util.methods.addSpaces(util.methods.uppercaseFirstLetters(property)); // The default is best to be just this!
+      },
+    },
+    dataTransformer: {
+      // Invoked after fetch.
+      type: Function,
+      // USE THIS default AS BASIS for override!
+      default: (propertyName, propertyValue, local) => {
+        if (util.methods.isEmptyObject(local) || util.methods.isEmptyString(propertyName)) {
+          console.error('Empty data transformer input. Input:', propertyName, propertyValue, local);
+          return ''; // Always has to return some value!
+        }
+        return propertyValue; // The default should be just this!
       },
     },
   },
@@ -105,6 +127,10 @@ export default {
           }
           setTimeout(() => {
             this.loading = false;
+            // Invoke data transformer
+            for (const key in detailsData) {
+              detailsData[key] = this.dataTransformer(key, detailsData[key], this);
+            }
             resolve(detailsData);
           });
         });

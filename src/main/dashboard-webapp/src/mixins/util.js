@@ -770,5 +770,23 @@ export default {
       }
       return words.join(' ');
     },
+    addSpaces: myString => {
+      return myString.replace(/([A-Z])/g, ' $1').trim();
+    },
+    isObject: item => {
+      return item && typeof item === 'object' && !Array.isArray(item);
+    },
+    isEmptyObject: myObject => {
+      // because Object.keys(new Date()).length === 0;
+      // we have to do some additional check
+      return (
+        myObject && // null and undefined check
+        Object.keys(myObject).length === 0 &&
+        Object.getPrototypeOf(myObject) === Object.prototype
+      );
+    },
+    isEmptyString: myString => {
+      return myString.length === 0 || !myString.trim();
+    },
   },
 };
