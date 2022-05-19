@@ -19,10 +19,10 @@
             align="center"
             class="mx-0 text--primary"
           >
-            {{ keysTransformer(property) }}: {{ detailsData[property] }}
+            {{ keysTransformer(property) }}: {{ detailsData[property] }} <br /><br />
           </v-row>
           <v-row v-for="property in secondaryProps" :key="property" align="center" class="mx-0">
-            {{ keysTransformer(property) }}: {{ detailsData[property] }}
+            {{ keysTransformer(property) }}: {{ detailsData[property] }} <br /><br />
           </v-row>
           <slot> <!-- Custom main content / text --> </slot>
         </v-card-text>

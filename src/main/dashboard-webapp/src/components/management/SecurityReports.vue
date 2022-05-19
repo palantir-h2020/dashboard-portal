@@ -23,6 +23,7 @@
 <script>
 import EventBus from '@/helpers/event-bus.js';
 import Table from '@/components/Table';
+import util from '@/mixins/util.js';
 
 export default {
   name: 'SecurityReports',
@@ -32,8 +33,25 @@ export default {
   data: () => ({
     search: {},
     headers: [
-      { text: 'Type', value: 'type', sortable: false },
-      { text: 'Name', value: 'name', sortable: false },
+      {
+        text: 'Type',
+        value: 'type',
+        sortable: false,
+        transform: val => {
+          const typeParts = val.split(':');
+          const type = typeParts[0];
+          const subtype = typeParts.length > 1 ? typeParts[1] : '';
+          return util.methods.uppercaseFirstLetters(`${subtype} ${type}`.trim());
+        },
+      },
+      {
+        text: 'Name',
+        value: 'name',
+        sortable: false,
+        transform: val => {
+          return util.methods.uppercaseFirstLetters(val);
+        },
+      },
       {
         text: 'Time (YYYY-MM-DD hh:mm)',
         value: 'createdTimestamp',

@@ -64,6 +64,9 @@
             <span v-else-if="header.type == 'EnumEntity'">{{
               $t(getDescendantProp(item, header.value + '.description'))
             }}</span>
+            <span v-else-if="'transform' in header">{{
+              header.transform(getDescendantProp(item, header.value))
+            }}</span>
             <span v-else>{{ getDescendantProp(item, header.value) }}</span>
           </td>
           <td>
