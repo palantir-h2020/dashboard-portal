@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
-import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -20,7 +19,6 @@ public class IncidentDto implements Serializable {
 
     private String description;
 
-    @CreationTimestamp
     private Instant createdTimestamp;
 
     public IncidentDto() {

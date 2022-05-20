@@ -2,7 +2,6 @@ import 'intersection-observer';
 import Vue from 'vue';
 import './plugins/axios';
 import App from './App.vue';
-import VueSocketIO from 'vue-socket.io'
 import vuetify from './plugins/vuetify';
 import router from './router';
 import store from './store/store';
@@ -15,8 +14,19 @@ import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
 import '@mdi/font/css/materialdesignicons.min.css';
 import 'typeface-roboto/index.css';
-
 import './styles/app.scss';
+// Internationalization
+import i18n from './i18n';
+// WebSocket connector
+import VueNativeSock from 'vue-native-websocket';
+// Notifications utility
+import Snotify, { SnotifyPosition } from 'vue-snotify';
+// Portal Component, renders DOME outside of a component, anywhere. (useful for popups)
+import PortalVue from 'portal-vue';
+// For some reason this directive is not included, so it is now fixed.
+import vClickOutside from 'v-click-outside';
+// Utilities
+import util from './mixins/util.js';
 
 //fixes issue with marker not being visible
 delete Icon.Default.prototype._getIconUrl;
@@ -36,19 +46,36 @@ Vue.use(TiptapVuetifyPlugin, {
   iconsGroup: 'mdi',
 });
 
-// EXAMPLE TO FOLLOW: https://github.com/dalailomo/vue-socket-io-example
-const options = { path: '/websocket/' }; //Options object to pass into SocketIO
-Vue.use(new VueSocketIO({
-  debug: true,
-  connection: SocketIO('http://localhost:8080', options),
-  vuex: {
-    store,
-    actionPrefix: 'SOCKET_',
-    mutationPrefix: 'SOCKET_'
+Vue.use(
+  VueNativeSock,
+  `ws://${util.methods.currentIP()}:8081/websocket/notifications-stream/${util.methods.makeId(10)}`,
+  {
+    connectManually: true,
+    store: store,
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 3000,
   },
-}))
+);
+
+Vue.use(Snotify, {
+  toast: {
+    position: SnotifyPosition.rightTop,
+    titleMaxLength: 300,
+    bodyMaxLength: 3000,
+    buttons: [
+      { text: 'Ok', action: null, bold: false },
+      { text: 'Check', action: null, bold: false },
+    ],
+  },
+});
+
+Vue.use(PortalVue);
+
+Vue.use(vClickOutside);
 
 new Vue({
+  i18n,
   vuetify,
   router,
   store: store,

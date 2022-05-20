@@ -1,6 +1,7 @@
 package eu.palantir.portal.dto.events;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,7 +16,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "componentId",
         "componentIP",
         "targetIPs",
-        "description"
+        "description",
+        "createdTimestamp",
 })
 public class ActionDto implements Serializable {
 
@@ -33,13 +35,13 @@ public class ActionDto implements Serializable {
 
     private String description;
 
+    private Instant createdTimestamp;
+
     public ActionDto() {
     }
 
-    public ActionDto(Long id, String componentType, String componentId, String componentIP,
-            List<String> targetIPs,
-            String name,
-            String description) {
+    public ActionDto(Long id, String componentType, String componentId, String componentIP, List<String> targetIPs,
+            String name, String description, Instant createdTimestamp) {
         this.id = id;
         this.componentType = componentType;
         this.componentId = componentId;
@@ -47,6 +49,7 @@ public class ActionDto implements Serializable {
         this.targetIPs = targetIPs;
         this.name = name;
         this.description = description;
+        this.createdTimestamp = createdTimestamp;
     }
 
     public Long getId() {
@@ -105,6 +108,14 @@ public class ActionDto implements Serializable {
         this.description = description;
     }
 
+    public Instant getCreatedTimestamp() {
+        return this.createdTimestamp;
+    }
+
+    public void setCreatedTimestamp(Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -116,12 +127,14 @@ public class ActionDto implements Serializable {
         return Objects.equals(id, actionDto.id) && Objects.equals(componentType, actionDto.componentType)
                 && Objects.equals(componentId, actionDto.componentId)
                 && Objects.equals(componentIP, actionDto.componentIP) && Objects.equals(targetIPs, actionDto.targetIPs)
-                && Objects.equals(name, actionDto.name) && Objects.equals(description, actionDto.description);
+                && Objects.equals(name, actionDto.name) && Objects.equals(description, actionDto.description)
+                && Objects.equals(createdTimestamp, actionDto.createdTimestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, componentType, componentId, componentIP, targetIPs, name, description);
+        return Objects.hash(id, componentType, componentId, componentIP, targetIPs, name, description,
+                createdTimestamp);
     }
 
     @Override
@@ -134,6 +147,7 @@ public class ActionDto implements Serializable {
                 ", targetIPs='" + getTargetIPs() + "'" +
                 ", name='" + getName() + "'" +
                 ", description='" + getDescription() + "'" +
+                ", createdTimestamp='" + getCreatedTimestamp() + "'" +
                 "}";
     }
 

@@ -31,22 +31,37 @@ docker-compose --profile monitoring up
 
 ### Keycloak
 
-Once the docker compose services are up, go to <http://localhost:8090/auth/> and login in the Administration Console using the credentials defined in the `.env` file (i.e. admin/admin).
+Once the docker compose services are up, go to <http://localhost:8090/auth/> and login in the Administration Console using the credentials defined in the `.env` file (i.e. admin/palantir).
 
-From the realm selector, add a new realm by selecting the `realm-export.json` file in `realm/` folder.
+The realm to select by default is `palantir`. In order to import the default settings of the palantir realm, use the `realm/realm.json` file.
 
 Then go to *Clients* and open the `backend-service` client ID. On the *Credentials* tab generate a new secret and update the value of `KEYCLOAK_CLIENT_SECRET` in `.env` with it.
 
-Last but not least, go to *Users* and add a user with a non-temporary password. Once you save the user, go to *Credentials* to set a password. You can also go to *Attributes* and add the following key-values:
+Last but not least, go to *`Users`* and add a user with a *non-temporary* password. Once you save the user, go to *`Credentials`* tab for the user, to set a password, and *de-select the temporary* switch.
+The go to `Role Mappings` and add role to the user.
+Each user must have ONE role! By default the mapping is default-roles-quarkus. REMOVE that from the assigned roles, and add another one. The supported ones are:
+- `network_operator`
+- `sme_manager`
+- `sc_developer`
 
-| Key          | Value   |
-| ------------ | ------- |
-| userid       | 1       |
-| userfullname | manager |
+This way the users are appropriately set up.
 
-The go to Roles and add role SME_MANAGER to the user.
+### Set hosts appropriately
 
-### Backend
+Make sure that either `/etc/hosts` file on the host, *or the dns* service, have the following domain names as valid:
+
+- `sco-scc` &rarr; valid **SCC** IP
+- `sco-so` &rarr; valid **SO** IP
+
+This is required in order for APIs of other PALANTIR components to be reachable by the Frontend.
+
+Similarly, **do the same for kafka**! Make sure that the following domain name mapping is in place:
+
+- `kafka` &rarr; valid **Kafka broker** IP
+
+The above step is necessary for proper operation of the backend.
+
+### Portal Backend
 
 You can compile and run the **backend** service in dev mode with a profile using:
 
@@ -54,7 +69,7 @@ You can compile and run the **backend** service in dev mode with a profile using
 ./mvnw clean compile quarkus:dev
 ```
 
-### Frontend
+### Portal Dashboard Web App / Frontend
 
 Before moving on, make sure you've installed the required dependencies needed to watch the frontend app:
 
@@ -110,25 +125,3 @@ java -jar target/portal-${release}-runner.jar
 ./mvnw clean package -Dquarkus.container-image.build=true -Pvue
 docker run --env-file .env --network=host palantir/dashboard-portal:${release}
 ```
-
-## Extras
-
-### Backend Development Tool: Migrating database changes, after changing the Model, semi-automatically
-
->Note: Proper usage of this development tool **requires knowledge of liquibase**. If changes are to be made in the model, then the changelog has to be generated, based on the difference from the current database. Instructions on how to do this are included in a later section. In order to make this possible **create a `src/main/resources/liquibase.properties` file** based on the `src/main/resources/liquibase.properties.example` file that exists. Make sure the same credentials are used as in the `.env` file created.
-
-In case changes are done to `src/main/java/eu/palantir/portal/model`, the changes can be migrated to the database easily by automatically generating a liquibase changelog. **Make sure the liquibase.properties file has already been properly configured** before continuing. The only changes from the example should be url, username and password.
-
-In order to find the difference between the current DB and the current JPA model in the project:
-
-```sh
-./mvnw liquibase:diff
-```
-
-The generated changelog can be found as `src/main/resources/liquibase-diffChangeLog.xml`.
-After this the generated changelog can be added to the overall changelogs as expected by liquibase.
-Inspect the diff changelog, verify it has the changes you want in it.
-To include the changelog in the migration to be executed:
-
-1. Rename the diff file into a name of your choosing, for example `my_changes.xml`, and move it into the `src/main/resources/db/changelog` directory.
-2. Add an entry to the `src/main/resources/db/changelog.xml` file that points to the file, as a last entry of the `</databaseChangeLog>` element. **Notice**: Make sure the `<include>` elements are in the proper sequence of changes in the file. The entry for the example above would be `<include file="db/changelog/my_changes.xml" relativeToChangelogFile="false"/>`

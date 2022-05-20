@@ -12,7 +12,7 @@
     >
       <v-row class="pa-0">
         <v-col cols="12" class="pa-0 mt-16 d-flex flex-column align-center">
-          <div class="text-h4 font-weight-bold">WELCOME BACK!</div>
+          <!-- <div class="text-h4 font-weight-bold">WELCOME BACK!</div> -->
         </v-col>
         <v-col cols="12" class="pa-0">
           <router-view></router-view>

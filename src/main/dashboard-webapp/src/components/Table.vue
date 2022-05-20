@@ -1,25 +1,41 @@
 <template>
-  <div>
+  <!-- MAKE SURE THAT THIS COMPONENT IS WITHIN A v-main -->
+  <div v-click-outside="clearHighlighted">
     <v-data-table
-      :headers="headers"
+      :headers="dataTableHeaders"
       :items="items"
       class="elevation-0"
       :options.sync="options"
       :server-items-length="totalItems"
       :loading="loading"
       :multi-sort="true"
-      :footer-props="{
-        showFirstLastPage: false,
-        itemsPerPageOptions: [10, 15, 25, 50, 100, 150, 200],
-      }"
+      :hide-default-footer="true"
       item-class="properties"
       :dense="false"
+      item-key="id"
     >
-      <template v-if="totalItems === 2147483647" #footer.page-text="props">
-        {{ props.pageStart }} - {{ props.pageStop }}
+      <template v-slot:top="{ pagination, options, updateOptions }">
+        <v-data-footer
+          :items-per-page-options="[10, 15, 25, 50, 100, 150, 200]"
+          :pagination="pagination"
+          :options="options"
+          @update:options="updateOptions"
+          items-per-page-text="$vuetify.dataTable.itemsPerPageText"
+          showFirstLastPage
+          firstIcon="mdi-arrow-collapse-left"
+          lastIcon="mdi-arrow-collapse-right"
+          prevIcon="mdi-arrow-left"
+          nextIcon="mdi-arrow-right"
+        />
       </template>
-      <template v-slot:item="{ item }">
-        <tr>
+      <template v-slot:item="{ item, index: itemIndex }">
+        <tr
+          :class="selectedRows.indexOf(item.id) > -1 ? 'light-blue lighten-2' : ''"
+          @click="rowClicked(item)"
+        >
+          <td>
+            {{ options.itemsPerPage * (options.page - 1) + itemIndex + 1 }}
+          </td>
           <td
             class="d-block d-sm-table-cell"
             v-for="(header, index) in headers"
@@ -36,7 +52,7 @@
               formatDateTimeLocale(getDescendantProp(item, header.value))
             }}</span>
             <span v-else-if="header.type == 'Enum'">{{
-              getDescendantProp(item, header.value + '.description')
+              $t(getDescendantProp(item, header.value + '.id'))
             }}</span>
             <span v-else-if="header.type == 'List'">{{
               getDescendantProp(item, header.value)
@@ -44,6 +60,12 @@
                   return item[header.property];
                 })
                 .join(', ')
+            }}</span>
+            <span v-else-if="header.type == 'EnumEntity'">{{
+              $t(getDescendantProp(item, header.value + '.description'))
+            }}</span>
+            <span v-else-if="'transform' in header">{{
+              header.transform(getDescendantProp(item, header.value))
             }}</span>
             <span v-else>{{ getDescendantProp(item, header.value) }}</span>
           </td>
@@ -55,7 +77,7 @@
                     mdi-file-find-outline
                   </v-icon>
                 </template>
-                <span>View</span>
+                <span>{{ $t('view') }}</span>
               </v-tooltip>
               <v-tooltip top v-if="editRouter">
                 <template v-slot:activator="{ on }">
@@ -63,9 +85,9 @@
                     mdi-file-document-edit-outline
                   </v-icon>
                 </template>
-                <span>Edit</span>
+                <span>{{ $t('edit') }}</span>
               </v-tooltip>
-              <v-tooltip top>
+              <v-tooltip top v-if="!noDelete">
                 <template v-slot:activator="{ on }">
                   <v-icon
                     v-on="on"
@@ -75,7 +97,7 @@
                     mdi-delete-outline
                   </v-icon>
                 </template>
-                <span>Delete</span>
+                <span>{{ $t('delete.message') }}</span>
               </v-tooltip>
             </v-layout>
           </td>
@@ -85,17 +107,17 @@
 
     <v-dialog v-if="itemToBeDeleted !== null" v-model="deleteDialog" max-width="500">
       <v-card>
-        <v-card-title class="headline">Delete</v-card-title>
+        <v-card-title class="headline">{{ $t('delete.message') }}</v-card-title>
         <v-card-text>
-          Are you sure you want to delete this item?
+          {{ $t('delete.confirm') }}
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="secondary" text @click="deleteDialog = false">
-            Cancel
+            {{ $t('cancel') }}
           </v-btn>
           <v-btn color="red darken-1" text @click="onDeleteItem" :disabled="disableDelete">
-            Delete
+            {{ $t('delete.message') }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -111,13 +133,32 @@ export default {
   name: 'Table',
   mixins: [util],
   props: {
-    headers: Array,
-    url: String,
-    urlApi: String,
+    headers: Array, // Table headers as list.
+    urlApi: String, // REST API endpoint as Data source.
+    /*
+    if you do not want to use generic urlApi, use urlApiDelete
+     */
+    urlApiDelete: String, // Alternate REST API endpoint for delete.
     search: Object,
     searchAttributes: Array,
-    editRouter: String,
-    viewRouter: String,
+    editRouter: String, // Route for edit.
+    viewRouter: String, // Route for view.
+    noDelete: {
+      type: Boolean,
+      default: false,
+    }, // If true, no delete allowed.
+    cacheName: {
+      type: String,
+      default: '',
+    }, // Key for cached data fetched by table.
+    highlight: {
+      type: Boolean,
+      default: false,
+    }, // If true, clicked item is toggled highlighted.
+    singleHighlight: {
+      type: Boolean,
+      default: false,
+    }, // If true and 'highlight' true, ONLY clicked item is toggled highlighted.
   },
   data: () => ({
     firstLoad: true,
@@ -128,6 +169,9 @@ export default {
     itemToBeDeleted: null,
     deleteDialog: false,
     disableDelete: false,
+    dataTableHeaders: [{ text: '#' }],
+    tableId: '',
+    selectedRows: [],
   }),
   watch: {
     options: {
@@ -144,10 +188,19 @@ export default {
       deep: true,
     },
   },
+  beforeMount() {
+    let dataTableHeaders = [{ text: '#', sortable: false, align: 'start' }].concat(this.headers);
+    if (this.viewRouter || this.editRouter || !this.noDelete) {
+      dataTableHeaders = dataTableHeaders.concat([
+        { text: 'Actions', sortable: false, align: 'end' },
+      ]);
+    }
+    this.dataTableHeaders = dataTableHeaders;
+    this.tableId = 'table:' + this.makeId(10);
+  },
   mounted() {
     console.log('[Table] Mounted');
     if (this.firstLoad) {
-      /* Populate table from route */
       this.options.page = this.$route.query.index ? Number(this.$route.query.index) + 1 : 1;
       this.options.itemsPerPage = this.$route.query.size ? Number(this.$route.query.size) : 10;
       this.options.sortBy = [];
@@ -175,6 +228,9 @@ export default {
       this.totalItems = data.total;
       this.firstLoad = false;
     });
+  },
+  beforeDestroy() {
+    this.$store.commit('clearCachedData', this.cacheName ? this.cacheName : this.tableId);
   },
   methods: {
     triggerSearch() {
@@ -213,6 +269,7 @@ export default {
               total = res.data.total;
             }
             setTimeout(() => {
+              if (res.status === 200) this.cacheTableData(items);
               this.loading = false;
               resolve({
                 items,
@@ -255,6 +312,7 @@ export default {
     },
     onViewItem(value) {
       console.log('Click View ' + value.id);
+      this.keepHighlighted(value);
       this.$router.push({
         name: this.viewRouter,
         query: { id: value.id },
@@ -262,6 +320,7 @@ export default {
     },
     onEditItem(value) {
       console.log('Click Edit ' + value.id);
+      this.keepHighlighted(value);
       this.$router.push({
         name: this.editRouter,
         query: { id: value.id },
@@ -273,11 +332,11 @@ export default {
       console.log('Click Delete ' + value.id);
       EventBus.$emit('waiting', true);
       this.axios
-        .delete(this.urlApi + '/' + value.id)
+        .delete((this.urlApiDelete ? this.urlApiDelete : this.urlApi) + '/' + value.id)
         .then(() => {
           console.log('Success');
           EventBus.$emit('snackbar', {
-            text: 'Delete successfully.',
+            text: this.$i18n.t('delete.success'),
           });
           this.deleteDialog = false;
           this.getDataFromApi().then(data => {
@@ -291,6 +350,49 @@ export default {
           this.disableDelete = false;
         })
         .finally(EventBus.$emit('waiting', false));
+    },
+    updateTable() {
+      this.getDataFromApi().then(data => {
+        this.items = data.items;
+        this.totalItems = data.total;
+      });
+    },
+    cacheTableData(data) {
+      let cachedItems = {};
+      for (const item of data) {
+        cachedItems[item.id] = item;
+      }
+      this.$store.commit('setCachedData', {
+        cachedData: cachedItems,
+        cacheId: this.cacheName ? this.cacheName : this.tableId,
+      });
+    },
+    rowClicked(row) {
+      if (!this.highlight) return;
+      if (this.singleHighlight) {
+        let isOn = this.selectedRows.includes(row.id);
+        this.selectedRows = [];
+        if (!isOn) this.selectedRows.push(row.id);
+      } else this.toggleSelection(row.id);
+    },
+    toggleSelection(keyID, off = false, on = false) {
+      if (!off && this.selectedRows.includes(keyID)) {
+        this.selectedRows = this.selectedRows.filter(selectedKeyID => selectedKeyID !== keyID);
+      } else if (!on) {
+        this.selectedRows.push(keyID);
+      }
+    },
+    keepHighlighted(row) {
+      if (this.highlight) {
+        if (this.singleHighlight) {
+          this.selectedRows = [row.id];
+          this.rowClicked(row);
+        } else this.toggleSelection(row.id, false, true);
+      }
+    },
+    clearHighlighted() {
+      if (this.$store.getters.frozenUnderlayState) return;
+      this.selectedRows = [];
     },
   },
 };

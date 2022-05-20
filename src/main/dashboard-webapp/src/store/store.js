@@ -1,8 +1,8 @@
-//you need to import both vue and vuex, as both are used here
 import Vue from 'vue';
 import Vuex from 'vuex';
 import sharedMutations from 'vuex-shared-mutations';
-//then you use Vuex
+import EventBus from '../helpers/event-bus.js';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -12,8 +12,65 @@ export default new Vuex.Store({
     roles: null,
     timezone: null,
     dateFormat: null,
+    socket: {
+      isConnected: false,
+      lastMessage: '',
+      reconnectError: false,
+    },
+    notificationCollections: {
+      action: {},
+      incident: {},
+    },
+    // Standard mappings type -> collection
+    dataCollections: {
+      'failed_attestation:fsm': 'attestation_incident',
+      'threat:netflow': 'netflow_incident',
+      anomaly: 'netflow_incident',
+      'threat:syslog': 'syslog_threat_incidents',
+    },
+    // Cached data from current path
+    cachedData: {},
+    notificationList: [],
+    frozenUnderlayState: false,
   },
   mutations: {
+    // Socket mutations
+    SOCKET_ONOPEN(state, event) {
+      Vue.prototype.$socket = event.currentTarget;
+      state.socket.isConnected = true;
+      console.log('Socket opened', event);
+    },
+    SOCKET_ONCLOSE(state, event) {
+      state.socket.isConnected = false;
+      console.log('Socket closed', event);
+    },
+    SOCKET_ONERROR(state, event) {
+      console.error(state, event);
+    },
+    // default handler called for all methods
+    SOCKET_ONMESSAGE(state, message) {
+      console.log('Received message', message);
+      message = JSON.parse(message.data);
+      state.socket.lastMessage = message;
+      console.log('Received JSON:', message);
+      EventBus.$emit('newEvent', message);
+      // Push notification to temporary notifications list.
+      state.notificationList.push(message);
+      // Index notification in collections.
+      if (!state.notificationCollections[message.type][message.collection]) {
+        state.notificationCollections[message.type][message.collection] = {};
+      }
+      state.notificationCollections[message.type][message.collection][message.id] = message;
+      // TODO LATER... Clean up old from temp list and index.
+    },
+    // mutations for reconnect methods
+    SOCKET_RECONNECT(state, count) {
+      console.info(state, count);
+    },
+    SOCKET_RECONNECT_ERROR(state) {
+      state.socket.reconnectError = true;
+    },
+    // Basic mutations
     initialiseStore(state) {
       if (localStorage.avatar) {
         state.avatar = localStorage.avatar;
@@ -76,6 +133,24 @@ export default new Vuex.Store({
         state.fullName = null;
       }
     },
+    // Careful! Data for a Cache ID is meant for a specific purpose.
+    // Updates the data.
+    setCachedData(state, payload) {
+      let { cachedData, cacheId } = payload;
+      state.cachedData[cacheId] = {
+        ...state.cachedData[cacheId],
+        ...cachedData,
+      };
+    },
+    clearCachedData(state, cacheId) {
+      delete state.cachedData[cacheId];
+    },
+    freezeUnderlayState(state) {
+      state.frozenUnderlayState = true;
+    },
+    unfreezeUnderlayState(state) {
+      state.frozenUnderlayState = false;
+    },
   },
   getters: {
     avatar: state => {
@@ -93,10 +168,28 @@ export default new Vuex.Store({
     fullName: state => {
       return state.fullName ? state.fullName : 'Undefined';
     },
+    notificationCollections: state => {
+      return state.notificationCollections;
+    },
+    notificationList: state => {
+      return state.notificationList;
+    },
+    dataCollections: state => {
+      return state.dataCollections;
+    },
+    dataCollectionTypes: state => {
+      return Object.keys(state.dataCollections);
+    },
+    cachedData: state => cacheId => {
+      return state.cachedData[cacheId];
+    },
+    frozenUnderlayState: state => {
+      return state.frozenUnderlayState;
+    },
   },
   plugins: [
     sharedMutations({
       predicate: ['setAvatar', 'setRoles', 'setTimezone', 'setDateFormat', 'setFullName'],
-    }),
+    }), // All data mutations shared between different tabs are put here.
   ],
 });

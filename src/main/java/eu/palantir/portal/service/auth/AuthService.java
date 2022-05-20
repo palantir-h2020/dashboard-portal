@@ -11,7 +11,6 @@ import eu.palantir.portal.model.Token_;
 import eu.palantir.portal.model.User;
 import eu.palantir.portal.model.User_;
 import eu.palantir.portal.util.JwtClaim;
-import eu.palantir.portal.mail.Templates;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -37,7 +36,6 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -56,6 +54,9 @@ public class AuthService {
     String adminUsername;
     @ConfigProperty(name = "keycloak.admin.password")
     String adminPassword;
+    // Uncomment for email operations:
+    // @ConfigProperty(name = "domain")
+    // String domain;
 
     @Inject
     UserMapper userMapper;
@@ -110,9 +111,8 @@ public class AuthService {
         }
     }
 
-    // LATER: check keycloak java admin client api for refresh token support
+    // TODO check keycloak java admin client api for refresh token support
     // (currently not supported)
-
     @Transactional
     public AuthToken refresh(String refreshToken) {
         // logger.info("Fetching token with refresh token: " + refreshtoken);
@@ -248,17 +248,15 @@ public class AuthService {
             throw new BadRequestAlertException("Passwords do not match", "authorization", "passwordsNotMatch");
         }
         User user = userMapper.toUser(signUpDto);
-        User tempUser = (User) User.find(User_.USERNAME, user.getUsername()).firstResult().await().atMost(
-                Duration.ofSeconds(5));
+        User tempUser = User.find(User_.USERNAME, user.getUsername()).firstResult();
         if (tempUser != null) {
             throw new UsernameAlreadyExistsException();
         }
-        tempUser = (User) User.find(User_.EMAIL, user.getEmail()).firstResult().await().atMost(
-                Duration.ofSeconds(5));
+        tempUser = User.find(User_.EMAIL, user.getEmail()).firstResult();
         if (tempUser != null) {
             throw new EmailAlreadyExistsException();
         }
-        user.persist().onItem();
+        user.persist();
         UserRepresentation keycloakUser = new UserRepresentation();
         keycloakUser.setUsername(user.getUsername());
         keycloakUser.setEmail(user.getEmail());
@@ -323,7 +321,7 @@ public class AuthService {
         if (!resetPasswordDto.getPassword().equals(resetPasswordDto.getConfirmPassword())) {
             throw new BadRequestAlertException("Passwords do not match", "authorization", "passwordsNotMatch");
         }
-        Token token = (Token) Token.find(Token_.UUID, uuid).firstResult();
+        Token token = Token.find(Token_.UUID, uuid).firstResult();
         if (token == null || token.hasExpired()) {
             throw new BadRequestAlertException("Token not valid or have expired", "authorization", "notValid");
         }
@@ -333,11 +331,8 @@ public class AuthService {
 
     @Transactional
     public void resetPasswordFromProfile(Long id, ResetPasswordDto resetPasswordDto) {
-        User user = null;
-        user = (User) User.findById(id).await().atMost(Duration.ofSeconds(5));
-        if (user == null) {
-            throw new NotFoundAlertException(User.class.getName());
-        }
+        User user = (User) User.findByIdOptional(id)
+                .orElseThrow(() -> new NotFoundAlertException(User.class.getName()));
         if (!resetPasswordDto.getPassword().equals(resetPasswordDto.getConfirmPassword())) {
             throw new BadRequestAlertException("Passwords do not match", "authorization", "passwordsNotMatch");
         }
@@ -355,7 +350,7 @@ public class AuthService {
 
     @Transactional
     public void verifyEmail(String uuid) {
-        Token token = (Token) Token.find(Token_.UUID, uuid).firstResult().await().atMost(Duration.ofSeconds(5));
+        Token token = Token.find(Token_.UUID, uuid).firstResult();
         if (token == null || token.hasExpired()) {
             throw new BadRequestAlertException("Token not valid or have expired", "authorization", "notValid");
         }
@@ -384,22 +379,32 @@ public class AuthService {
 
     @Transactional
     public void sendResetPasswordEmail(String username) {
-        User user = (User) User.find(User_.USERNAME, username).firstResult().await().atMost(Duration.ofSeconds(5));
+        User user = User.find(User_.USERNAME, username).firstResult();
         if (user == null) {
             throw new NotFoundAlertException("user");
         }
         Token token = new Token(user, Token.Type.RESET_PASSWORD);
         token.persistAndFlush();
+        // Templates.reset_password(domain + "/auth/reset-password?uuid=" +
+        // token.getUuid()).to(user.getEmail())
+        // .subject("Reset your password").send()
+        // .subscribeAsCompletionStage()
+        // .thenApply(x -> Response.accepted().build());
     }
 
     @Transactional
     public void sendVerifyEmail(String username) {
-        User user = (User) User.find(User_.USERNAME, username).firstResult().await().atMost(Duration.ofSeconds(5));
+        User user = User.find(User_.USERNAME, username).firstResult();
         if (user == null) {
             throw new NotFoundAlertException("user");
         }
         Token token = new Token(user, Token.Type.VERIFY_EMAIL);
         token.persistAndFlush();
+        // Templates.verify_email(domain + "/auth/verify-email?uuid=" +
+        // token.getUuid()).to(user.getEmail())
+        // .subject("Verify email").send()
+        // .subscribeAsCompletionStage()
+        // .thenApply(x -> Response.accepted().build());
     }
 
 }

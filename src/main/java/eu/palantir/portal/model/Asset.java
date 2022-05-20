@@ -2,13 +2,14 @@ package eu.palantir.portal.model;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 @Entity
 public class Asset extends PanacheEntityBase {
@@ -20,6 +21,7 @@ public class Asset extends PanacheEntityBase {
 
     private String type;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private String ip;

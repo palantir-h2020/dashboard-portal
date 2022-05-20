@@ -1,8 +1,7 @@
 <template>
   <v-container class="d-flex flex-column" fluid style="max-width: 429px">
     <v-container class="d-flex flex-column align-center">
-      <p class="text-h4 font-weight-bold">SIGN IN</p>
-      <p class="text-h5 font-weight-bold">TO ACCESS THE PORTAL</p>
+      <p class="text-h4 font-weight-bold">Sign in</p>
     </v-container>
     <v-alert type="error" v-if="errorSummary !== null">{{ errorSummary }}</v-alert>
     <v-form ref="form" :lazy-validation="true" @keyup.native.enter="submit" fluid>
@@ -66,6 +65,8 @@ export default {
       credentials.password = this.password;
       credentials.grant_type = 'password';
       this.loading = true;
+      // Fallback username
+      localStorage.userfullname = credentials.username;
       this.axios
         .post('/api/v1/auth/login', credentials)
         .then(res => {

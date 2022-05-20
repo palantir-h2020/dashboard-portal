@@ -14,6 +14,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import java.util.logging.Logger;
 
 @Singleton
@@ -22,18 +23,18 @@ public class AuthResource {
     private static final Logger logger = Logger.getLogger(AuthResource.class.getName());
 
     @Inject
-    AuthService authservice;
+    AuthService authService;
 
     @POST
     @Path("/login")
     public Response login(Credentials credentials) {
-        return Response.ok(authservice.login(credentials.getUsername(), credentials.getPassword())).build();
+        return Response.ok(authService.login(credentials.getUsername(), credentials.getPassword())).build();
     }
 
     @POST
     @Path("/refresh")
     public Response refresh(String refreshToken) {
-        AuthToken authToken = authservice.refresh(refreshToken);
+        AuthToken authToken = authService.refresh(refreshToken);
         if (authToken == null) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
@@ -44,34 +45,34 @@ public class AuthResource {
     @Path("/sign-up")
     public Response signUp(SignUpDto signUpDto) {
         try {
-            authservice.addUser(signUpDto);
+            authService.addUser(signUpDto);
         } catch (UsernameAlreadyExistsException e) {
-            return Response.status(Response.Status.CONFLICT.getStatusCode(), "Username Already Exists!").build();
+            return Response.status(Status.CONFLICT).entity("Username already exists!").build();
         } catch (EmailAlreadyExistsException e) {
-            return Response.status(Response.Status.CONFLICT.getStatusCode(), "Email Already Exists!").build();
+            return Response.status(Status.CONFLICT).entity("E-mail already exists!").build();
         }
-        authservice.sendVerifyEmail(signUpDto.getUsername());
+        authService.sendVerifyEmail(signUpDto.getUsername());
         return Response.noContent().build();
     }
 
     @POST
     @Path("/forgot-password")
     public Response forgotPassword(@QueryParam("username") String username) {
-        authservice.sendResetPasswordEmail(username);
+        authService.sendResetPasswordEmail(username);
         return Response.noContent().build();
     }
 
     @POST
     @Path("/reset-password")
     public Response resetPassword(@QueryParam("uuid") String uuid, ResetPasswordDto resetPasswordDto) {
-        authservice.resetPasswordFromEmail(resetPasswordDto, uuid);
+        authService.resetPasswordFromEmail(resetPasswordDto, uuid);
         return Response.noContent().build();
     }
 
     @POST
     @Path("/verify-email")
     public Response verifyEmail(@QueryParam("uuid") String uuid) {
-        authservice.verifyEmail(uuid);
+        authService.verifyEmail(uuid);
         return Response.noContent().build();
     }
 

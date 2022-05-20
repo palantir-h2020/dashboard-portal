@@ -3,6 +3,7 @@ package eu.palantir.portal.rest;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
+import eu.palantir.portal.dto.message.ActionNotification;
 import eu.palantir.portal.dto.message.ti.ThreadFindingSysLog;
 import eu.palantir.portal.kafka.processing.PalantirNotificationsGateway;
 
@@ -15,6 +16,8 @@ import javax.ws.rs.core.StreamingOutput;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -56,7 +59,22 @@ public class GatewayResource {
 
         notificationsGateway.acceptThreadFindingSysLog(threadFindingSysLog);
 
-        return Response.ok().build();
+        return Response.ok().entity("Test done!").build();
+    }
+
+    @GET
+    @Path("/test_action")
+    public Response sendAction() {
+        List<String> onIps = new ArrayList<String>();
+
+        // onIps.add("10.100.33.33");
+
+        ActionNotification actionNotification = new ActionNotification(
+                "sco", "so", "10.101.41.168", "onboarding",
+                "SC package with id=fd332c09-59c8-4857-9313-8a5939c67273 has been onboarded", onIps);
+        notificationsGateway.acceptActionsNotifications(actionNotification);
+
+        return Response.ok().entity("Test done!").build();
     }
 
     @GET

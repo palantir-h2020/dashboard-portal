@@ -3,6 +3,7 @@ package eu.palantir.portal.model;
 import java.time.Instant;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,7 +12,7 @@ import javax.persistence.InheritanceType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -26,6 +27,7 @@ public class Incident extends PanacheEntityBase {
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     // CHANGE add organization later.

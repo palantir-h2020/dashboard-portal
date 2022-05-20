@@ -94,10 +94,12 @@ export default {
       if (jwt.userfullname) {
         localStorage.userfullname = jwt.userfullname;
       }
-      localStorage.userid = jwt.userid;
+      if (jwt.userid) localStorage.userid = jwt.userid;
       localStorage.roles = jwt.realm_access.roles;
       if (jwt.avatar) {
         localStorage.avatar = jwt.avatar;
+      } else {
+        localStorage.avatar = 2; // Fallback
       }
       if (jwt.timezone) {
         localStorage.timezone = jwt.timezone;
@@ -739,6 +741,52 @@ export default {
     },
     requiredRuleEditor() {
       return [v => v !== '<p></p>' || 'Field is required'];
+    },
+    // Extra Utilities
+    makeId(length) {
+      let result = '';
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      const charactersLength = characters.length;
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    },
+    currentIP() {
+      const host = window.location.host;
+      return host.split(':')[0];
+    },
+    uppercaseFirstLetters: mySentence => {
+      const words = mySentence.split(' ');
+      for (let i = 0; i < words.length; i++) {
+        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+      }
+      return words.join(' ');
+    },
+    uppercaseWords: (mySentence, upperLimit) => {
+      const words = mySentence.split(' ');
+      for (let i = 0; i < words.length; i++) {
+        if (words[i].length <= upperLimit) words[i] = words[i].toUpperCase();
+      }
+      return words.join(' ');
+    },
+    addSpaces: myString => {
+      return myString.replace(/([A-Z])/g, ' $1').trim();
+    },
+    isObject: item => {
+      return item && typeof item === 'object' && !Array.isArray(item);
+    },
+    isEmptyObject: myObject => {
+      // because Object.keys(new Date()).length === 0;
+      // we have to do some additional check
+      return (
+        myObject && // null and undefined check
+        Object.keys(myObject).length === 0 &&
+        Object.getPrototypeOf(myObject) === Object.prototype
+      );
+    },
+    isEmptyString: myString => {
+      return myString.length === 0 || !myString.trim();
     },
   },
 };
