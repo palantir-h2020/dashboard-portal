@@ -9,7 +9,6 @@
         >
         SIGN UP
       </p>
-      <p class="text-h5 font-weight-bold">TO ACCESS THE PORTAL</p>
     </v-container>
     <v-alert type="error" v-if="errorSummary !== null" class="white--text">{{
       errorSummary
@@ -54,13 +53,17 @@
         :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
         data-cy="confirmPassword"
       ></v-text-field>
-
       <v-radio-group v-model="user.realmRole" mandatory>
         <template v-slot:label>
-          <div>What kind of user are you?</div>
+          <h3 class="text--primary">What kind of user are you?</h3>
         </template>
-        <v-radio label="Trainee" value="trainee" color="green"></v-radio>
-        <v-radio label="Trainer" value="trainer" color="green"></v-radio>
+        <v-radio label="Network Operator" value="networkOperator" color="primary"></v-radio>
+        <v-radio label="SME Manager" value="smeManager" color="primary"></v-radio>
+        <v-radio
+          label="Security Capabilities Developer"
+          value="scDeveloper"
+          color="primary"
+        ></v-radio>
       </v-radio-group>
     </v-form>
     <v-btn block color="secondary" @click="submit" :disabled="!valid || loading" data-cy="register"
