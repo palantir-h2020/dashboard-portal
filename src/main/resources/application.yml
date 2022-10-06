@@ -119,12 +119,21 @@ mp:
         value:
           deserializer: eu.palantir.portal.kafka.serialization.RSNotificationDeserializer
 
+  mailer:
+    from:
+    host:
+    port:
+    username:
+    password:
+
 # keycloak:
 #   baseurl:
 #   realm:
 #   admin:
 #     username:
 #     password:
+
+domain: h2020-palantir.eu
 
 "%dev":
   quarkus:
@@ -141,7 +150,7 @@ mp:
     kafka:
       devservices:
         enabled: false
-  # domain:
+  domain: h2020-palantir.eu
 
 "%test":
   quarkus:
@@ -172,4 +181,4 @@ mp:
       mock: false
     liquibase:
       contexts: "!fake-data"
-  # domain:
+  domain:

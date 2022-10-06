@@ -57,11 +57,11 @@
         <template v-slot:label>
           <h3 class="text--primary">What kind of user are you?</h3>
         </template>
-        <v-radio label="Network Operator" value="networkOperator" color="primary"></v-radio>
-        <v-radio label="SME Manager" value="smeManager" color="primary"></v-radio>
+        <v-radio label="Network Operator" value="network_operator" color="primary"></v-radio>
+        <v-radio label="SME Manager" value="sme_manager" color="primary"></v-radio>
         <v-radio
           label="Security Capabilities Developer"
-          value="scDeveloper"
+          value="sc_developer"
           color="primary"
         ></v-radio>
       </v-radio-group>
@@ -87,8 +87,9 @@ export default {
       email: null,
       password: null,
       confirmPassword: null,
-      realmRole: 'trainee',
+      realmRole: 'sme_manager',
       realmRoles: [],
+      // organization: null,
     },
     usernameRules: [
       v => !!v || 'Nickname is required',
@@ -116,7 +117,7 @@ export default {
       this.loading = true;
       EventBus.$emit('waiting', true);
       this.axios
-        .post('/api/v1/auth/add-user', this.user)
+        .post('/api/v1/auth/sign-up', this.user)
         .then(() => {
           console.log('Success');
           EventBus.$emit('snackbar', {

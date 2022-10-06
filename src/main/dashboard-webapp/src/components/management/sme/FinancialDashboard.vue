@@ -100,6 +100,7 @@ export default {
             },
           ],
           data: {
+            // Dummy data
             items: [
               {
                 id: 1,
@@ -148,6 +149,7 @@ export default {
             },
           ],
           data: {
+            // Dummy data
             items: [
               {
                 date: '03/10/22 18:35',
@@ -221,6 +223,7 @@ export default {
             },
           ],
           data: {
+            // Dummy data
             items: [
               {
                 period: 'October 2022',

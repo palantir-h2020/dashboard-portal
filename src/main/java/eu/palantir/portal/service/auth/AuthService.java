@@ -11,6 +11,7 @@ import eu.palantir.portal.model.Token_;
 import eu.palantir.portal.model.User;
 import eu.palantir.portal.model.User_;
 import eu.palantir.portal.util.JwtClaim;
+import eu.palantir.portal.mail.Templates;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -54,9 +55,8 @@ public class AuthService {
     String adminUsername;
     @ConfigProperty(name = "keycloak.admin.password")
     String adminPassword;
-    // Uncomment for email operations:
-    // @ConfigProperty(name = "domain")
-    // String domain;
+    @ConfigProperty(name = "domain")
+    String domain;
 
     @Inject
     UserMapper userMapper;
@@ -111,8 +111,6 @@ public class AuthService {
         }
     }
 
-    // TODO check keycloak java admin client api for refresh token support
-    // (currently not supported)
     @Transactional
     public AuthToken refresh(String refreshToken) {
         // logger.info("Fetching token with refresh token: " + refreshtoken);
@@ -385,11 +383,11 @@ public class AuthService {
         }
         Token token = new Token(user, Token.Type.RESET_PASSWORD);
         token.persistAndFlush();
-        // Templates.reset_password(domain + "/auth/reset-password?uuid=" +
-        // token.getUuid()).to(user.getEmail())
-        // .subject("Reset your password").send()
-        // .subscribeAsCompletionStage()
-        // .thenApply(x -> Response.accepted().build());
+        Templates.reset_password(domain + "/auth/reset-password?uuid=" +
+                token.getUuid()).to(user.getEmail())
+                .subject("Reset your password").send()
+                .subscribeAsCompletionStage()
+                .thenApply(x -> Response.accepted().build());
     }
 
     @Transactional
@@ -400,11 +398,11 @@ public class AuthService {
         }
         Token token = new Token(user, Token.Type.VERIFY_EMAIL);
         token.persistAndFlush();
-        // Templates.verify_email(domain + "/auth/verify-email?uuid=" +
-        // token.getUuid()).to(user.getEmail())
-        // .subject("Verify email").send()
-        // .subscribeAsCompletionStage()
-        // .thenApply(x -> Response.accepted().build());
+        Templates.verify_email(domain + "/auth/verify-email?uuid=" +
+                token.getUuid()).to(user.getEmail())
+                .subject("Verify email").send()
+                .subscribeAsCompletionStage()
+                .thenApply(x -> Response.accepted().build());
     }
 
 }
