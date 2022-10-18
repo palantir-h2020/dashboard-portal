@@ -4,6 +4,9 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,7 +15,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-// This is the subscriber, not the .
+// This is the subscriber to the PALANTIR platform.
 // The SC developer can also be part of an organization.
 @Entity
 public class Organization extends PanacheEntityBase {
@@ -34,6 +37,8 @@ public class Organization extends PanacheEntityBase {
 
     @NotNull
     @ElementCollection
+    @CollectionTable(name = "ORG_SECURITY_CAPABILITY_SUBS", joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"))
+    @Column(name = "security_capability")
     // List of subscribed SC IDs.
     private List<String> securityCapabilitySubscriptions = new ArrayList<String>();
 
