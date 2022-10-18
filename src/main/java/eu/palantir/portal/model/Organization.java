@@ -4,21 +4,38 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
+// This is the subscriber, not the .
+// The SC developer can also be part of an organization.
 @Entity
 public class Organization extends PanacheEntityBase {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    // Corresponds to the VAT number or something similarly unique.
+    private String id;
 
     @NotNull
-    private String name;
+    private String name; // Label
+
+    @NotNull
+    // IP or URI of the PALANTIR "control plane" reverse proxy.
+    private String controlProxy;
+
+    @NotNull
+    // One deployment model active at a time for each organization.
+    private PalantirDeploymentModel deploymentModel;
+
+    @NotNull
+    @ElementCollection
+    // List of subscribed SC IDs.
+    private List<String> securityCapabilitySubscriptions = new ArrayList<String>();
 
     @CreationTimestamp
     private Instant createdTimestamp;
@@ -26,24 +43,48 @@ public class Organization extends PanacheEntityBase {
     @UpdateTimestamp
     private Instant updatedTimestamp;
 
-    public Long getId() {
-        return id;
+    public String getId() {
+        return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getControlProxy() {
+        return this.controlProxy;
+    }
+
+    public void setControlProxy(String controlProxy) {
+        this.controlProxy = controlProxy;
+    }
+
+    public PalantirDeploymentModel getDeploymentModel() {
+        return this.deploymentModel;
+    }
+
+    public void setDeploymentModel(PalantirDeploymentModel deploymentModel) {
+        this.deploymentModel = deploymentModel;
+    }
+
+    public List<String> getSecurityCapabilitySubscriptions() {
+        return this.securityCapabilitySubscriptions;
+    }
+
+    public void setSecurityCapabilitySubscriptions(List<String> securityCapabilitySubscriptions) {
+        this.securityCapabilitySubscriptions = securityCapabilitySubscriptions;
+    }
+
     public Instant getCreatedTimestamp() {
-        return createdTimestamp;
+        return this.createdTimestamp;
     }
 
     public void setCreatedTimestamp(Instant createdTimestamp) {
@@ -51,7 +92,7 @@ public class Organization extends PanacheEntityBase {
     }
 
     public Instant getUpdatedTimestamp() {
-        return updatedTimestamp;
+        return this.updatedTimestamp;
     }
 
     public void setUpdatedTimestamp(Instant updatedTimestamp) {
