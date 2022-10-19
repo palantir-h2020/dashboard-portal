@@ -4,9 +4,12 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -41,6 +44,11 @@ public class Organization extends PanacheEntityBase {
     @Column(name = "security_capability")
     // List of subscribed SC IDs.
     private List<String> securityCapabilitySubscriptions = new ArrayList<String>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "organization")
+    @OrderBy("id")
+    @JoinColumn(name = "organizationId")
+    private List<User> organizationUsers = new ArrayList<User>();
 
     @CreationTimestamp
     private Instant createdTimestamp;
@@ -86,6 +94,14 @@ public class Organization extends PanacheEntityBase {
 
     public void setSecurityCapabilitySubscriptions(List<String> securityCapabilitySubscriptions) {
         this.securityCapabilitySubscriptions = securityCapabilitySubscriptions;
+    }
+
+    public List<User> getOrganizationUsers() {
+        return this.organizationUsers;
+    }
+
+    public void setOrganizationUsers(List<User> organizationUsers) {
+        this.organizationUsers = organizationUsers;
     }
 
     public Instant getCreatedTimestamp() {
