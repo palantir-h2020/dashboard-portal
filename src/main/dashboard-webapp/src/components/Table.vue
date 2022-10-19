@@ -159,6 +159,9 @@ export default {
       type: Boolean,
       default: false,
     }, // If true and 'highlight' true, ONLY clicked item is toggled highlighted.
+    dummyData: {
+      type: Object,
+    }, // Does not use API if dummy data is passed through prop!
   },
   data: () => ({
     firstLoad: true,
@@ -200,7 +203,7 @@ export default {
   },
   mounted() {
     console.log('[Table] Mounted');
-    if (this.firstLoad) {
+    if (this.firstLoad && !this.dummyData) {
       this.options.page = this.$route.query.index ? Number(this.$route.query.index) + 1 : 1;
       this.options.itemsPerPage = this.$route.query.size ? Number(this.$route.query.size) : 10;
       this.options.sortBy = [];
@@ -216,10 +219,12 @@ export default {
           }
         }
       }
-      for (let i = 0; i < this.searchAttributes.length; i += 1) {
-        const attr = this.searchAttributes[i];
-        if (this.$route.query[attr]) {
-          this.$set(this.search, attr, this.$route.query[attr]);
+      if (this.searchAttributes && !this.dummyData) {
+        for (let i = 0; i < this.searchAttributes.length; i += 1) {
+          const attr = this.searchAttributes[i];
+          if (this.$route.query[attr]) {
+            this.$set(this.search, attr, this.$route.query[attr]);
+          }
         }
       }
     }
@@ -245,6 +250,8 @@ export default {
       }
     },
     changeOptions() {
+      // Dummy data override
+      if (this.dummyData && Object.keys(this.dummyData).length > 0) return;
       this.$router.push({
         path: this.$router.path,
         query: this.getParams(),
@@ -253,9 +260,24 @@ export default {
       localStorage[currentPathName] = this.$router.currentRoute.fullPath;
     },
     getDataFromApi() {
+      // Dummy data override
+      if (this.dummyData && Object.keys(this.dummyData).length > 0) {
+        console.log('went inside');
+        this.loading = false;
+        return new Promise(resolve => {
+          let items = this.dummyData.items;
+          let total = this.dummyData.total;
+          resolve({
+            items,
+            total,
+          });
+        });
+      }
+
       console.log('[Table] Loading data');
       this.loading = true;
       EventBus.$emit('waiting', true);
+
       return new Promise(resolve => {
         this.axios
           .get(`${this.urlApi}?`, {
@@ -302,10 +324,12 @@ export default {
       if (sort !== '') {
         query.sort = sort;
       }
-      for (let i = 0; i < this.searchAttributes.length; i += 1) {
-        const attr = this.searchAttributes[i];
-        if (this.search[attr]) {
-          query[attr] = this.search[attr];
+      if (this.searchAttributes) {
+        for (let i = 0; i < this.searchAttributes.length; i += 1) {
+          const attr = this.searchAttributes[i];
+          if (this.search[attr]) {
+            query[attr] = this.search[attr];
+          }
         }
       }
       return query;

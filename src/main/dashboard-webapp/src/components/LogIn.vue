@@ -13,6 +13,7 @@
         :rules="requiredRule()"
         filled
         autofocus
+        solo
         data-cy="username"
       ></v-text-field>
 
@@ -22,6 +23,7 @@
         type="password"
         :rules="requiredRule()"
         filled
+        solo
         placeholder="Enter Password Here"
         data-cy="password"
       ></v-text-field>
