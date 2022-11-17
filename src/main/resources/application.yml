@@ -126,6 +126,9 @@ mp:
     username:
     password:
 
+  swagger-ui:
+    title: Security Capabilities Catalogue API
+
 # keycloak:
 #   baseurl:
 #   realm:
@@ -134,6 +137,8 @@ mp:
 #     password:
 
 domain: h2020-palantir.eu
+
+
 
 "%dev":
   quarkus:

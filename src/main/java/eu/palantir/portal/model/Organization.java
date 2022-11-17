@@ -47,7 +47,6 @@ public class Organization extends PanacheEntityBase {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "organization")
     @OrderBy("id")
-    @JoinColumn(name = "organizationId")
     private List<User> organizationUsers = new ArrayList<User>();
 
     @CreationTimestamp

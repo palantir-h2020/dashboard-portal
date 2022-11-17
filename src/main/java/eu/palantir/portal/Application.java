@@ -11,11 +11,14 @@ import java.util.TimeZone;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.eclipse.microprofile.health.Readiness;
+import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
+import org.eclipse.microprofile.openapi.annotations.info.Info;
 
 import eu.palantir.portal.readiness.KeycloakReadinessCheck;
 import eu.palantir.portal.readiness.MinioReadinessCheck;
 
 @ApplicationScoped
+@OpenAPIDefinition(info = @Info(title = "Portal Backend API API", description = "PALANTIR Portal Backend API.", version = "0.1.0"))
 public class Application {
 
     private static final Logger LOG = Logger.getLogger(Application.class.getName());
